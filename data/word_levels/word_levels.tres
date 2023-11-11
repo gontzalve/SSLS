@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://e73ytwisfwps"]
+
+[ext_resource type="Script" path="res://data/word_levels/word_levels.gd" id="1_n0jam"]
+
+[resource]
+script = ExtResource("1_n0jam")
+words = Array[String](["CAT", "HOUSE", "PIDGEON", "SCHOOL", "XANAX", "WYVERN", "DOOHICKEY", "SNOLLYGOSTER", "EXPERGEFACTOR", "WHATCHAMACALLIT"])

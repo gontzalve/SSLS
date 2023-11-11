@@ -1,0 +1,28 @@
+[gd_scene load_steps=7 format=3 uid="uid://d2mt4713epsq8"]
+
+[ext_resource type="Texture2D" uid="uid://eq00cndsu4vj" path="res://graphics/letters/letter_a.png" id="1_idjne"]
+[ext_resource type="Script" path="res://scenes/game/letter/letter.gd" id="1_ykfcf"]
+[ext_resource type="Texture2D" uid="uid://b35s65xixkvam" path="res://graphics/outline/outline.png" id="2_8o7lr"]
+[ext_resource type="Resource" uid="uid://cdk1xdepsungo" path="res://data/color_palette/color_palette.tres" id="2_lpad2"]
+[ext_resource type="Resource" uid="uid://b416tkf4phlrv" path="res://data/letters/letter_textures.tres" id="3_pbucg"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pp8vm"]
+radius = 32.0
+
+[node name="Letter" type="RigidBody2D"]
+gravity_scale = 0.0
+lock_rotation = true
+script = ExtResource("1_ykfcf")
+color_palette_data = ExtResource("2_lpad2")
+letter_textures_data = ExtResource("3_pbucg")
+force_magnitude = 15.0
+
+[node name="LetterSprite" type="Sprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("1_idjne")
+
+[node name="Outline" type="Sprite2D" parent="."]
+texture = ExtResource("2_8o7lr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_pp8vm")
