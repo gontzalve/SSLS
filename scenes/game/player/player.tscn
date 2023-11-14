@@ -1,3 +1,26 @@
-[gd_scene format=3 uid="uid://cj0w5dwyhcvv8"]
+[gd_scene load_steps=5 format=3 uid="uid://cj0w5dwyhcvv8"]
 
-[node name="player" type="Node2D"]
+[ext_resource type="Script" path="res://scenes/game/player/player.gd" id="1_52xme"]
+[ext_resource type="Texture2D" uid="uid://c8c8c0y5k8ehu" path="res://graphics/letters/letter_x.png" id="2_svb6d"]
+[ext_resource type="Texture2D" uid="uid://b35s65xixkvam" path="res://graphics/outline/outline.png" id="3_juccd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gquwh"]
+radius = 32.0
+
+[node name="Player" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_52xme")
+movement_speed = 480.0
+movement_acceleration = 2000.0
+
+[node name="SpriteContainer" type="Node2D" parent="."]
+modulate = Color(0.772549, 0.105882, 0.329412, 1)
+
+[node name="PlayerSprite" type="Sprite2D" parent="SpriteContainer"]
+texture = ExtResource("2_svb6d")
+
+[node name="OutlineSprite" type="Sprite2D" parent="SpriteContainer"]
+texture = ExtResource("3_juccd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_gquwh")

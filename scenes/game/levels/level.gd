@@ -6,17 +6,20 @@ extends Node2D
 var letters: Array[Node2D]
 
 const LETTER_COUNT: int = 100
-const LETTER_SPAWN_RANGE_X: Vector2 = Vector2(-360, 1500)
-const LETTER_SPAWN_RANGE_Y: Vector2 = Vector2(-360, 960)
 
 
 func _ready() -> void:
+	_initialize_grid()
 	_spawn_letter_nodes()
 	_initialize_letter_nodes()
 
 
 func _process(_delta: float) -> void:
 	pass
+
+
+func _initialize_grid() -> void:
+	$LevelGrid.initialize()
 
 
 func _spawn_letter_nodes() -> void:
@@ -28,12 +31,8 @@ func _spawn_letter_nodes() -> void:
 
 func _initialize_letter_nodes() -> void:
 	for letter in letters:
-		var initial_pos: Vector2 = _calculate_letter_initial_position()
-		letter.initialize(initial_pos, alphabet_data.get_random_character())
+		var cell_pos: Vector2i = $LevelGrid.get_random_free_cell()
+		var cell_world_pos: Vector2 = $LevelGrid.get_random_position_inside_cell(cell_pos)
+		letter.initialize(cell_world_pos, alphabet_data.get_random_character())
+		$LevelGrid.set_cell_as_occupied(cell_pos)
 
-
-func _calculate_letter_initial_position() -> Vector2:
-	var initial_pos = Vector2.ZERO
-	initial_pos.x = randf_range(LETTER_SPAWN_RANGE_X.x, LETTER_SPAWN_RANGE_X.y)
-	initial_pos.y = randf_range(LETTER_SPAWN_RANGE_Y.x, LETTER_SPAWN_RANGE_Y.y)
-	return initial_pos

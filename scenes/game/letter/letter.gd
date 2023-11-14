@@ -11,7 +11,7 @@ func _ready() -> void:
 #	set_initial_color()
 #	set_letter_type("b")
 #	apply_random_force()
-	print(get_window().size)
+	pass
 
 
 func _process(_delta: float) -> void:
@@ -23,6 +23,7 @@ func initialize(pos: Vector2, letter_char: String) -> void:
 	assigned_letter_char = letter_char
 	set_initial_color()
 	set_letter_type(letter_char)
+
 
 func set_initial_color() -> void:
 	var random_color: Color = color_palette_data.get_random_color_for_letter()
