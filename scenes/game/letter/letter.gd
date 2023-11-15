@@ -1,4 +1,4 @@
-extends RigidBody2D
+extends CharacterBody2D
 
 @export var color_palette_data: Resource
 @export var letter_textures_data: Resource
@@ -15,6 +15,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	move_and_slide()
 	pass
 	
 
@@ -43,6 +44,6 @@ func set_texture(letter_char: String) -> void:
 func apply_random_force() -> void:
 	var random_dir: Vector2 = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 	print(random_dir)
-	add_constant_central_force(random_dir * force_magnitude)
+#	add_constant_central_force(random_dir * force_magnitude)
 
 

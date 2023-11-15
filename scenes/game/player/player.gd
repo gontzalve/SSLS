@@ -24,7 +24,11 @@ func _check_movement_input(delta: float) -> void:
 	var movement_dir: Vector2 = _get_movement_direction()
 	var target_velocity: Vector2 = movement_dir * movement_speed
 	velocity = velocity.move_toward(target_velocity, movement_acceleration * delta)
-	move_and_slide()
+	var collision: KinematicCollision2D = move_and_collide(velocity * delta)
+	if collision:
+		var collision_speed: float = velocity.length() * 0.6
+		collision.get_collider().velocity = collision_speed * -collision.get_normal()
+#		velocity = velocity.bounce(collision.get_normal()) * 0.2
 	
 
 func _get_movement_direction() -> Vector2:

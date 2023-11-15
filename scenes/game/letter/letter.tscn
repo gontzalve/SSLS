@@ -9,9 +9,8 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_pp8vm"]
 radius = 32.0
 
-[node name="Letter" type="RigidBody2D"]
-gravity_scale = 0.0
-lock_rotation = true
+[node name="Letter" type="CharacterBody2D"]
+motion_mode = 1
 script = ExtResource("1_ykfcf")
 color_palette_data = ExtResource("2_lpad2")
 letter_textures_data = ExtResource("3_pbucg")
@@ -26,4 +25,3 @@ texture = ExtResource("2_8o7lr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_pp8vm")
-disabled = true
