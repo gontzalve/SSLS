@@ -9,7 +9,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_pp8vm"]
 radius = 32.0
 
-[node name="Letter" type="CharacterBody2D"]
+[node name="Letter" type="CharacterBody2D" groups=["letters"]]
 motion_mode = 1
 script = ExtResource("1_ykfcf")
 color_palette_data = ExtResource("2_lpad2")
