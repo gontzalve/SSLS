@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://jl30cbb50et2"]
+
+[ext_resource type="Script" path="res://scenes/game/camera/game_camera.gd" id="1_o1gyb"]
+[ext_resource type="Script" path="res://scenes/game/camera/camera_shake.gd" id="2_6tfly"]
+[ext_resource type="Script" path="res://scenes/game/camera/camera_zoom.gd" id="3_njb4v"]
+[ext_resource type="Script" path="res://scenes/game/camera/camera_follow.gd" id="4_r3qp6"]
+
+[node name="GameCamera" type="Node2D"]
+script = ExtResource("1_o1gyb")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
+
+[node name="CameraShake" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_6tfly")
+
+[node name="CameraZoom" type="Node2D" parent="." node_paths=PackedStringArray("camera2D")]
+unique_name_in_owner = true
+script = ExtResource("3_njb4v")
+camera2D = NodePath("../Camera2D")
+
+[node name="CameraFollow" type="Node2D" parent="." node_paths=PackedStringArray("camera_container")]
+unique_name_in_owner = true
+script = ExtResource("4_r3qp6")
+camera_container = NodePath("..")

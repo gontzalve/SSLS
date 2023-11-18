@@ -1,4 +1,4 @@
-extends Camera2D
+extends Node2D
 
 enum ZoomTransitionState { 
 	NONE, 
@@ -7,6 +7,10 @@ enum ZoomTransitionState {
 	EXECUTING_ZOOM_IN,
 	EXECUTING_ZOOM_OUT,
 }
+
+signal on_zoom_changed(is_zoom_in)
+
+@export var camera2D: Camera2D
 
 const ZOOM_IN_ACTION: String = "zoom_in"
 const ZOOM_OUT_ACTION: String = "zoom_out"
@@ -18,7 +22,6 @@ const ZOOM_DETECTION_TIME: float = 0.3
 const ZOOM_INACTIVITY_TIME: float = 0.2
 const ZOOM_SENSIBILITY: float = 10
 
-var player_node: Node2D
 var current_zoom: float
 var current_zoom_transition: ZoomTransitionState
 var zoom_detection_timer: float
@@ -26,7 +29,6 @@ var zoom_inactivity_timer: float
 
 
 func _ready() -> void:
-	player_node = %Player
 	current_zoom_transition = ZoomTransitionState.NONE
 	zoom_detection_timer = 0
 	zoom_inactivity_timer = 0
@@ -34,14 +36,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_follow_player()
 	_check_zoom_input(delta)
-
-
-func _follow_player() -> void:
-	if player_node == null:
-		return
-	position = player_node.position
 
 
 func _check_zoom_input(delta: float) -> void:
@@ -52,6 +47,23 @@ func _check_zoom_input(delta: float) -> void:
 		_handle_no_zoom_input(delta)
 	else:
 		_handle_zoom_input(detected_zoom_input, delta)
+
+
+func _handle_zoom_input(detected_input: int, delta: float) -> void:
+	var detected_zoom_transition: ZoomTransitionState
+	if detected_input == 1:
+		detected_zoom_transition = ZoomTransitionState.DETECTING_ZOOM_IN
+	else:
+		detected_zoom_transition = ZoomTransitionState.DETECTING_ZOOM_OUT
+	if current_zoom_transition != detected_zoom_transition:
+		zoom_detection_timer = 0
+		current_zoom_transition = detected_zoom_transition
+	zoom_detection_timer += delta * ZOOM_SENSIBILITY
+	if zoom_detection_timer >= ZOOM_DETECTION_TIME:
+		if detected_input == 1:
+			_zoom_in()
+		else:
+			_zoom_out()
 
 
 func _get_zoom_input() -> int:
@@ -69,48 +81,37 @@ func _handle_no_zoom_input(delta: float) -> void:
 	zoom_inactivity_timer += delta
 	if zoom_inactivity_timer >= ZOOM_INACTIVITY_TIME:
 		_reset()
-		
 
-func _handle_zoom_input(detected_input: int, delta: float) -> void:
-	var detected_zoom_transition: ZoomTransitionState
-	if detected_input == 1:
-		detected_zoom_transition = ZoomTransitionState.DETECTING_ZOOM_IN
-	else:
-		detected_zoom_transition = ZoomTransitionState.DETECTING_ZOOM_OUT
-	if current_zoom_transition != detected_zoom_transition:
-		zoom_detection_timer = 0
-		current_zoom_transition = detected_zoom_transition
-	zoom_detection_timer += delta * ZOOM_SENSIBILITY
-	if zoom_detection_timer >= ZOOM_DETECTION_TIME:
-		if detected_input == 1:
-			_zoom_in()
-		else:
-			_zoom_out()
-			
 		
 func _zoom_in() -> void:
 	current_zoom_transition = ZoomTransitionState.EXECUTING_ZOOM_IN
 	_set_zoom(MAX_ZOOM_IN)
+	on_zoom_changed.emit(true)
 	
 
 func _zoom_out() -> void:
 	current_zoom_transition = ZoomTransitionState.EXECUTING_ZOOM_OUT
 	_set_zoom(MAX_ZOOM_OUT)
+	on_zoom_changed.emit(false)
 	
 
 func _set_zoom(zoom_level: float) -> void:
 	zoom_level = clampf(zoom_level, MAX_ZOOM_OUT, MAX_ZOOM_IN)
 	current_zoom = zoom_level
+	_tween_camera_zoom(zoom_level)
+
+
+func _tween_camera_zoom(zoom_level: float) -> void:
 	var tween: Tween = create_tween()
 	var tweener: PropertyTweener
-	tweener = tween.tween_property(self, "zoom", Vector2.ONE * zoom_level, 0.4)
+	tweener = tween.tween_property(camera2D, "zoom", Vector2.ONE * zoom_level, 0.4)
 	tweener.set_trans(Tween.TRANS_BACK)
 	tweener.set_ease(Tween.EASE_OUT)
 	tween.tween_callback(_on_tween_ended)
-
+	
 
 func _on_tween_ended():
-	_reset()
+	_reset()	
 
 
 func _reset():
