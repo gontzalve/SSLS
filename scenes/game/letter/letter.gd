@@ -3,10 +3,12 @@ extends CharacterBody2D
 @export var color_palette_data: Resource
 @export var letter_textures_data: Resource
 @export var force_magnitude: float
+@export var friction: Vector2
 
 var assigned_letter_char: String
 
 const LETTER_GROUP_NAME: String = "letters"
+const CLOSE_TO_ZERO_SPEED: float = 3
 
 
 func _ready() -> void:
@@ -15,6 +17,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_execute_movement(delta)
+	_apply_friction(delta)
 	pass
 	
 
@@ -44,12 +47,12 @@ func _execute_movement(delta: float) -> void:
 	var collision: KinematicCollision2D = move_and_collide(velocity * delta)
 	if collision:
 		if collision.get_collider().is_in_group(LETTER_GROUP_NAME):
-			print("colliding with letter")
+			var collision_speed: float = velocity.length() * 0.6
+			collision.get_collider().velocity = collision_speed * -collision.get_normal()
 
 
-func apply_random_force() -> void:
-	var random_dir: Vector2 = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
-	print(random_dir)
-#	add_constant_central_force(random_dir * force_magnitude)
-
-
+func _apply_friction(delta: float) -> void:
+	if velocity.length() < CLOSE_TO_ZERO_SPEED:
+		velocity = Vector2.ZERO
+	velocity -= sign(velocity) * friction * delta
+	
