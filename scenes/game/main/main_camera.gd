@@ -82,7 +82,6 @@ func _handle_zoom_input(detected_input: int, delta: float) -> void:
 		current_zoom_transition = detected_zoom_transition
 	zoom_detection_timer += delta * ZOOM_SENSIBILITY
 	if zoom_detection_timer >= ZOOM_DETECTION_TIME:
-		print("DETECTED ZOOM")
 		if detected_input == 1:
 			_zoom_in()
 		else:

@@ -1,15 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://cnkavhuprclg4"]
+[gd_scene load_steps=5 format=3 uid="uid://cnkavhuprclg4"]
 
 [ext_resource type="PackedScene" uid="uid://duqk6nnpkjlh1" path="res://scenes/game/levels/level.tscn" id="1_dps4s"]
+[ext_resource type="Script" path="res://scenes/game/main/main_controller.gd" id="1_e8hqi"]
 [ext_resource type="Script" path="res://scenes/game/main/main_camera.gd" id="1_niu8u"]
 [ext_resource type="PackedScene" uid="uid://cj0w5dwyhcvv8" path="res://scenes/game/player/player.tscn" id="2_cg2un"]
 
 [node name="main" type="Node2D"]
+script = ExtResource("1_e8hqi")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("1_niu8u")
 
 [node name="Level" parent="." instance=ExtResource("1_dps4s")]
+unique_name_in_owner = true
 
 [node name="Player" parent="." instance=ExtResource("2_cg2un")]
 unique_name_in_owner = true

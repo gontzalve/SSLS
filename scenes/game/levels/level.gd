@@ -5,7 +5,7 @@ extends Node2D
 
 var letters: Array[Node2D]
 
-const LETTER_COUNT: int = 100
+const LETTER_COUNT: int = 120
 
 
 func _ready() -> void:
@@ -16,6 +16,10 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	pass
+
+
+func get_center_cell_pos() -> Vector2:
+	return $LevelGrid.get_center_cell_world_pos()
 
 
 func _initialize_grid() -> void:

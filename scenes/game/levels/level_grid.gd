@@ -1,13 +1,13 @@
 extends Node2D
 
-const CELL_SIZE: int = 96
+const CELL_SIZE: int = 112
 const LETTER_SIZE: int = 64
 
-const GRID_ROWS: int = 10
-const GRID_COLUMNS: int = 14
+const GRID_ROWS: int = 11
+const GRID_COLUMNS: int = 15
 
-const DOUBLE_CELL_ROWS: int = 8
-const DOUBLE_CELL_COLUMNS: int = 10
+const DOUBLE_CELL_ROWS: int = 0
+const DOUBLE_CELL_COLUMNS: int = 0
 
 var grid: Array
 var row_sections: Array
@@ -17,6 +17,13 @@ var column_sections: Array
 func initialize() -> void:
 	_initialize_grid()
 	_initialize_sections()
+
+
+func get_center_cell_world_pos() -> Vector2:
+	var center_row: int = (GRID_ROWS - 1) / 2
+	var center_column: int = (GRID_COLUMNS - 1) / 2
+	return get_world_position_for_cell(Vector2(center_row, center_column))
+	
 
 func set_cell_as_occupied(cell_grid_pos: Vector2i) -> void:
 	if not _is_cell_position_valid(cell_grid_pos):
