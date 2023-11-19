@@ -3,8 +3,8 @@ extends Node2D
 const CELL_SIZE: int = 112
 const LETTER_SIZE: int = 64
 
-const GRID_ROWS: int = 11
-const GRID_COLUMNS: int = 15
+const GRID_ROWS: int = 19
+const GRID_COLUMNS: int = 23
 
 const DOUBLE_CELL_ROWS: int = 0
 const DOUBLE_CELL_COLUMNS: int = 0

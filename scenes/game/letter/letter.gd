@@ -11,22 +11,20 @@ const LETTER_GROUP_NAME: String = "letters"
 const CLOSE_TO_ZERO_SPEED: float = 3
 
 
-func _ready() -> void:
-	pass
-
-
 func _physics_process(delta: float) -> void:
 	_execute_movement(delta)
 	_apply_friction(delta)
 	pass
 	
 
-func initialize(pos: Vector2, letter_char: String) -> void:
+func set_initial_pos(pos: Vector2) -> void:
 	position = pos
-	assigned_letter_char = letter_char
-	set_initial_color()
-	set_letter_type(letter_char)
 
+
+func set_letter_type(letter_char: String) -> void:
+	assigned_letter_char = letter_char
+	set_texture(letter_char)
+	
 
 func set_initial_color() -> void:
 	var random_color: Color = color_palette_data.get_random_color_for_letter()
@@ -34,10 +32,6 @@ func set_initial_color() -> void:
 	$Outline.modulate = random_color
 
 
-func set_letter_type(letter_char: String) -> void:
-	set_texture(letter_char)
-	
-	
 func set_texture(letter_char: String) -> void:
 	var letter_texture = letter_textures_data.get_texture_from_char(letter_char)
 	$LetterSprite.texture = letter_texture
