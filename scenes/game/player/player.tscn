@@ -14,7 +14,6 @@ movement_speed = 480.0
 movement_acceleration = 2000.0
 
 [node name="SpriteContainer" type="Node2D" parent="."]
-modulate = Color(0.772549, 0.105882, 0.329412, 1)
 
 [node name="PlayerSprite" type="Sprite2D" parent="SpriteContainer"]
 texture = ExtResource("2_svb6d")

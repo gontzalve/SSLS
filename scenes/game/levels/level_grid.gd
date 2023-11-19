@@ -86,7 +86,7 @@ func _initialize_sections() -> void:
 
 
 func _get_world_position_x_for_cell(column: int) -> float:
-	var world_pos_x: float = CELL_SIZE / 2
+	var world_pos_x: float = CELL_SIZE / 2.0
 	for section in column_sections:
 		var min_section_length: int = mini(column, section["Length"])  
 		column = column - min_section_length
@@ -97,7 +97,7 @@ func _get_world_position_x_for_cell(column: int) -> float:
 
 
 func _get_world_position_y_for_cell(row: int) -> float:
-	var world_pos_y: float = CELL_SIZE / 2
+	var world_pos_y: float = CELL_SIZE / 2.0
 	for section in row_sections:
 		var min_section_length: int = mini(row, section["Length"])
 		row = row - min_section_length
