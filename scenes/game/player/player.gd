@@ -18,6 +18,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_check_movement_input(delta)
+	_check_rotation()
 
 
 func _check_movement_input(delta: float) -> void:
@@ -35,4 +36,14 @@ func _get_movement_direction() -> Vector2:
 	var direction: Vector2 = Input.get_vector(MOVE_LEFT_ACTION, 
 			MOVE_RIGHT_ACTION, MOVE_UP_ACTION, MOVE_DOWN_ACTION)
 	return direction.normalized()
+
+
+func _check_rotation() -> void:
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	var center_pos: Vector2 = get_viewport().size / 2
+	var angle = rad_to_deg(center_pos.angle_to_point(mouse_pos))
+	rotation_degrees = angle
+	
+#	var vector_1: Vector2 = center_pos + Vector2.RIGHT
+#	var vector_2: Vector2 = (mouse_pos - center_pos).normalized()
 	

@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://scenes/game/player/player.gd" id="1_52xme"]
 [ext_resource type="Texture2D" uid="uid://c8c8c0y5k8ehu" path="res://graphics/letters/letter_x.png" id="2_svb6d"]
-[ext_resource type="Texture2D" uid="uid://b35s65xixkvam" path="res://graphics/outline/outline.png" id="3_juccd"]
+[ext_resource type="Texture2D" uid="uid://byvcpiq0240fv" path="res://graphics/player/player.png" id="3_lgypu"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_gquwh"]
-radius = 32.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vo12v"]
+size = Vector2(32, 32)
 
 [node name="Player" type="CharacterBody2D"]
 motion_mode = 1
@@ -16,10 +16,11 @@ movement_acceleration = 2000.0
 [node name="SpriteContainer" type="Node2D" parent="."]
 
 [node name="PlayerSprite" type="Sprite2D" parent="SpriteContainer"]
+visible = false
 texture = ExtResource("2_svb6d")
 
 [node name="OutlineSprite" type="Sprite2D" parent="SpriteContainer"]
-texture = ExtResource("3_juccd")
+texture = ExtResource("3_lgypu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_gquwh")
+shape = SubResource("RectangleShape2D_vo12v")

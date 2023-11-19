@@ -11,10 +11,10 @@ func _ready() -> void:
 func set_big_cursor() -> void:
 	if cursor_big == null:
 		return
-	Input.set_custom_mouse_cursor(cursor_big)
+	Input.set_custom_mouse_cursor(cursor_big, Input.CURSOR_ARROW, cursor_big.get_size() / 2)
 
 
 func set_small_cursor() -> void:
 	if cursor_small == null:
 		return
-	Input.set_custom_mouse_cursor(cursor_small)
+	Input.set_custom_mouse_cursor(cursor_small, Input.CURSOR_ARROW, cursor_small.get_size() / 2)
