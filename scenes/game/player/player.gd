@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal shot_fired(spawn_pos: Vector2, direction: Vector2)
+
 @export var movement_speed: float
 @export var movement_acceleration: float
 
@@ -9,7 +11,6 @@ const MOVE_UP_ACTION: String = "move_up"
 const MOVE_DOWN_ACTION: String = "move_down"
 
 const SHOOT_ACTION: String = "shoot"
-#const MOVE_LEFT_ACTION: String = "move_left"
 
 
 func _ready() -> void:
@@ -18,6 +19,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_check_movement_input(delta)
+	_check_shooting_input(delta)
 	_check_rotation()
 
 
@@ -38,12 +40,25 @@ func _get_movement_direction() -> Vector2:
 	return direction.normalized()
 
 
+func _check_shooting_input(delta: float) -> void:
+	if Input.is_action_just_pressed(SHOOT_ACTION):
+		var shooting_dir: Vector2 = _get_shooting_direction()
+		_shoot(shooting_dir)
+
+
+func _get_shooting_direction() -> Vector2:
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	var center_pos: Vector2 = get_viewport().size / 2
+	return (mouse_pos - center_pos).normalized()
+
+
+func _shoot(direction: Vector2) -> void:
+	shot_fired.emit(position, direction)
+
+
 func _check_rotation() -> void:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
 	var center_pos: Vector2 = get_viewport().size / 2
 	var angle = rad_to_deg(center_pos.angle_to_point(mouse_pos))
 	rotation_degrees = angle
-	
-#	var vector_1: Vector2 = center_pos + Vector2.RIGHT
-#	var vector_2: Vector2 = (mouse_pos - center_pos).normalized()
 	

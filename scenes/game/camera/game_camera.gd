@@ -1,7 +1,7 @@
 extends Node2D
 
-signal on_zoomed_in
-signal on_zoomed_out
+signal zoomed_in
+signal zoomed_out
 
 @export var follow_target_node: Node2D
 
@@ -16,11 +16,11 @@ func _inject_dependencies() -> void:
 
 
 func _connect_to_children_signals() -> void:
-	$CameraZoom.on_zoom_changed.connect(_on_camera_zoom_changed)
+	$CameraZoom.zoom_changed.connect(_on_camera_zoom_changed)
 
 
 func _on_camera_zoom_changed(is_zoom_in: bool) -> void:
 	if is_zoom_in:
-		on_zoomed_in.emit()
+		zoomed_in.emit()
 	else:
-		on_zoomed_out.emit()
+		zoomed_out.emit()

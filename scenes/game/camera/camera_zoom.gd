@@ -8,7 +8,7 @@ enum ZoomTransitionState {
 	EXECUTING_ZOOM_OUT,
 }
 
-signal on_zoom_changed(is_zoom_in)
+signal zoom_changed(is_zoom_in: bool)
 
 @export var camera2D: Camera2D
 
@@ -86,13 +86,13 @@ func _handle_no_zoom_input(delta: float) -> void:
 func _zoom_in() -> void:
 	current_zoom_transition = ZoomTransitionState.EXECUTING_ZOOM_IN
 	_set_zoom(MAX_ZOOM_IN)
-	on_zoom_changed.emit(true)
+	zoom_changed.emit(true)
 	
 
 func _zoom_out() -> void:
 	current_zoom_transition = ZoomTransitionState.EXECUTING_ZOOM_OUT
 	_set_zoom(MAX_ZOOM_OUT)
-	on_zoom_changed.emit(false)
+	zoom_changed.emit(false)
 	
 
 func _set_zoom(zoom_level: float) -> void:
