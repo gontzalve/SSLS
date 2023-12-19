@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://iv5glvthjnbv"]
 
 [ext_resource type="Script" path="res://scenes/game/cursor/game_cursor.gd" id="1_bvn0f"]
-[ext_resource type="Texture2D" uid="uid://bg04c8g2erqkt" path="res://graphics/crosshairs/crosshair_big.png" id="2_fhtyc"]
-[ext_resource type="Texture2D" uid="uid://c2o8077ti42pp" path="res://graphics/crosshairs/crosshair_small.png" id="3_18s7n"]
+[ext_resource type="Texture2D" uid="uid://bg04c8g2erqkt" path="res://graphics/game/crosshairs/crosshair_big.png" id="2_mcncb"]
+[ext_resource type="Texture2D" uid="uid://c2o8077ti42pp" path="res://graphics/game/crosshairs/crosshair_small.png" id="3_ixlhv"]
 
 [node name="GameCursor" type="Node2D"]
 script = ExtResource("1_bvn0f")
-cursor_big = ExtResource("2_fhtyc")
-cursor_small = ExtResource("3_18s7n")
+cursor_big = ExtResource("2_mcncb")
+cursor_small = ExtResource("3_ixlhv")

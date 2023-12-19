@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://dpe2lfrixtimh"]
+
+[ext_resource type="Script" path="res://scenes/splash/splash_controller.gd" id="1_cyh7r"]
+[ext_resource type="Texture2D" uid="uid://d0o78x1pote5k" path="res://graphics/splash/godot_name_g.png" id="2_bopxx"]
+[ext_resource type="Texture2D" uid="uid://btm1f1cppbtsb" path="res://graphics/splash/godot_logo.png" id="3_4a2po"]
+[ext_resource type="Texture2D" uid="uid://wd4ee4y8qn7s" path="res://graphics/splash/godot_name_o.png" id="3_uad6v"]
+[ext_resource type="Texture2D" uid="uid://bhoreoenmix4a" path="res://graphics/splash/godot_name_d.png" id="4_we2bt"]
+[ext_resource type="Texture2D" uid="uid://cha25lr8u0s3o" path="res://graphics/splash/godot_name_t.png" id="5_nqwel"]
+
+[node name="Splash" type="Node2D" node_paths=PackedStringArray("godot_logo", "godot_letter_container")]
+script = ExtResource("1_cyh7r")
+godot_logo = NodePath("Logo")
+godot_letter_container = NodePath("GodotNameContainer")
+
+[node name="Logo" type="Sprite2D" parent="."]
+position = Vector2(480, 320)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("3_4a2po")
+
+[node name="GodotNameContainer" type="Node2D" parent="."]
+position = Vector2(480, 450)
+scale = Vector2(0.6, 0.6)
+
+[node name="G" type="Sprite2D" parent="GodotNameContainer"]
+position = Vector2(-150, 0)
+texture = ExtResource("2_bopxx")
+
+[node name="O1" type="Sprite2D" parent="GodotNameContainer"]
+position = Vector2(-75, 0)
+texture = ExtResource("3_uad6v")
+
+[node name="D" type="Sprite2D" parent="GodotNameContainer"]
+texture = ExtResource("4_we2bt")
+
+[node name="O2" type="Sprite2D" parent="GodotNameContainer"]
+position = Vector2(75, 0)
+texture = ExtResource("3_uad6v")
+
+[node name="T" type="Sprite2D" parent="GodotNameContainer"]
+position = Vector2(150, 0)
+texture = ExtResource("5_nqwel")
