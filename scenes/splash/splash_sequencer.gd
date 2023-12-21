@@ -5,6 +5,9 @@ signal sequence_ended
 @export var godot_logo: Node2D
 @export var godot_letter_container: Node2D
 @export var color_palette: Resource
+@export var audio_player: AudioStreamPlayer
+@export var sfx_splash_letters: AudioStream
+@export var sfx_splash_logo: AudioStream
 
 var godot_letters: Array[Node]
 
@@ -33,6 +36,7 @@ func _execute_splash_sequence() -> void:
 	# Letters appearing ####################################
 	for letter in godot_letters:
 		letter.visible = true
+		_play_splash_letters_sfx()
 		await get_tree().create_timer(0.1).timeout
 	await get_tree().create_timer(0.1).timeout
 	# Logo appearing and letters moving ####################################
@@ -43,7 +47,8 @@ func _execute_splash_sequence() -> void:
 	# Color sequence ####################################
 	var splash_colors: PackedColorArray = color_palette.get_color_array_for_splash_sequence()
 	for color in splash_colors:
-		set_splash_color(color)
+		_set_splash_color(color)
+		_play_splash_logo_sfx()
 		await get_tree().create_timer(0.25).timeout
 	await get_tree().create_timer(0.1).timeout
 	# Logo disappearing and letters moving ####################################
@@ -53,6 +58,7 @@ func _execute_splash_sequence() -> void:
 	# Letters disappearing ####################################
 	for letter in godot_letters:
 		letter.visible = false
+		_play_splash_letters_sfx()
 		await get_tree().create_timer(0.1).timeout
 	# Sequence end ####################################
 	sequence_ended.emit()
@@ -74,10 +80,19 @@ func _tween_logo_letters(new_position: Vector2, easing: int) -> void:
 	tweener.set_ease(easing)
 
 
-func set_splash_color(color: Color) -> void:
+func _set_splash_color(color: Color) -> void:
 	godot_logo.self_modulate = color
 	for letter in godot_letters:
 		letter.self_modulate = color
-	
+
+
+func _play_splash_letters_sfx(pitch: float = 1) -> void:
+	audio_player.pitch_scale = pitch
+	audio_player.stream = sfx_splash_letters
+	audio_player.play()
 	
 
+func _play_splash_logo_sfx(pitch: float = 1) -> void:
+	audio_player.pitch_scale = pitch
+	audio_player.stream = sfx_splash_logo
+	audio_player.play()

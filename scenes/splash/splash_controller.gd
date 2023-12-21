@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var next_scene: PackedScene
+@export var loading_scene: PackedScene
 
 
 func _ready() -> void:
@@ -8,4 +8,4 @@ func _ready() -> void:
 
 
 func _on_splash_sequence_ended() -> void:
-	get_tree().change_scene_to_packed(next_scene)
+	get_tree().change_scene_to_packed(loading_scene)

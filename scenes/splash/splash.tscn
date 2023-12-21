@@ -1,16 +1,19 @@
-[gd_scene load_steps=9 format=3 uid="uid://dpe2lfrixtimh"]
+[gd_scene load_steps=11 format=3 uid="uid://dpe2lfrixtimh"]
 
 [ext_resource type="Script" path="res://scenes/splash/splash_controller.gd" id="1_cyh7r"]
 [ext_resource type="Script" path="res://scenes/splash/splash_sequencer.gd" id="1_g6we6"]
 [ext_resource type="Texture2D" uid="uid://d0o78x1pote5k" path="res://graphics/splash/godot_name_g.png" id="2_bopxx"]
+[ext_resource type="PackedScene" uid="uid://cy00th7vdr6ke" path="res://scenes/utils/loader.tscn" id="2_pe0e8"]
 [ext_resource type="Texture2D" uid="uid://btm1f1cppbtsb" path="res://graphics/splash/godot_logo.png" id="3_4a2po"]
 [ext_resource type="Texture2D" uid="uid://wd4ee4y8qn7s" path="res://graphics/splash/godot_name_o.png" id="3_uad6v"]
 [ext_resource type="Texture2D" uid="uid://bhoreoenmix4a" path="res://graphics/splash/godot_name_d.png" id="4_we2bt"]
 [ext_resource type="Texture2D" uid="uid://cha25lr8u0s3o" path="res://graphics/splash/godot_name_t.png" id="5_nqwel"]
 [ext_resource type="Resource" uid="uid://cdk1xdepsungo" path="res://data/color_palette/color_palette.tres" id="8_ntdtg"]
+[ext_resource type="AudioStream" uid="uid://381ptg42to2m" path="res://sfxs/sfx_splash_letters.wav" id="10_ku61b"]
 
 [node name="Splash" type="Node2D"]
 script = ExtResource("1_cyh7r")
+loading_scene = ExtResource("2_pe0e8")
 
 [node name="Logo" type="Sprite2D" parent="."]
 self_modulate = Color(0, 0.631373, 0.894118, 1)
@@ -46,10 +49,15 @@ self_modulate = Color(0, 0.631373, 0.894118, 1)
 position = Vector2(150, 0)
 texture = ExtResource("5_nqwel")
 
-[node name="Sequencer" type="Node2D" parent="." node_paths=PackedStringArray("godot_logo", "godot_letter_container")]
+[node name="Sequencer" type="Node2D" parent="." node_paths=PackedStringArray("godot_logo", "godot_letter_container", "audio_player")]
 script = ExtResource("1_g6we6")
 godot_logo = NodePath("../Logo")
 godot_letter_container = NodePath("../GodotNameContainer")
 color_palette = ExtResource("8_ntdtg")
+audio_player = NodePath("../AudioStreamPlayer")
+sfx_splash_letters = ExtResource("10_ku61b")
+sfx_splash_logo = ExtResource("10_ku61b")
 
 [node name="Loader" type="Node2D" parent="."]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
