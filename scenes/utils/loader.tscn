@@ -14,12 +14,19 @@ script = ExtResource("1_vwao7")
 game_scene_path = "res://scenes/game/main/main.tscn"
 
 [node name="LoadingBarContainer" type="Control" parent="."]
-anchors_preset = 0
-offset_left = 375.0
-offset_top = 345.0
-offset_right = 585.0
-offset_bottom = 375.0
-pivot_offset = Vector2(105, 15)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -80.0
+offset_right = -60.0
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(100, 10)
 
 [node name="LoadingBarBackground" type="ColorRect" parent="LoadingBarContainer"]
 layout_mode = 1
