@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://cy00th7vdr6ke"]
+[gd_scene load_steps=4 format=3 uid="uid://cy00th7vdr6ke"]
 
 [ext_resource type="Script" path="res://scenes/utils/loader.gd" id="1_vwao7"]
+[ext_resource type="StyleBox" uid="uid://de68smf7ix6rq" path="res://themes/theme_rectangle.tres" id="2_0umix"]
+
+[sub_resource type="Theme" id="Theme_q1k7v"]
 
 [node name="Loader" type="Control"]
 layout_mode = 3
@@ -15,27 +18,25 @@ game_scene_path = "res://scenes/game/main/main.tscn"
 
 [node name="LoadingBarContainer" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -260.0
-offset_top = -80.0
-offset_right = -60.0
-offset_bottom = -60.0
-grow_horizontal = 0
-grow_vertical = 0
-pivot_offset = Vector2(100, 10)
-
-[node name="LoadingBarBackground" type="ColorRect" parent="LoadingBarContainer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -10.0
+offset_right = 100.0
+offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.772549, 0.105882, 0.329412, 1)
+pivot_offset = Vector2(100, 10)
+
+[node name="LoadingBarBackground" type="Panel" parent="LoadingBarContainer"]
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 20.0
+theme = SubResource("Theme_q1k7v")
+theme_override_styles/panel = ExtResource("2_0umix")
 
 [node name="LoadingBarFill" type="ColorRect" parent="LoadingBarContainer"]
 unique_name_in_owner = true
@@ -45,5 +46,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.5, 1)
-color = Color(1, 0.796078, 0.121569, 1)
+scale = Vector2(1e-05, 1)
+color = Color(0.772549, 0.105882, 0.329412, 1)

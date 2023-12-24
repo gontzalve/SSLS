@@ -32,7 +32,7 @@ func _setup_scene() -> void:
 
 func _execute_splash_sequence() -> void:
 	# Initial delay ####################################
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(1).timeout
 	# Letters appearing ####################################
 	for i in range(godot_letters.size()):
 		godot_letters[i].visible = true
