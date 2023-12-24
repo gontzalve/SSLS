@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bhoreoenmix4a" path="res://graphics/splash/godot_name_d.png" id="4_we2bt"]
 [ext_resource type="Texture2D" uid="uid://cha25lr8u0s3o" path="res://graphics/splash/godot_name_t.png" id="5_nqwel"]
 [ext_resource type="Resource" uid="uid://cdk1xdepsungo" path="res://data/color_palette/color_palette.tres" id="8_ntdtg"]
-[ext_resource type="AudioStream" uid="uid://381ptg42to2m" path="res://sfxs/sfx_splash_letters.wav" id="10_ku61b"]
+[ext_resource type="AudioStream" uid="uid://bqp56jh80yxre" path="res://sfxs/sfx_splash.wav" id="10_vtf1a"]
 
 [node name="Splash" type="Node2D"]
 script = ExtResource("1_cyh7r")
@@ -55,8 +55,7 @@ godot_logo = NodePath("../Logo")
 godot_letter_container = NodePath("../GodotNameContainer")
 color_palette = ExtResource("8_ntdtg")
 audio_player = NodePath("../AudioStreamPlayer")
-sfx_splash_letters = ExtResource("10_ku61b")
-sfx_splash_logo = ExtResource("10_ku61b")
+sfx_splash = ExtResource("10_vtf1a")
 
 [node name="Loader" type="Node2D" parent="."]
 
