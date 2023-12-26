@@ -1,9 +1,12 @@
 extends CharacterBody2D
 
+signal appeared
 signal shot_fired(spawn_pos: Vector2, direction: Vector2)
 
 @export var movement_speed: float
 @export var movement_acceleration: float
+
+var has_appeared: bool = false
 
 const MOVE_LEFT_ACTION: String = "move_left"
 const MOVE_RIGHT_ACTION: String = "move_right"
@@ -14,13 +17,31 @@ const SHOOT_ACTION: String = "shoot"
 
 
 func _ready() -> void:
-	pass # Replace with function body.
+	scale = Vector2.ZERO
 
 
 func _process(delta: float) -> void:
+	if not has_appeared:
+		return
 	_check_movement_input(delta)
 	_check_shooting_input(delta)
 	_check_rotation()
+
+
+func appear_at(pos: Vector2) -> void:
+	position = pos
+	var tween: Tween = create_tween()
+	var tweener: PropertyTweener
+	tweener = tween.tween_property(self, "scale", Vector2.ONE, 0.2)
+	tweener.set_trans(Tween.TRANS_BACK)
+	tweener.set_ease(Tween.EASE_OUT)
+	tween.tween_callback(_on_appeared)
+
+
+func _on_appeared() -> void:
+	await get_tree().create_timer(0.5).timeout
+	has_appeared = true
+	appeared.emit()
 
 
 func _check_movement_input(delta: float) -> void:
@@ -53,7 +74,14 @@ func _get_shooting_direction() -> Vector2:
 
 
 func _shoot(direction: Vector2) -> void:
-	shot_fired.emit(position, direction)
+	shot_fired.emit($ShootingPivot.global_position, direction)
+	_tween_player_arrow()
+
+
+func _tween_player_arrow() -> void:
+	var tween: Tween = create_tween()
+	tween.tween_property($PlayerArrowSprite, "position", Vector2.LEFT * 3, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property($PlayerArrowSprite, "position", Vector2.ZERO, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 func _check_rotation() -> void:

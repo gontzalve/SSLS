@@ -8,6 +8,14 @@ func _ready() -> void:
 	set_big_cursor()
 
 
+func show_cursor() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+
+func hide_cursor() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
+
+
 func set_big_cursor() -> void:
 	if cursor_big == null:
 		return

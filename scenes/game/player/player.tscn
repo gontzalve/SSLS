@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cj0w5dwyhcvv8"]
+[gd_scene load_steps=5 format=3 uid="uid://cj0w5dwyhcvv8"]
 
 [ext_resource type="Script" path="res://scenes/game/player/player.gd" id="1_52xme"]
-[ext_resource type="Texture2D" uid="uid://c8c8c0y5k8ehu" path="res://graphics/game/letters/letter_x.png" id="2_sfexw"]
-[ext_resource type="Texture2D" uid="uid://byvcpiq0240fv" path="res://graphics/game/player/player.png" id="3_1ixwg"]
-[ext_resource type="Script" path="res://scenes/game/player/player_drawer.gd" id="4_was6d"]
+[ext_resource type="Texture2D" uid="uid://c4db867j0ajg2" path="res://graphics/game/player/PlayerOutline.png" id="2_6a5kw"]
+[ext_resource type="Texture2D" uid="uid://boofwcm6g13eu" path="res://graphics/game/player/PlayerArrow.png" id="3_d7osy"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_t4nuc"]
 radius = 24.0
@@ -15,17 +14,14 @@ script = ExtResource("1_52xme")
 movement_speed = 480.0
 movement_acceleration = 2000.0
 
-[node name="SpriteContainer" type="Node2D" parent="."]
-
-[node name="PlayerSprite" type="Sprite2D" parent="SpriteContainer"]
-visible = false
-texture = ExtResource("2_sfexw")
-
-[node name="OutlineSprite" type="Sprite2D" parent="SpriteContainer"]
-texture = ExtResource("3_1ixwg")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_t4nuc")
 
-[node name="PlayerDrawer" type="Node2D" parent="."]
-script = ExtResource("4_was6d")
+[node name="PlayerOutlineSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_6a5kw")
+
+[node name="PlayerArrowSprite" type="Sprite2D" parent="."]
+texture = ExtResource("3_d7osy")
+
+[node name="ShootingPivot" type="Node2D" parent="."]
+position = Vector2(32, 0)
