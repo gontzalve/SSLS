@@ -11,6 +11,10 @@ func _ready() -> void:
 	_connect_to_children_signals()
 
 
+func start_shake() -> void:
+	$CameraShake.start_shake()
+
+
 func _inject_dependencies() -> void:
 	%CameraFollow.set_target_reference(follow_target_node)
 

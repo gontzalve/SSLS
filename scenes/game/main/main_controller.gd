@@ -28,6 +28,7 @@ func _on_player_appeared() -> void:
 	
 
 func _on_player_shot_fired(spawn_pos: Vector2, direction: Vector2) -> void:
+	game_camera.start_shake()
 	bullet_factory.create_bullet(spawn_pos, direction)
 
 
