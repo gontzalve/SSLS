@@ -6,7 +6,7 @@ signal shot_fired(spawn_pos: Vector2, direction: Vector2)
 @export var movement_speed: float
 @export var movement_acceleration: float
 
-var has_appeared: bool = false
+var has_appeared: bool
 
 const MOVE_LEFT_ACTION: String = "move_left"
 const MOVE_RIGHT_ACTION: String = "move_right"
@@ -17,19 +17,28 @@ const SHOOT_ACTION: String = "shoot"
 
 
 func _ready() -> void:
-	scale = Vector2.ZERO
+	pass
 
 
 func _process(delta: float) -> void:
 	if not has_appeared:
 		return
 	_check_movement_input(delta)
-	_check_shooting_input(delta)
+	_check_shooting_input()
 	_check_rotation()
+	
+
+func initialize() -> void:
+	has_appeared = false
+	scale = Vector2.ZERO
 
 
 func appear_at(pos: Vector2) -> void:
 	position = pos
+	_tween_up_scale()
+
+
+func _tween_up_scale() -> void:
 	var tween: Tween = create_tween()
 	var tweener: PropertyTweener
 	tweener = tween.tween_property(self, "scale", Vector2.ONE, 0.2)
@@ -50,9 +59,14 @@ func _check_movement_input(delta: float) -> void:
 	velocity = velocity.move_toward(target_velocity, movement_acceleration * delta)
 	var collision: KinematicCollision2D = move_and_collide(velocity * delta)
 	if collision:
-		var collision_speed: float = velocity.length() * 0.6
-		collision.get_collider().velocity = collision_speed * -collision.get_normal()
-#		velocity = velocity.bounce(collision.get_normal()) * 0.2
+		if collision.get_collider().is_in_group("letters"):
+			_handle_collision_with_letter(collision)
+
+
+func _handle_collision_with_letter(collision: KinematicCollision2D) -> void:
+	var collision_speed: float = velocity.length() * 0.75
+	collision.get_collider().velocity = collision_speed * -collision.get_normal()
+	# velocity = velocity.bounce(collision.get_normal()) * 0.2
 	
 
 func _get_movement_direction() -> Vector2:
@@ -61,7 +75,7 @@ func _get_movement_direction() -> Vector2:
 	return direction.normalized()
 
 
-func _check_shooting_input(delta: float) -> void:
+func _check_shooting_input() -> void:
 	if Input.is_action_just_pressed(SHOOT_ACTION):
 		var shooting_dir: Vector2 = _get_shooting_direction()
 		_shoot(shooting_dir)

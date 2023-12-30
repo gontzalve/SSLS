@@ -10,8 +10,9 @@
 [node name="main" type="Node2D"]
 script = ExtResource("1_e8hqi")
 
-[node name="GameCamera" parent="." instance=ExtResource("2_vxcp5")]
+[node name="GameCamera" parent="." node_paths=PackedStringArray("follow_target_node") instance=ExtResource("2_vxcp5")]
 unique_name_in_owner = true
+follow_target_node = NodePath("../Player")
 
 [node name="Level" parent="." instance=ExtResource("1_dps4s")]
 unique_name_in_owner = true

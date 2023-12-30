@@ -17,7 +17,7 @@ script = ExtResource("1_ykfcf")
 color_palette_data = ExtResource("2_lpad2")
 letter_textures_data = ExtResource("3_pbucg")
 force_magnitude = 15.0
-friction = Vector2(150, 150)
+friction = Vector2(320, 320)
 
 [node name="LetterSprite" type="Sprite2D" parent="."]
 scale = Vector2(0.75, 0.75)

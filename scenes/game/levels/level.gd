@@ -12,8 +12,8 @@ const LETTER_REPETITIONS: int = 4
 
 func _ready() -> void:
 	pass
-	#_initialize_grid()
-	#load_word_level(0)
+	_initialize_grid()
+	load_word_level(0)
 
 
 func load_word_level(index: int) -> void:

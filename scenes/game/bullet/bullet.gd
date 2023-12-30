@@ -2,6 +2,7 @@ extends RigidBody2D
 
 
 @export var initial_impulse: float
+@export var push_force_magnitude: float
 
 
 func _ready() -> void:
@@ -14,7 +15,11 @@ func start_movement(direction: Vector2):
 
 
 func _on_body_entered(body: Node) -> void:
-	print(body.name)
+	if body.is_in_group("letters"):
+		var push_velocity: Vector2 = (body.position - position) * push_force_magnitude
+		body.on_bullet_collision(push_velocity)
+	queue_free()
+	pass
 
 
 func _set_initial_rotation(direction: Vector2) -> void:
