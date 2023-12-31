@@ -10,6 +10,7 @@ script = ExtResource("1_o1gyb")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
+zoom = Vector2(0.2, 0.2)
 
 [node name="CameraShake" type="Node2D" parent="." node_paths=PackedStringArray("camera_2d")]
 unique_name_in_owner = true

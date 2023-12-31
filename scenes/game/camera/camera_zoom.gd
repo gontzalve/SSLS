@@ -32,7 +32,7 @@ func _ready() -> void:
 	current_zoom_transition = ZoomTransitionState.NONE
 	zoom_detection_timer = 0
 	zoom_inactivity_timer = 0
-	_set_zoom(1)
+	# _set_zoom(1)
 
 
 func _process(delta: float) -> void:

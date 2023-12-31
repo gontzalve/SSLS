@@ -11,7 +11,7 @@ func _ready() -> void:
 
 func start_movement(direction: Vector2):
 	apply_impulse(direction * initial_impulse)
-	_set_initial_rotation(direction)
+	_set_initial_rotation()
 
 
 func _on_body_entered(body: Node) -> void:
@@ -22,7 +22,7 @@ func _on_body_entered(body: Node) -> void:
 	pass
 
 
-func _set_initial_rotation(direction: Vector2) -> void:
+func _set_initial_rotation() -> void:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
 	var center_pos: Vector2 = get_viewport().size / 2
 	var angle = rad_to_deg(center_pos.angle_to_point(mouse_pos))

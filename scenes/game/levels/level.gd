@@ -5,14 +5,22 @@ extends Node2D
 @export var word_levels: Resource
 
 var letters: Array[Node2D]
+var origin_position: Vector2
+var letter_node_slot_radius: float
+var current_spawn_circle_radius: float
 
 const LETTER_COUNT: int = 360
 const LETTER_REPETITIONS: int = 4
 
+const LETTER_NODE_RADIUS: float = 54.0
+const LETTER_NODE_RADIUS_PADDING: float = 8.0 
+const SPAWN_CIRCLE_INITIAL_RADIUS: float = 150.0
+const SPAWN_CIRCLE_RADIUS_INCREASE_STEP: float = 150.0
+
 
 func _ready() -> void:
-	pass
-	_initialize_grid()
+	origin_position = Vector2.ZERO
+	letter_node_slot_radius = LETTER_NODE_RADIUS + LETTER_NODE_RADIUS_PADDING
 	load_word_level(0)
 
 
@@ -21,33 +29,53 @@ func load_word_level(index: int) -> void:
 	var level_word: String = word_levels.get_level_word(index)
 	if level_word == "-":
 		return
-	_spawn_letter_nodes()
-	_initialize_letter_nodes(level_word)
+	_execute_spawn_sequence()
+
+
+func _execute_spawn_sequence() -> void:
+	var spawned_letters: int = 0
+	current_spawn_circle_radius = SPAWN_CIRCLE_INITIAL_RADIUS
+	while spawned_letters < LETTER_COUNT:
+		print("Spawned Letters: " , spawned_letters, " / Spawn Radius: ", current_spawn_circle_radius)
+		var letter_slot_angle: float = _calculate_letter_slot_angle(current_spawn_circle_radius)
+		var letter_slot_count: int = floori(360.0 / letter_slot_angle)
+		letter_slot_count = min(letter_slot_count, LETTER_COUNT - spawned_letters)
+		print("Slot Angle: " , letter_slot_angle)
+		print("Letter slots: " , letter_slot_count)
+		for i in range(letter_slot_count):
+			var spawn_angle: float = (letter_slot_angle / 2) + i * letter_slot_angle
+			var spawn_pos: Vector2 = _calculate_letter_spawn_position(spawn_angle, current_spawn_circle_radius)
+			_spawn_letter(spawn_pos)
+			await get_tree().create_timer(0.02).timeout
+			spawned_letters += 1
+		current_spawn_circle_radius += SPAWN_CIRCLE_RADIUS_INCREASE_STEP
+		print("-------------------------------")
+	# _initialize_letter_nodes(level_word)
+	
+
+func _calculate_letter_slot_angle(spawn_radius: float) -> float:
+	var slot_angle: float = 4 * asin(letter_node_slot_radius / (2 * spawn_radius))
+	return rad_to_deg(slot_angle)
+
+
+func _calculate_letter_spawn_position(angle: float, radius: float) -> Vector2:
+	var rad_angle: float = deg_to_rad(angle)
+	return Vector2(radius * cos(rad_angle), radius * sin(rad_angle))
+
+
+func _spawn_letter(spawn_pos: Vector2) -> void:
+	var letter_node: Node = letter_scene.instantiate()
+	letter_node.position = spawn_pos
+	letters.append(letter_node)
+	$LetterContainer.add_child(letter_node)
+	pass
 
 
 func _clear_level() -> void:
-	_clear_letters_array()
-	
-
-func get_center_cell_pos() -> Vector2:
-	return $LevelGrid.get_center_cell_world_pos()
-
-
-func _initialize_grid() -> void:
-	$LevelGrid.initialize()
-
-
-func _clear_letters_array() -> void:
 	for letter_node in letters:
 		letter_node.queue_free()
 	letters.clear()
 
-
-func _spawn_letter_nodes() -> void:
-	for i in range(LETTER_COUNT):
-		var letter_node: Node = letter_scene.instantiate()
-		letters.append(letter_node)
-		$LetterContainer.add_child(letter_node)
 
 
 func _initialize_letter_nodes(level_word: String) -> void:
