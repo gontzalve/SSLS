@@ -6,7 +6,7 @@ signal shot_fired(spawn_pos: Vector2, direction: Vector2)
 @export var movement_speed: float
 @export var movement_acceleration: float
 
-var has_appeared: bool
+var allowed_input: bool
 
 const MOVE_LEFT_ACTION: String = "move_left"
 const MOVE_RIGHT_ACTION: String = "move_right"
@@ -21,7 +21,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if not has_appeared:
+	if not allowed_input:
 		return
 	_check_movement_input(delta)
 	_check_shooting_input()
@@ -29,13 +29,17 @@ func _process(delta: float) -> void:
 	
 
 func initialize() -> void:
-	has_appeared = false
+	allowed_input = false
 	scale = Vector2.ZERO
 
 
 func appear_at(pos: Vector2) -> void:
 	position = pos
 	_tween_up_scale()
+
+
+func allow_input() -> void:
+	allowed_input = true
 
 
 func _tween_up_scale() -> void:
@@ -49,7 +53,6 @@ func _tween_up_scale() -> void:
 
 func _on_appeared() -> void:
 	await get_tree().create_timer(0.5).timeout
-	has_appeared = true
 	appeared.emit()
 
 

@@ -13,6 +13,26 @@ const CLOSE_TO_ZERO_SPEED: float = 3
 const MAX_SPEED: float = 200
 
 
+func appear() -> void:
+	show()
+	$LetterSprite.hide()
+	scale = Vector2.ZERO
+	_tween_up_scale()
+
+
+func _tween_up_scale() -> void:
+	var tween: Tween = create_tween()
+	var tweener: PropertyTweener
+	tweener = tween.tween_property(self, "scale", Vector2.ONE, 0.2)
+	tweener.set_trans(Tween.TRANS_BACK)
+	tweener.set_ease(Tween.EASE_OUT)
+	tween.tween_callback(_on_appeared)
+
+
+func _on_appeared() -> void:
+	$LetterSprite.show()
+
+
 func _physics_process(delta: float) -> void:
 	_execute_movement(delta)
 	_apply_friction(delta)

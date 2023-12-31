@@ -1,5 +1,7 @@
 extends Node2D
 
+signal level_appeared
+
 @export var letter_scene: PackedScene
 @export var alphabet_data: Resource
 @export var word_levels: Resource
@@ -17,11 +19,12 @@ const LETTER_NODE_RADIUS_PADDING: float = 8.0
 const SPAWN_CIRCLE_INITIAL_RADIUS: float = 150.0
 const SPAWN_CIRCLE_RADIUS_INCREASE_STEP: float = 150.0
 
+const LETTER_APPEAR_INITIAL_DELAY: float = 0.5
+
 
 func _ready() -> void:
 	origin_position = Vector2.ZERO
 	letter_node_slot_radius = LETTER_NODE_RADIUS + LETTER_NODE_RADIUS_PADDING
-	load_word_level(0)
 
 
 func load_word_level(index: int) -> void:
@@ -29,10 +32,12 @@ func load_word_level(index: int) -> void:
 	var level_word: String = word_levels.get_level_word(index)
 	if level_word == "-":
 		return
-	_execute_spawn_sequence()
+	_spawn_letter_nodes()
+	_initialize_letter_nodes(level_word)
+	_execute_letter_nodes_appear_sequence()
 
 
-func _execute_spawn_sequence() -> void:
+func _spawn_letter_nodes() -> void:
 	var spawned_letters: int = 0
 	current_spawn_circle_radius = SPAWN_CIRCLE_INITIAL_RADIUS
 	while spawned_letters < LETTER_COUNT:
@@ -46,11 +51,9 @@ func _execute_spawn_sequence() -> void:
 			var spawn_angle: float = (letter_slot_angle / 2) + i * letter_slot_angle
 			var spawn_pos: Vector2 = _calculate_letter_spawn_position(spawn_angle, current_spawn_circle_radius)
 			_spawn_letter(spawn_pos)
-			await get_tree().create_timer(0.02).timeout
 			spawned_letters += 1
 		current_spawn_circle_radius += SPAWN_CIRCLE_RADIUS_INCREASE_STEP
 		print("-------------------------------")
-	# _initialize_letter_nodes(level_word)
 	
 
 func _calculate_letter_slot_angle(spawn_radius: float) -> float:
@@ -65,32 +68,16 @@ func _calculate_letter_spawn_position(angle: float, radius: float) -> Vector2:
 
 func _spawn_letter(spawn_pos: Vector2) -> void:
 	var letter_node: Node = letter_scene.instantiate()
-	letter_node.position = spawn_pos
+	letter_node.set_initial_pos(spawn_pos)
+	letter_node.hide()
 	letters.append(letter_node)
 	$LetterContainer.add_child(letter_node)
-	pass
-
-
-func _clear_level() -> void:
-	for letter_node in letters:
-		letter_node.queue_free()
-	letters.clear()
-
 
 
 func _initialize_letter_nodes(level_word: String) -> void:
-	_initialize_letter_positions()
 	_initialize_letter_characters(level_word)
 	_initialize_letter_colors()
 
-
-func _initialize_letter_positions() -> void:
-	for letter in letters:
-		var cell_pos: Vector2i = $LevelGrid.get_random_free_cell()
-		var cell_world_pos: Vector2 = $LevelGrid.get_random_position_inside_cell(cell_pos)
-		letter.set_initial_pos(cell_world_pos)
-		$LevelGrid.set_cell_as_occupied(cell_pos)
-	
 
 func _initialize_letter_characters(level_word: String) -> void:
 	var word_size = level_word.length()
@@ -107,4 +94,24 @@ func _initialize_letter_characters(level_word: String) -> void:
 func _initialize_letter_colors() -> void:
 	for letter in letters:
 		letter.set_initial_color()
+
+
+func _execute_letter_nodes_appear_sequence() -> void:
+	for i in range(letters.size()):
+		letters[i].appear()
+		var delay: float = LETTER_APPEAR_INITIAL_DELAY - LETTER_APPEAR_INITIAL_DELAY * _ease_out_expo(i / 48.0)
+		delay = maxf(delay, 0.01)
+		await get_tree().create_timer(delay).timeout
+	level_appeared.emit()
+
+
+func _ease_out_expo(x: float) -> float:
+	if x >= 1:
+		return 1
+	return 1 - pow(2, -10 * x)
+
 	
+func _clear_level() -> void:
+	for letter_node in letters:
+		letter_node.queue_free()
+	letters.clear()
