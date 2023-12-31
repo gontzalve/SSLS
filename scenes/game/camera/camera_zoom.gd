@@ -22,6 +22,8 @@ const ZOOM_DETECTION_TIME: float = 0.3
 const ZOOM_INACTIVITY_TIME: float = 0.2
 const ZOOM_SENSIBILITY: float = 10
 
+const PLAYER_ZOOM_DURATION: float = 0.4
+
 var current_zoom: float
 var current_zoom_transition: ZoomTransitionState
 var zoom_detection_timer: float
@@ -32,11 +34,19 @@ func _ready() -> void:
 	current_zoom_transition = ZoomTransitionState.NONE
 	zoom_detection_timer = 0
 	zoom_inactivity_timer = 0
-	# _set_zoom(1)
+	_set_zoom(1)
 
 
 func _process(delta: float) -> void:
 	_check_zoom_input(delta)
+
+
+func start_zoom(zoom_target: float, duration: float) -> void:
+	_tween_camera_zoom(zoom_target, duration)
+
+
+func get_current_zoom() -> float:
+	return current_zoom
 
 
 func _check_zoom_input(delta: float) -> void:
@@ -98,13 +108,13 @@ func _zoom_out() -> void:
 func _set_zoom(zoom_level: float) -> void:
 	zoom_level = clampf(zoom_level, MAX_ZOOM_OUT, MAX_ZOOM_IN)
 	current_zoom = zoom_level
-	_tween_camera_zoom(zoom_level)
+	_tween_camera_zoom(zoom_level, PLAYER_ZOOM_DURATION)
 
 
-func _tween_camera_zoom(zoom_level: float) -> void:
+func _tween_camera_zoom(zoom_level: float, duration: float) -> void:
 	var tween: Tween = create_tween()
 	var tweener: PropertyTweener
-	tweener = tween.tween_property(camera2D, "zoom", Vector2.ONE * zoom_level, 0.4)
+	tweener = tween.tween_property(camera2D, "zoom", Vector2.ONE * zoom_level, duration)
 	tweener.set_trans(Tween.TRANS_BACK)
 	tweener.set_ease(Tween.EASE_OUT)
 	tween.tween_callback(_on_tween_ended)

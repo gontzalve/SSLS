@@ -4,7 +4,7 @@ var player: Node2D
 var game_cursor: Node2D
 var game_camera: Node2D
 var bullet_factory: Node2D
-var level: Node2D
+var level_controller: Node2D
 
 var current_level_index: int
 
@@ -28,10 +28,14 @@ func _start_game() -> void:
 
 
 func _on_player_appeared() -> void:
-	level.load_word_level(current_level_index)
+	level_controller.load_word_level(current_level_index)
 
 
-func _on_level_appeared() -> void:
+func _on_level_ring_appeared() -> void:
+	game_camera.start_zoom(game_camera.get_current_zoom() - 0.1, 0.4)
+	pass
+
+func _on_level_created() -> void:
 	game_cursor.show_cursor()
 	player.allow_input()
 	
@@ -54,7 +58,7 @@ func _get_references() -> void:
 	game_cursor = %GameCursor
 	game_camera = %GameCamera
 	bullet_factory = %BulletFactory
-	level = %Level
+	level_controller = %LevelController
 
 
 func _connect_to_signals() -> void:
@@ -62,4 +66,5 @@ func _connect_to_signals() -> void:
 	player.shot_fired.connect(_on_player_shot_fired)
 	game_camera.zoomed_in.connect(_on_game_camera_zoomed_in)
 	game_camera.zoomed_out.connect(_on_game_camera_zoomed_out)
-	level.level_appeared.connect(_on_level_appeared)
+	level_controller.level_ring_appeared.connect(_on_level_ring_appeared)
+	level_controller.level_created.connect(_on_level_created)

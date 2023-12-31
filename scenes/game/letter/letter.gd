@@ -5,7 +5,7 @@ extends CharacterBody2D
 @export var force_magnitude: float
 @export var friction: Vector2
 
-var assigned_letter_char: String
+var assigned_letter_char: String = ""
 var assigned_color: Color
 
 const LETTER_GROUP_NAME: String = "letters"
@@ -18,6 +18,10 @@ func appear() -> void:
 	$LetterSprite.hide()
 	scale = Vector2.ZERO
 	_tween_up_scale()
+
+
+func has_letter_assigned() -> bool:
+	return assigned_letter_char != ""
 
 
 func _tween_up_scale() -> void:

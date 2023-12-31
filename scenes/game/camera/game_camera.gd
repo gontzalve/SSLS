@@ -15,12 +15,21 @@ func start_shake() -> void:
 	$CameraShake.start_shake()
 
 
+func start_zoom(zoom_target: float, duration: float) -> void:
+	%CameraZoom.start_zoom(zoom_target, duration)
+	pass
+
+
+func get_current_zoom() -> float:
+	return %CameraZoom.get_current_zoom()
+
+
 func _inject_dependencies() -> void:
 	%CameraFollow.set_target_reference(follow_target_node)
 
 
 func _connect_to_children_signals() -> void:
-	$CameraZoom.zoom_changed.connect(_on_camera_zoom_changed)
+	%CameraZoom.zoom_changed.connect(_on_camera_zoom_changed)
 
 
 func _on_camera_zoom_changed(is_zoom_in: bool) -> void:
