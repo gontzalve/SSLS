@@ -5,21 +5,26 @@ extends CharacterBody2D
 @export var force_magnitude: float
 @export var friction: Vector2
 
-var assigned_letter_char: String = ""
-var assigned_color: Color
-
 @export var audio_player: AudioStreamPlayer
 @export var sfx_appear: AudioStream
+
+var assigned_letter_char: String = ""
+var assigned_color: Color
+var is_dead: bool
+var current_health: int
 
 const LETTER_GROUP_NAME: String = "letters"
 const CLOSE_TO_ZERO_SPEED: float = 3
 const MAX_SPEED: float = 200
+const LETTER_MAX_HEALTH: int = 3
 
 
 func appear() -> void:
 	show()
 	$LetterSprite.hide()
 	scale = Vector2.ZERO
+	is_dead = false
+	current_health = LETTER_MAX_HEALTH
 	_tween_up_scale()
 
 
@@ -75,8 +80,10 @@ func _execute_movement(delta: float) -> void:
 
 
 func on_bullet_collision(push_velocity: Vector2) -> void:
+	current_health -= 1
 	_receive_push(push_velocity)
 	_execute_flash_sequence()
+	_check_for_death()
 
 
 func _receive_push(push_velocity: Vector2) -> void:
@@ -91,6 +98,38 @@ func _execute_flash_sequence() -> void:
 	_set_color(Color.WHITE)
 	await get_tree().create_timer(0.2).timeout
 	_set_color(assigned_color)
+
+
+func _check_for_death() -> void:
+	if current_health > 0:
+		return
+	_on_death()
+	
+
+func _on_death() -> void:
+	is_dead = true
+	set_process(false)
+	velocity = Vector2.ZERO
+	_disappear()
+	$CollisionShape2D.set_deferred("disabled", true)
+
+
+func _disappear() -> void:
+	$LetterSprite.visible = false
+	_tween_down_scale()
+
+
+func _tween_down_scale() -> void:
+	var tween: Tween = create_tween()
+	var tweener: PropertyTweener
+	tweener = tween.tween_property(self, "scale", Vector2.ZERO, 0.3)
+	tweener.set_trans(Tween.TRANS_BACK)
+	tweener.set_ease(Tween.EASE_IN)
+	tween.tween_callback(_on_disappeared)
+
+
+func _on_disappeared() -> void:
+	queue_free()
 
 
 func _apply_friction(delta: float) -> void:

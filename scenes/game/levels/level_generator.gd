@@ -116,7 +116,7 @@ func _execute_letter_nodes_appear_sequence() -> void:
 			letter_node_rings[i][j].appear()
 			var delay: float = _calculate_letter_appear_delay(appeared_letter_count)
 			delay = maxf(delay, 0.01)
-			await get_tree().create_timer(delay).timeout
+			# await get_tree().create_timer(delay).timeout
 			appeared_letter_count += 1
 		if i < letter_node_rings.size() - 1:
 			level_ring_appeared.emit()
