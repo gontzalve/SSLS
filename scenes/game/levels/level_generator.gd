@@ -12,15 +12,15 @@ var origin_position: Vector2
 var letter_node_slot_radius: float
 var current_spawn_circle_radius: float
 
-const LETTER_COUNT: int = 360
+const LETTER_COUNT: int = 180
 const LETTER_REPETITIONS: int = 4
 
 const LETTER_NODE_RADIUS: float = 54.0
 const LETTER_NODE_RADIUS_PADDING: float = 8.0 
 const SPAWN_CIRCLE_INITIAL_RADIUS: float = 150.0
-const SPAWN_CIRCLE_RADIUS_INCREASE_STEP: float = 150.0
+const SPAWN_CIRCLE_RADIUS_INCREASE_STEP: float = 120.0
 
-const LETTER_APPEAR_INITIAL_DELAY: float = 0.5
+const LETTER_APPEAR_INITIAL_DELAY: float = 0.4
 
 
 func _ready() -> void:
@@ -45,12 +45,14 @@ func _spawn_letter_nodes() -> void:
 	var spawned_letters: int = 0
 	current_spawn_circle_radius = SPAWN_CIRCLE_INITIAL_RADIUS
 	while spawned_letters < LETTER_COUNT:
-		print("Spawned Letters: " , spawned_letters, " / Spawn Radius: ", current_spawn_circle_radius)
+		# print("Spawned Letters: " , spawned_letters, " / Spawn Radius: ", current_spawn_circle_radius)
 		var letter_slot_angle: float = _calculate_letter_slot_angle(current_spawn_circle_radius)
 		var letter_slot_count: int = floori(360.0 / letter_slot_angle)
-		letter_slot_count = min(letter_slot_count, LETTER_COUNT - spawned_letters)
-		print("Slot Angle: " , letter_slot_angle)
-		print("Letter slots: " , letter_slot_count)
+		letter_slot_angle = 360.0 / letter_slot_count
+		if letter_slot_count > LETTER_COUNT - spawned_letters:
+			return
+		# print("Slot Angle: " , letter_slot_angle)
+		# print("Letter slots: " , letter_slot_count)
 		var letter_node_ring: Array[Node] = []
 		for i in range(letter_slot_count):
 			var spawn_angle: float = (letter_slot_angle / 2) + i * letter_slot_angle
@@ -60,7 +62,8 @@ func _spawn_letter_nodes() -> void:
 			spawned_letters += 1
 		letter_node_rings.append(letter_node_ring)
 		current_spawn_circle_radius += SPAWN_CIRCLE_RADIUS_INCREASE_STEP
-		print("-------------------------------")
+		print("spawned: ", spawned_letters)
+		# print("-------------------------------")
 	
 
 func _calculate_letter_slot_angle(spawn_radius: float) -> float:
@@ -115,14 +118,15 @@ func _execute_letter_nodes_appear_sequence() -> void:
 			delay = maxf(delay, 0.01)
 			await get_tree().create_timer(delay).timeout
 			appeared_letter_count += 1
-		level_ring_appeared.emit()
+		if i < letter_node_rings.size() - 1:
+			level_ring_appeared.emit()
 	await get_tree().create_timer(0.5).timeout
 	level_created.emit()
 
 
 func _calculate_letter_appear_delay(letter_index: int) -> float:
 	var delay: float = LETTER_APPEAR_INITIAL_DELAY
-	delay -= LETTER_APPEAR_INITIAL_DELAY * _ease_out_expo(letter_index / 48.0)
+	delay -= LETTER_APPEAR_INITIAL_DELAY * _ease_out_expo(letter_index / 36.0)
 	return delay
 
 

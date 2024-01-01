@@ -8,6 +8,9 @@ extends CharacterBody2D
 var assigned_letter_char: String = ""
 var assigned_color: Color
 
+@export var audio_player: AudioStreamPlayer
+@export var sfx_appear: AudioStream
+
 const LETTER_GROUP_NAME: String = "letters"
 const CLOSE_TO_ZERO_SPEED: float = 3
 const MAX_SPEED: float = 200
@@ -35,6 +38,7 @@ func _tween_up_scale() -> void:
 
 func _on_appeared() -> void:
 	$LetterSprite.show()
+	# _play_appear_sfx(randf_range(0.9, 1.1))
 
 
 func _physics_process(delta: float) -> void:
@@ -99,3 +103,8 @@ func _set_color(color: Color) -> void:
 	$LetterSprite.modulate = color
 	$Outline.modulate = color
 	
+
+func _play_appear_sfx(pitch: float) -> void:
+	audio_player.pitch_scale = pitch
+	audio_player.stream = sfx_appear
+	audio_player.play()

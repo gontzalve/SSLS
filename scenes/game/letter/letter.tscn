@@ -1,15 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://d2mt4713epsq8"]
+[gd_scene load_steps=8 format=3 uid="uid://d2mt4713epsq8"]
 
 [ext_resource type="Script" path="res://scenes/game/letter/letter.gd" id="1_ykfcf"]
 [ext_resource type="Resource" uid="uid://cdk1xdepsungo" path="res://data/color_palette/color_palette.tres" id="2_lpad2"]
 [ext_resource type="Resource" uid="uid://b416tkf4phlrv" path="res://data/letters/letter_textures.tres" id="3_pbucg"]
 [ext_resource type="Texture2D" uid="uid://eq00cndsu4vj" path="res://graphics/game/letters/letter_a.png" id="4_5eqql"]
+[ext_resource type="AudioStream" uid="uid://bqp56jh80yxre" path="res://sfxs/sfx_splash.wav" id="4_tfia8"]
 [ext_resource type="Texture2D" uid="uid://b35s65xixkvam" path="res://graphics/game/outline/outline.png" id="5_qugxa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pp8vm"]
 radius = 32.0
 
-[node name="Letter" type="CharacterBody2D" groups=["letters"]]
+[node name="Letter" type="CharacterBody2D" node_paths=PackedStringArray("audio_player") groups=["letters"]]
 collision_layer = 2
 collision_mask = 7
 motion_mode = 1
@@ -18,6 +19,8 @@ color_palette_data = ExtResource("2_lpad2")
 letter_textures_data = ExtResource("3_pbucg")
 force_magnitude = 15.0
 friction = Vector2(320, 320)
+audio_player = NodePath("AudioStreamPlayer")
+sfx_appear = ExtResource("4_tfia8")
 
 [node name="LetterSprite" type="Sprite2D" parent="."]
 scale = Vector2(0.75, 0.75)
@@ -28,3 +31,5 @@ texture = ExtResource("5_qugxa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_pp8vm")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

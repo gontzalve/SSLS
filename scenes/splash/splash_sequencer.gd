@@ -112,16 +112,7 @@ func _set_splash_color(color: Color) -> void:
 		letter.self_modulate = color
 
 
-#func _play_splash_sfx(randomPitch: bool) -> void:
-#	var pitch: float = randf_range(0.9, 1.1) if randomPitch else 1
-#	print(pitch)
-#	audio_player.pitch_scale = pitch
-#	audio_player.stream = sfx_splash
-#	audio_player.play()
-
-
 func _play_splash_sfx(pitch: float) -> void:
 	audio_player.pitch_scale = pitch
 	audio_player.stream = sfx_splash
 	audio_player.play()
-	pass

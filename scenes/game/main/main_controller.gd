@@ -32,10 +32,13 @@ func _on_player_appeared() -> void:
 
 
 func _on_level_ring_appeared() -> void:
-	game_camera.start_zoom(game_camera.get_current_zoom() - 0.1, 0.4)
+	game_camera.start_zoom(game_camera.get_current_zoom() - 0.13, 0.3)
 	pass
 
 func _on_level_created() -> void:
+	await get_tree().create_timer(0.5).timeout
+	game_camera.start_zoom(1, 0.6)
+	await get_tree().create_timer(1.2).timeout
 	game_cursor.show_cursor()
 	player.allow_input()
 	
