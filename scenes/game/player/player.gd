@@ -7,6 +7,7 @@ signal shot_fired(spawn_pos: Vector2, direction: Vector2)
 @export var movement_acceleration: float
 
 var allowed_input: bool
+var is_shooting: bool
 
 const MOVE_LEFT_ACTION: String = "move_left"
 const MOVE_RIGHT_ACTION: String = "move_right"
@@ -14,10 +15,12 @@ const MOVE_UP_ACTION: String = "move_up"
 const MOVE_DOWN_ACTION: String = "move_down"
 
 const SHOOT_ACTION: String = "shoot"
+const SHOOT_COOLDOWN: float = 0.1
+const SHOOT_INACCURACY: float = 10 # in degree angles
 
 
 func _ready() -> void:
-	pass
+	is_shooting = false
 
 
 func _process(delta: float) -> void:
@@ -79,9 +82,12 @@ func _get_movement_direction() -> Vector2:
 
 
 func _check_shooting_input() -> void:
-	if Input.is_action_just_pressed(SHOOT_ACTION):
+	if is_shooting:
+		return
+	if Input.is_action_pressed(SHOOT_ACTION):
 		var shooting_dir: Vector2 = _get_shooting_direction()
-		_shoot(shooting_dir)
+		var final_shooting_dir: Vector2 = _get_shooting_direction_with_randomness(shooting_dir)
+		_shoot(final_shooting_dir)
 
 
 func _get_shooting_direction() -> Vector2:
@@ -91,8 +97,18 @@ func _get_shooting_direction() -> Vector2:
 
 
 func _shoot(direction: Vector2) -> void:
+	is_shooting = true
 	shot_fired.emit($ShootingPivot.global_position, direction)
 	_tween_player_arrow()
+	await get_tree().create_timer(SHOOT_COOLDOWN).timeout
+	is_shooting = false
+
+
+func _get_shooting_direction_with_randomness(shooting_direction: Vector2) -> Vector2:
+	var offset_angle: float = deg_to_rad(randf_range(-10.0, 10.0))
+	var random_x: float = cos(offset_angle) * shooting_direction.x - sin(offset_angle) * shooting_direction.y
+	var random_y: float = sin(offset_angle) * shooting_direction.x + cos(offset_angle) * shooting_direction.y
+	return Vector2(random_x, random_y).normalized()
 
 
 func _tween_player_arrow() -> void:
