@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cnkavhuprclg4"]
+[gd_scene load_steps=8 format=3 uid="uid://cnkavhuprclg4"]
 
 [ext_resource type="Script" path="res://scenes/game/main/main_controller.gd" id="1_e8hqi"]
 [ext_resource type="PackedScene" uid="uid://cj0w5dwyhcvv8" path="res://scenes/game/player/player.tscn" id="2_cg2un"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://duqk6nnpkjlh1" path="res://scenes/game/levels/level_controller.tscn" id="4_1xhwx"]
 [ext_resource type="PackedScene" uid="uid://iv5glvthjnbv" path="res://scenes/game/cursor/game_cursor.tscn" id="5_k0t3l"]
 [ext_resource type="PackedScene" uid="uid://ci2uqol5tximj" path="res://scenes/game/bullet/bullet_factory.tscn" id="6_3vl2v"]
+[ext_resource type="PackedScene" uid="uid://bqchfuronsb2w" path="res://scenes/game/ui/ui.tscn" id="7_lcbm8"]
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_e8hqi")
@@ -25,3 +26,5 @@ unique_name_in_owner = true
 
 [node name="BulletFactory" parent="." instance=ExtResource("6_3vl2v")]
 unique_name_in_owner = true
+
+[node name="UI" parent="." instance=ExtResource("7_lcbm8")]
