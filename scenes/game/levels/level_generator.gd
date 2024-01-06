@@ -9,23 +9,25 @@ signal level_ring_appeared
 
 var letter_node_rings = []
 var origin_position: Vector2
-var letter_node_slot_radius: float
-var current_spawn_circle_radius: float
+var letter_node_slot_distance: float
 
 const LETTER_COUNT: int = 180
 const LETTER_REPETITIONS: int = 4
 
 const LETTER_NODE_RADIUS: float = 54.0
 const LETTER_NODE_RADIUS_PADDING: float = 8.0 
+
 const SPAWN_CIRCLE_INITIAL_RADIUS: float = 150.0
 const SPAWN_CIRCLE_RADIUS_INCREASE_STEP: float = 120.0
+const SPAWN_SQUARE_INITIAL_RING_SIZE: int = 3
+const SPAWN_SQUARE_RING_SIZE_INCREASE_STEP: int = 2
 
 const LETTER_APPEAR_INITIAL_DELAY: float = 0.4
 
 
 func _ready() -> void:
 	origin_position = Vector2.ZERO
-	letter_node_slot_radius = LETTER_NODE_RADIUS + LETTER_NODE_RADIUS_PADDING
+	letter_node_slot_distance =  2 * (LETTER_NODE_RADIUS + LETTER_NODE_RADIUS_PADDING)
 
 
 func clear_level() -> void:
@@ -42,11 +44,52 @@ func create_level(level_word: String) -> void:
 
 
 func _spawn_letter_nodes() -> void:
+	_spawn_letter_nodes_in_squares()
+	# _spawn_letter_nodes_in_circles()
+
+
+func _spawn_letter_nodes_in_squares() -> void:
+	var ring_side_size: int = SPAWN_SQUARE_INITIAL_RING_SIZE
 	var spawned_letters: int = 0
-	current_spawn_circle_radius = SPAWN_CIRCLE_INITIAL_RADIUS
+	while spawned_letters < LETTER_COUNT:
+		var letter_count_in_ring = 4 * (ring_side_size - 1)
+		var letter_node_ring: Array[Node] = []
+		for i in range(letter_count_in_ring):
+			var spawn_pos: Vector2 = _calculate_letter_spawn_position_in_square(i, ring_side_size)
+			var letter_node: Node = _spawn_letter(spawn_pos)
+			letter_node_ring.append(letter_node)
+			spawned_letters += 1
+		letter_node_rings.append(letter_node_ring)
+		ring_side_size += SPAWN_SQUARE_RING_SIZE_INCREASE_STEP
+
+
+func _calculate_letter_spawn_position_in_square(slot_index: int, ring_side_size) -> Vector2:
+	var pos_x: float = origin_position.x
+	var pos_y: float = origin_position.y
+	var slot_group_index: int = slot_index / (ring_side_size - 1)
+	var slot_index_in_group = slot_index % (ring_side_size - 1)
+	match slot_group_index:
+		0:
+			pos_x = pos_x - floori(ring_side_size / 2) * letter_node_slot_distance + slot_index_in_group * letter_node_slot_distance
+			pos_y = pos_y - floori(ring_side_size / 2) * letter_node_slot_distance 
+		1:
+			pos_x = pos_x + floori(ring_side_size / 2) * letter_node_slot_distance 
+			pos_y = pos_y - floori(ring_side_size / 2) * letter_node_slot_distance + slot_index_in_group * letter_node_slot_distance
+		2:
+			pos_x = pos_x + floori(ring_side_size / 2) * letter_node_slot_distance - slot_index_in_group * letter_node_slot_distance
+			pos_y = pos_y + floori(ring_side_size / 2) * letter_node_slot_distance 
+		3:
+			pos_x = pos_x - floori(ring_side_size / 2) * letter_node_slot_distance 
+			pos_y = pos_y + floori(ring_side_size / 2) * letter_node_slot_distance - slot_index_in_group * letter_node_slot_distance
+	return Vector2(pos_x, pos_y)
+
+
+func _spawn_letter_nodes_in_circles() -> void:
+	var spawned_letters: int = 0
+	var current_spawn_circle_radius = SPAWN_CIRCLE_INITIAL_RADIUS
 	while spawned_letters < LETTER_COUNT:
 		# print("Spawned Letters: " , spawned_letters, " / Spawn Radius: ", current_spawn_circle_radius)
-		var letter_slot_angle: float = _calculate_letter_slot_angle(current_spawn_circle_radius)
+		var letter_slot_angle: float = _calculate_letter_slot_angle_in_circle(current_spawn_circle_radius)
 		var letter_slot_count: int = floori(360.0 / letter_slot_angle)
 		letter_slot_angle = 360.0 / letter_slot_count
 		if letter_slot_count > LETTER_COUNT - spawned_letters:
@@ -56,7 +99,7 @@ func _spawn_letter_nodes() -> void:
 		var letter_node_ring: Array[Node] = []
 		for i in range(letter_slot_count):
 			var spawn_angle: float = (letter_slot_angle / 2) + i * letter_slot_angle
-			var spawn_pos: Vector2 = _calculate_letter_spawn_position(spawn_angle, current_spawn_circle_radius)
+			var spawn_pos: Vector2 = _calculate_letter_spawn_position_in_circle(spawn_angle, current_spawn_circle_radius)
 			var letter_node: Node = _spawn_letter(spawn_pos)
 			letter_node_ring.append(letter_node)
 			spawned_letters += 1
@@ -66,12 +109,13 @@ func _spawn_letter_nodes() -> void:
 		# print("-------------------------------")
 	
 
-func _calculate_letter_slot_angle(spawn_radius: float) -> float:
+func _calculate_letter_slot_angle_in_circle(spawn_radius: float) -> float:
+	var letter_node_slot_radius: float = letter_node_slot_distance / 2
 	var slot_angle: float = 4 * asin(letter_node_slot_radius / (2 * spawn_radius))
 	return rad_to_deg(slot_angle)
 
 
-func _calculate_letter_spawn_position(angle: float, radius: float) -> Vector2:
+func _calculate_letter_spawn_position_in_circle(angle: float, radius: float) -> Vector2:
 	var rad_angle: float = deg_to_rad(angle)
 	return Vector2(radius * cos(rad_angle), radius * sin(rad_angle))
 
@@ -116,7 +160,7 @@ func _execute_letter_nodes_appear_sequence() -> void:
 			letter_node_rings[i][j].appear()
 			var delay: float = _calculate_letter_appear_delay(appeared_letter_count)
 			delay = maxf(delay, 0.01)
-			# await get_tree().create_timer(delay).timeout
+			await get_tree().create_timer(delay).timeout
 			appeared_letter_count += 1
 		if i < letter_node_rings.size() - 1:
 			level_ring_appeared.emit()
