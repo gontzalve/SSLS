@@ -16,7 +16,7 @@ const MOVE_DOWN_ACTION: String = "move_down"
 
 const SHOOT_ACTION: String = "shoot"
 const SHOOT_COOLDOWN: float = 0.1
-const SHOOT_INACCURACY: float = 10 # in degree angles
+const SHOOT_INACCURACY: float = 7.5 # in degree angles
 
 
 func _ready() -> void:
