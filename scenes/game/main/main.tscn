@@ -28,3 +28,8 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="UI" parent="." instance=ExtResource("7_lcbm8")]
+unique_name_in_owner = true
+layer = -1
+
+[node name="GameTimer" type="Timer" parent="."]
+unique_name_in_owner = true
