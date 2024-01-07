@@ -6,13 +6,15 @@ signal level_ring_appeared
 @export var letter_scene: PackedScene
 @export var alphabet_data: Resource
 @export var letter_container: Node2D
+@export var audio_player: AudioStreamPlayer
+@export var sfx_ring: AudioStream
 
 var letter_node_rings = []
 var origin_position: Vector2
 var letter_node_slot_distance: float
 
-const LETTER_COUNT: int = 180
-const LETTER_REPETITIONS: int = 4
+const LETTER_COUNT: int = 120
+const LETTER_REPETITIONS: int = 2
 
 const LETTER_NODE_RADIUS: float = 54.0
 const LETTER_NODE_RADIUS_PADDING: float = 8.0 
@@ -22,7 +24,7 @@ const SPAWN_CIRCLE_RADIUS_INCREASE_STEP: float = 120.0
 const SPAWN_SQUARE_INITIAL_RING_SIZE: int = 3
 const SPAWN_SQUARE_RING_SIZE_INCREASE_STEP: int = 2
 
-const LETTER_APPEAR_INITIAL_DELAY: float = 0.4
+const LETTER_RING_APPEAR_DELAY: float = 0.1
 
 
 func _ready() -> void:
@@ -136,10 +138,14 @@ func _initialize_letter_nodes(level_word: String) -> void:
 func _initialize_letter_characters(level_word: String) -> void:
 	var word_size = level_word.length()
 	var level_characters_count = word_size * LETTER_REPETITIONS
+	var available_rings: Array = range(1, letter_node_rings.size())
 	for i in range(level_characters_count):
-		var random_ring: int = randi_range(0, letter_node_rings.size() - 1)
+		var random_ring: int = available_rings.pick_random()
 		var random_slot: int = randi_range(0, letter_node_rings[random_ring].size() - 1)
 		letter_node_rings[random_ring][random_slot].set_letter_type(level_word[i % word_size])
+		available_rings.erase(random_ring)
+		if available_rings.is_empty():
+			available_rings = range(1, letter_node_rings.size())
 	for letter_ring in letter_node_rings:
 		for letter in letter_ring:
 			if not letter.has_letter_assigned():
@@ -154,27 +160,17 @@ func _initialize_letter_colors() -> void:
 
 
 func _execute_letter_nodes_appear_sequence() -> void:
-	var appeared_letter_count: int = 0
 	for i in range(letter_node_rings.size()):
-		for j in range(letter_node_rings[i].size()):
-			letter_node_rings[i][j].appear()
-			var delay: float = _calculate_letter_appear_delay(appeared_letter_count)
-			delay = maxf(delay, 0.01)
-			await get_tree().create_timer(delay).timeout
-			appeared_letter_count += 1
+		for letter in letter_node_rings[i]:
+			letter.appear()
 		if i < letter_node_rings.size() - 1:
 			level_ring_appeared.emit()
-	await get_tree().create_timer(0.5).timeout
+		_play_ring_sfx(1.2 - i * 0.1)
+		await get_tree().create_timer(0.08).timeout
 	level_created.emit()
 
 
-func _calculate_letter_appear_delay(letter_index: int) -> float:
-	var delay: float = LETTER_APPEAR_INITIAL_DELAY
-	delay -= LETTER_APPEAR_INITIAL_DELAY * _ease_out_expo(letter_index / 36.0)
-	return delay
-
-
-func _ease_out_expo(x: float) -> float:
-	if x >= 1:
-		return 1
-	return 1 - pow(2, -10 * x)
+func _play_ring_sfx(pitch: float) -> void:
+	audio_player.pitch_scale = pitch
+	audio_player.stream = sfx_ring
+	audio_player.play()

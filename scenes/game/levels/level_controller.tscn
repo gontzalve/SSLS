@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://duqk6nnpkjlh1"]
+[gd_scene load_steps=7 format=3 uid="uid://duqk6nnpkjlh1"]
 
 [ext_resource type="PackedScene" uid="uid://d2mt4713epsq8" path="res://scenes/game/letter/letter.tscn" id="1_bllgx"]
 [ext_resource type="Script" path="res://scenes/game/levels/level_controller.gd" id="1_eklft"]
 [ext_resource type="Resource" uid="uid://dhfdr3120uqgx" path="res://data/alphabet/alphabet.tres" id="3_xfgl2"]
 [ext_resource type="Resource" uid="uid://e73ytwisfwps" path="res://data/word_levels/word_levels.tres" id="4_kuxe6"]
 [ext_resource type="Script" path="res://scenes/game/levels/level_generator.gd" id="5_q0ux3"]
+[ext_resource type="AudioStream" uid="uid://bqp56jh80yxre" path="res://sfxs/sfx_splash.wav" id="6_ny13k"]
 
 [node name="LevelController" type="Node2D"]
 script = ExtResource("1_eklft")
@@ -12,8 +13,12 @@ word_levels = ExtResource("4_kuxe6")
 
 [node name="LetterContainer" type="Node2D" parent="."]
 
-[node name="LevelGenerator" type="Node2D" parent="." node_paths=PackedStringArray("letter_container")]
+[node name="LevelGenerator" type="Node2D" parent="." node_paths=PackedStringArray("letter_container", "audio_player")]
 script = ExtResource("5_q0ux3")
 letter_scene = ExtResource("1_bllgx")
 alphabet_data = ExtResource("3_xfgl2")
 letter_container = NodePath("../LetterContainer")
+audio_player = NodePath("AudioStreamPlayer")
+sfx_ring = ExtResource("6_ny13k")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="LevelGenerator"]
