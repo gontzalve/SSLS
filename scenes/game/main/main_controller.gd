@@ -9,9 +9,11 @@ var ui_controller: Node
 var game_timer: Timer
 
 var current_level_index: int
+var has_level_started: bool
 
 
 func _ready() -> void:
+	has_level_started = false
 	_get_references()
 	_connect_to_signals()
 	_setup_scene()
@@ -20,13 +22,15 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if not has_level_started:
+		return
 	ui_controller.update_timer(game_timer.time_left)
 
 
 func _setup_scene() -> void:
 	player.initialize()
 	game_cursor.hide_cursor()
-	ui_controller.hide()
+	ui_controller.hide_ui()
 
 	
 func _start_game() -> void:
@@ -54,11 +58,13 @@ func _on_level_created() -> void:
 func _start_current_level() -> void:
 	game_cursor.show_cursor()
 	player.allow_input()
-	ui_controller.show()
+	ui_controller.show_ui()
 	var word: String = level_controller.get_current_level_word()
 	var duration: float = level_controller.get_current_level_duration()
 	ui_controller.set_level_info(word, duration)
-	game_timer.start(duration + 0.9)
+	await get_tree().create_timer(0.2).timeout
+	game_timer.start(duration)
+	has_level_started = true
 	
 
 func _on_player_shot_fired(spawn_pos: Vector2, direction: Vector2) -> void:
@@ -78,6 +84,7 @@ func _on_level_timed_out() -> void:
 	# game_cursor.hide_cursor()
 	player.disallow_input()
 	game_timer.stop()
+	ui_controller.show_game_over_ui()
 
 
 func _get_references() -> void:
@@ -86,7 +93,7 @@ func _get_references() -> void:
 	game_camera = %GameCamera
 	bullet_factory = %BulletFactory
 	level_controller = %LevelController
-	ui_controller = %UI
+	ui_controller = %UIController
 	game_timer = %GameTimer
 
 
