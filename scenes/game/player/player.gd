@@ -5,6 +5,9 @@ signal shot_fired(spawn_pos: Vector2, direction: Vector2)
 
 @export var movement_speed: float
 @export var movement_acceleration: float
+@export var audio_player: AudioStreamPlayer
+@export var sfx_player_appeared: AudioStream
+@export var sfx_player_shot: AudioStream
 
 var allowed_input: bool
 var is_shooting: bool
@@ -45,6 +48,10 @@ func allow_input() -> void:
 	allowed_input = true
 
 
+func disallow_input() -> void:
+	allowed_input = false
+
+
 func _tween_up_scale() -> void:
 	var tween: Tween = create_tween()
 	var tweener: PropertyTweener
@@ -55,7 +62,7 @@ func _tween_up_scale() -> void:
 
 
 func _on_appeared() -> void:
-	await get_tree().create_timer(0.5).timeout
+	_play_player_appeared_sfx(0.8)
 	appeared.emit()
 
 
@@ -99,6 +106,7 @@ func _get_shooting_direction() -> Vector2:
 func _shoot(direction: Vector2) -> void:
 	is_shooting = true
 	shot_fired.emit($ShootingPivot.global_position, direction)
+	_play_player_shot_sfx(randf_range(0.9, 1.1))
 	_tween_player_arrow()
 	await get_tree().create_timer(SHOOT_COOLDOWN).timeout
 	is_shooting = false
@@ -123,3 +131,15 @@ func _check_rotation() -> void:
 	var angle = rad_to_deg(center_pos.angle_to_point(mouse_pos))
 	rotation_degrees = angle
 	
+
+func _play_player_appeared_sfx(pitch: float) -> void:
+	audio_player.pitch_scale = pitch
+	audio_player.stream = sfx_player_appeared
+	audio_player.volume_db = 0 
+	audio_player.play()
+
+func _play_player_shot_sfx(pitch: float) -> void:
+	audio_player.pitch_scale = pitch
+	audio_player.stream = sfx_player_shot 
+	audio_player.volume_db = -8
+	audio_player.play()
