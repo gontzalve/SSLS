@@ -25,6 +25,7 @@ func show_level_ui() -> void:
 
 func start_countdown(duration_seconds: int) -> void:
 	for i in range(duration_seconds + 1):
+		_tween_countdown_text()
 		if i == duration_seconds:
 			%CountdownLabel.text = "Go!"
 			await get_tree().create_timer(0.5).timeout
@@ -35,10 +36,15 @@ func start_countdown(duration_seconds: int) -> void:
 	countdown_ended.emit()
 
 
+func _tween_countdown_text() -> void:
+	var tween: Tween = create_tween()
+	tween.tween_property(%CountdownLabel, "scale", Vector2.ONE * 1.3, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(%CountdownLabel, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
 func set_level_info(word: String, duration: float) -> void:
 	update_timer(duration)
 	%WordLabel.text = word
-	pass
 
 
 func update_timer(time_left: float) -> void:
