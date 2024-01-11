@@ -45,6 +45,10 @@ func create_level(level_word: String) -> void:
 	_execute_letter_nodes_appear_sequence()
 
 
+func create_tutorial_level(level_word: String) -> void:
+	pass
+
+
 func _spawn_letter_nodes() -> void:
 	_spawn_letter_nodes_in_squares()
 	# _spawn_letter_nodes_in_circles()
