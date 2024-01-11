@@ -5,9 +5,6 @@ extends CharacterBody2D
 @export var force_magnitude: float
 @export var friction: Vector2
 
-@export var audio_player: AudioStreamPlayer
-@export var sfx_appear: AudioStream
-
 var assigned_letter_char: String = ""
 var assigned_color: Color
 var is_dead: bool
@@ -43,7 +40,6 @@ func _tween_up_scale() -> void:
 
 func _on_appeared() -> void:
 	$LetterSprite.show()
-	# _play_appear_sfx(randf_range(0.9, 1.1))
 
 
 func _physics_process(delta: float) -> void:
@@ -141,9 +137,3 @@ func _apply_friction(delta: float) -> void:
 func _set_color(color: Color) -> void:
 	$LetterSprite.modulate = color
 	$Outline.modulate = color
-	
-
-func _play_appear_sfx(pitch: float) -> void:
-	audio_player.pitch_scale = pitch
-	audio_player.stream = sfx_appear
-	audio_player.play()

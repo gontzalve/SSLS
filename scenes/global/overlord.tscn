@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cto2fve2p047t"]
+
+[ext_resource type="Script" path="res://scenes/global/overlord.gd" id="1_mt8pq"]
+
+[node name="Overlord" type="Node2D"]
+script = ExtResource("1_mt8pq")

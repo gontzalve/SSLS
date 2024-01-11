@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpgo38kv3s3lv"]
+
+[ext_resource type="Script" path="res://scenes/global/audio_controller.gd" id="1_7bab6"]
+[ext_resource type="AudioStream" uid="uid://bqp56jh80yxre" path="res://sfxs/sfx_splash.wav" id="2_0u8jr"]
+
+[node name="AudioController" type="Node2D" node_paths=PackedStringArray("audio_players")]
+script = ExtResource("1_7bab6")
+audio_players = [NodePath("AudioStreamPlayer1"), NodePath("AudioStreamPlayer2"), NodePath("AudioStreamPlayer3"), NodePath("AudioStreamPlayer4"), NodePath("AudioStreamPlayer5")]
+sfx_main = ExtResource("2_0u8jr")
+
+[node name="AudioStreamPlayer1" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer4" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer5" type="AudioStreamPlayer" parent="."]

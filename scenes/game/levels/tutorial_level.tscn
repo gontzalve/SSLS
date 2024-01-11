@@ -9,14 +9,11 @@ script = ExtResource("1_rlswb")
 [node name="Letter" parent="." instance=ExtResource("2_wgad7")]
 position = Vector2(148, 308)
 
-[node name="Letter2" parent="." node_paths=PackedStringArray("audio_player") instance=ExtResource("2_wgad7")]
+[node name="Letter2" parent="." instance=ExtResource("2_wgad7")]
 position = Vector2(380, 138)
-audio_player = NodePath("../Letter/AudioStreamPlayer")
 
-[node name="Letter3" parent="." node_paths=PackedStringArray("audio_player") instance=ExtResource("2_wgad7")]
+[node name="Letter3" parent="." instance=ExtResource("2_wgad7")]
 position = Vector2(753, 281)
-audio_player = NodePath("../Letter/AudioStreamPlayer")
 
-[node name="Letter4" parent="." node_paths=PackedStringArray("audio_player") instance=ExtResource("2_wgad7")]
+[node name="Letter4" parent="." instance=ExtResource("2_wgad7")]
 position = Vector2(664, 562)
-audio_player = NodePath("../Letter/AudioStreamPlayer")

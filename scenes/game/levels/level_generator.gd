@@ -6,8 +6,6 @@ signal level_ring_appeared
 @export var letter_scene: PackedScene
 @export var alphabet_data: Resource
 @export var letter_container: Node2D
-@export var audio_player: AudioStreamPlayer
-@export var sfx_ring: AudioStream
 
 var letter_node_rings = []
 var origin_position: Vector2
@@ -169,12 +167,6 @@ func _execute_letter_nodes_appear_sequence() -> void:
 			letter.appear()
 		if i < letter_node_rings.size() - 1:
 			level_ring_appeared.emit()
-		_play_ring_sfx(1.2 - i * 0.1)
+		AudioController.play_main_sfx(1.2 - i * 0.1)
 		await get_tree().create_timer(0.08).timeout
 	level_created.emit()
-
-
-func _play_ring_sfx(pitch: float) -> void:
-	audio_player.pitch_scale = pitch
-	audio_player.stream = sfx_ring
-	audio_player.play()
