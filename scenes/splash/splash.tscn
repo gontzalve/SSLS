@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dpe2lfrixtimh"]
+[gd_scene load_steps=10 format=3 uid="uid://dpe2lfrixtimh"]
 
 [ext_resource type="Script" path="res://scenes/splash/splash_controller.gd" id="1_cyh7r"]
 [ext_resource type="Script" path="res://scenes/splash/splash_sequencer.gd" id="1_g6we6"]
@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://bhoreoenmix4a" path="res://graphics/splash/godot_name_d.png" id="4_we2bt"]
 [ext_resource type="Texture2D" uid="uid://cha25lr8u0s3o" path="res://graphics/splash/godot_name_t.png" id="5_nqwel"]
 [ext_resource type="Resource" uid="uid://cdk1xdepsungo" path="res://data/color_palette/color_palette.tres" id="8_ntdtg"]
-[ext_resource type="AudioStream" uid="uid://bqp56jh80yxre" path="res://sfxs/sfx_splash.wav" id="10_vtf1a"]
 
 [node name="Splash" type="Node2D"]
 script = ExtResource("1_cyh7r")
@@ -49,13 +48,11 @@ self_modulate = Color(0, 0.631373, 0.894118, 1)
 position = Vector2(150, 0)
 texture = ExtResource("5_nqwel")
 
-[node name="Sequencer" type="Node2D" parent="." node_paths=PackedStringArray("godot_logo", "godot_letter_container", "audio_player")]
+[node name="Sequencer" type="Node2D" parent="." node_paths=PackedStringArray("godot_logo", "godot_letter_container")]
 script = ExtResource("1_g6we6")
 godot_logo = NodePath("../Logo")
 godot_letter_container = NodePath("../GodotNameContainer")
 color_palette = ExtResource("8_ntdtg")
-audio_player = NodePath("../AudioStreamPlayer")
-sfx_splash = ExtResource("10_vtf1a")
 
 [node name="Loader" type="Node2D" parent="."]
 

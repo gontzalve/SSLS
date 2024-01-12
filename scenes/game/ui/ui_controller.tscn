@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://kfk18ah52c2n"]
+[gd_scene load_steps=10 format=3 uid="uid://kfk18ah52c2n"]
 
 [ext_resource type="Script" path="res://scenes/game/ui/ui_controller.gd" id="1_lhojd"]
 [ext_resource type="FontFile" uid="uid://cgti1yvcveiqx" path="res://fonts/NunitoSans_7pt-Bold.ttf" id="2_k2pdu"]
+[ext_resource type="PackedScene" uid="uid://xddfjim7v1tx" path="res://scenes/game/ui/letter_ui.tscn" id="2_wqq27"]
 [ext_resource type="Theme" uid="uid://7fmata4vfx8n" path="res://themes/theme_ui.tres" id="3_y1n5b"]
 [ext_resource type="StyleBox" uid="uid://de68smf7ix6rq" path="res://themes/theme_rectangle.tres" id="4_t4tny"]
 
@@ -10,30 +11,26 @@ font = ExtResource("2_k2pdu")
 font_size = 32
 font_color = Color(1, 1, 1, 0.25098)
 
-[sub_resource type="LabelSettings" id="LabelSettings_emwgs"]
-font = ExtResource("2_k2pdu")
-font_size = 32
-font_color = Color(0.772549, 0.105882, 0.329412, 1)
-
 [sub_resource type="LabelSettings" id="LabelSettings_17ee3"]
 font = ExtResource("2_k2pdu")
 font_size = 32
 font_color = Color(1, 1, 1, 0.25098)
-
-[sub_resource type="FontVariation" id="FontVariation_o7678"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_kegsc"]
-font = ExtResource("2_k2pdu")
-font_size = 32
-font_color = Color(0.772549, 0.105882, 0.329412, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_hccww"]
 font = ExtResource("2_k2pdu")
 font_size = 32
 font_color = Color(1, 1, 1, 0.0470588)
 
+[sub_resource type="LabelSettings" id="LabelSettings_emwgs"]
+font = ExtResource("2_k2pdu")
+font_size = 32
+font_color = Color(0.772549, 0.105882, 0.329412, 1)
+outline_size = 4
+outline_color = Color(0.180392, 0.156863, 0.164706, 1)
+
 [node name="UIController" type="Node2D"]
 script = ExtResource("1_lhojd")
+letter_ui_scene = ExtResource("2_wqq27")
 
 [node name="BackUI" type="CanvasLayer" parent="."]
 layer = -1
@@ -53,25 +50,6 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "0:10"
 label_settings = SubResource("LabelSettings_hxk3y")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="GameOverLabel" type="Label" parent="BackUI"]
-unique_name_in_owner = true
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -60.0
-offset_top = 25.0
-offset_right = 60.0
-offset_bottom = 70.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Time's up!"
-label_settings = SubResource("LabelSettings_emwgs")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -96,27 +74,24 @@ vertical_alignment = 1
 
 [node name="FrontUI" type="CanvasLayer" parent="."]
 
-[node name="WordContainer" type="PanelContainer" parent="FrontUI"]
-anchors_preset = 7
+[node name="LettersPanel" type="PanelContainer" parent="FrontUI"]
+unique_name_in_owner = true
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -90.0
-offset_top = -100.0
-offset_right = 90.0
-offset_bottom = -49.0
+offset_left = -56.5
+offset_top = 48.0
+offset_right = 56.5
+offset_bottom = 99.0
 grow_horizontal = 2
-grow_vertical = 0
-theme = ExtResource("3_y1n5b")
 theme_override_styles/panel = ExtResource("4_t4tny")
 
-[node name="WordLabel" type="Label" parent="FrontUI/WordContainer"]
+[node name="LettersContainer" type="HBoxContainer" parent="FrontUI/LettersPanel"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_o7678")
-label_settings = SubResource("LabelSettings_kegsc")
-horizontal_alignment = 1
+theme = ExtResource("3_y1n5b")
+theme_override_constants/separation = 8
+alignment = 1
 
 [node name="TimerLabelFront" type="Label" parent="FrontUI"]
 unique_name_in_owner = true
@@ -133,5 +108,24 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "0:10"
 label_settings = SubResource("LabelSettings_hccww")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GameOverLabel" type="Label" parent="FrontUI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.5
+offset_top = 25.0
+offset_right = 84.5
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Time's up!"
+label_settings = SubResource("LabelSettings_emwgs")
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -2,6 +2,7 @@ extends Node2D
 
 signal level_ring_appeared
 signal level_created
+signal letter_dead(assigned_char: String)
 
 @export var word_levels: Resource
 
@@ -42,3 +43,7 @@ func _on_level_ring_appeared() -> void:
 
 func _on_level_created() -> void:
 	level_created.emit()
+
+
+func on_letter_dead(assigned_char: String) -> void:
+	print(assigned_char)

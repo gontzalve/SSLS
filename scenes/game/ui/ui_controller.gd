@@ -2,6 +2,11 @@ extends Node2D
 
 signal countdown_ended
 
+@export var letter_ui_scene: PackedScene
+
+const LETTERS_PANEL_HORIZONTAL_PADDING: int = 20
+var letter_ui_node_array: Array[Node] = []
+
 
 func hide_ui() -> void:
 	$BackUI.visible = false
@@ -28,10 +33,11 @@ func start_countdown(duration_seconds: int) -> void:
 		_tween_countdown_text()
 		if i == duration_seconds:
 			%CountdownLabel.text = "Go!"
-			await get_tree().create_timer(0.5).timeout
+			AudioController.play_main_sfx(1.5)
 		else:
 			%CountdownLabel.text = "%d" % (duration_seconds - i)
-			await get_tree().create_timer(1).timeout
+			AudioController.play_main_sfx(1.2)
+		await get_tree().create_timer(0.75).timeout
 	%CountdownLabel.visible = false
 	countdown_ended.emit()
 
@@ -44,7 +50,28 @@ func _tween_countdown_text() -> void:
 
 func set_level_info(word: String, duration: float) -> void:
 	update_timer(duration)
-	%WordLabel.text = word
+	_clear_letter_ui_nodes()
+	_create_letter_ui_nodes(word)
+
+
+func _clear_letter_ui_nodes() -> void:
+	var letter_count: int = letter_ui_node_array.size()
+	for i in range(letter_count, 0, -1):
+		letter_ui_node_array[i].queue_free()
+	letter_ui_node_array = []
+
+
+func _create_letter_ui_nodes(word: String) -> void:
+	%LettersPanel.visible = false
+	for character in word:
+		var letter_ui_node: Node = letter_ui_scene.instantiate()
+		letter_ui_node.text = character
+		letter_ui_node_array.append(letter_ui_node)
+		%LettersContainer.add_child(letter_ui_node)
+	await get_tree().create_timer(0.1).timeout
+	var panel_width: float = %LettersContainer.size.x + 2 * LETTERS_PANEL_HORIZONTAL_PADDING
+	%LettersPanel.size.x = panel_width
+	%LettersPanel.visible = true
 
 
 func update_timer(time_left: float) -> void:

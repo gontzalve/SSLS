@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal dead(assigned_char: String)
+
 @export var color_palette_data: Resource
 @export var letter_textures_data: Resource
 @export var force_magnitude: float
@@ -104,6 +106,7 @@ func _check_for_death() -> void:
 
 func _on_death() -> void:
 	is_dead = true
+	dead.emit(assigned_letter_char)
 	set_process(false)
 	velocity = Vector2.ZERO
 	_disappear()

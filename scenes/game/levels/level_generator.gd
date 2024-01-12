@@ -128,6 +128,7 @@ func _spawn_letter(spawn_pos: Vector2) -> Node:
 	var letter_node: Node = letter_scene.instantiate()
 	letter_node.set_initial_pos(spawn_pos)
 	letter_node.hide()
+	letter_node.dead.connect(Callable(get_parent(), "on_letter_dead"))
 	letter_container.add_child(letter_node)
 	return letter_node
 

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://xddfjim7v1tx"]
+
+[ext_resource type="LabelSettings" uid="uid://daoa6o144ot4u" path="res://themes/label_settings.tres" id="1_pvymt"]
+
+[node name="LetterUILabel" type="Label"]
+offset_right = 48.0
+offset_bottom = 60.0
+text = "C"
+label_settings = ExtResource("1_pvymt")
+horizontal_alignment = 1
+vertical_alignment = 1
