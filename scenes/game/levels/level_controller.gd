@@ -2,11 +2,14 @@ extends Node2D
 
 signal level_ring_appeared
 signal level_created
-signal letter_dead(assigned_char: String)
+signal letter_dead(assigned_char: String, is_correct: bool)
+signal level_completed
 
 @export var word_levels: Resource
 
 var current_level_word: String
+var remaining_letters: String
+var remaining_letters_count: int
 var current_level_duration: float
 
 
@@ -20,6 +23,8 @@ func create_word_level(index: int) -> void:
 	if level_word == "-":
 		return
 	current_level_word = level_word
+	remaining_letters = level_word
+	remaining_letters_count = level_word.length()
 	current_level_duration = word_levels.get_level_duration(index)
 	$LevelGenerator.clear_level()
 	$LevelGenerator.create_level(level_word)
@@ -46,4 +51,10 @@ func _on_level_created() -> void:
 
 
 func on_letter_dead(assigned_char: String) -> void:
-	print(assigned_char)
+	var letter_index: int = remaining_letters.find(assigned_char)
+	if letter_index >= 0:
+		remaining_letters[letter_index] = "*"
+		remaining_letters_count -= 1
+	letter_dead.emit(assigned_char, letter_index)
+	if remaining_letters_count == 0:
+		level_completed.emit()

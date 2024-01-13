@@ -79,6 +79,15 @@ func _on_player_shot_fired(spawn_pos: Vector2, direction: Vector2) -> void:
 	bullet_factory.create_bullet(spawn_pos, direction)
 
 
+func _on_letter_dead(assigned_char: String, letter_index: int) -> void:
+	if letter_index >= 0:
+		ui_controller.resolve_letter(letter_index)
+
+
+func _on_level_completed() -> void:
+	print("level completed")
+
+
 func _on_game_camera_zoomed_in() -> void:
 	game_cursor.set_big_cursor()
 
@@ -111,5 +120,7 @@ func _connect_to_signals() -> void:
 	game_camera.zoomed_out.connect(_on_game_camera_zoomed_out)
 	level_controller.level_ring_appeared.connect(_on_level_ring_appeared)
 	level_controller.level_created.connect(_on_level_created)
+	level_controller.letter_dead.connect(_on_letter_dead)
+	level_controller.level_completed.connect(_on_level_completed)
 	ui_controller.countdown_ended.connect(_on_countdown_ended)
 	game_timer.timeout.connect(_on_level_timed_out)

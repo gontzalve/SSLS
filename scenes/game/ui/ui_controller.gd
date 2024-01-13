@@ -74,6 +74,11 @@ func _create_letter_ui_nodes(word: String) -> void:
 	%LettersPanel.visible = true
 
 
+func resolve_letter(letter_index: int) -> void:
+	letter_ui_node_array[letter_index].font_color = Color.RED
+	pass
+
+
 func update_timer(time_left: float) -> void:
 	%TimerLabel.text = _get_formatted_time(time_left)
 	%TimerLabelFront.text = _get_formatted_time(time_left)
