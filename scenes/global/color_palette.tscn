@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfq4kahrsme2q"]
+
+[ext_resource type="Script" path="res://scenes/global/color_palette.gd" id="1_q1ld6"]
+
+[node name="ColorPalette" type="Node"]
+script = ExtResource("1_q1ld6")
+BLACK = Color(0.180392, 0.156863, 0.164706, 1)
+WHITE = Color(1, 1, 1, 1)
+RED = Color(0.772549, 0.105882, 0.329412, 1)
+BLUE = Color(0, 0.631373, 0.894118, 1)
+GREEN = Color(0.34902, 0.788235, 0.647059, 1)
+YELLOW = Color(1, 0.796078, 0.121569, 1)
+PURPLE = Color(0.537255, 0.501961, 0.960784, 1)

@@ -1,7 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cdk1xdepsungo"]
-
-[ext_resource type="Script" path="res://data/color_palette/color_palette.gd" id="1_28c3v"]
-
-[resource]
-script = ExtResource("1_28c3v")
-colors = PackedColorArray(0.180392, 0.156863, 0.164706, 1, 1, 1, 1, 1, 0.772549, 0.105882, 0.329412, 1, 0, 0.631373, 0.894118, 1, 0.34902, 0.788235, 0.647059, 1, 1, 0.796078, 0.121569, 1, 0.470588, 0.439216, 0.854902, 1)

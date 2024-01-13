@@ -4,7 +4,6 @@ signal sequence_ended
 
 @export var godot_logo: Node2D
 @export var godot_letter_container: Node2D
-@export var color_palette: Resource
 
 var godot_letters: Array[Node]
 
@@ -45,7 +44,7 @@ func _execute_splash_sequence() -> void:
 	# Delay for reading ####################################
 	await get_tree().create_timer(1).timeout
 	# Color sequence ####################################
-	var splash_colors: PackedColorArray = color_palette.get_color_array_for_splash_sequence()
+	var splash_colors: PackedColorArray = ColorPalette.get_color_array_for_splash_sequence()
 	for i in range(splash_colors.size()):
 		_set_splash_color(splash_colors[i])
 		var pitch: float = 1.2 if i == 0 or i == 4 else 0.9

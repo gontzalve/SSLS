@@ -2,7 +2,6 @@ extends CharacterBody2D
 
 signal dead(assigned_char: String)
 
-@export var color_palette_data: Resource
 @export var letter_textures_data: Resource
 @export var force_magnitude: float
 @export var friction: Vector2
@@ -60,7 +59,7 @@ func set_letter_type(letter_char: String) -> void:
 	
 
 func set_initial_color() -> void:
-	assigned_color = color_palette_data.get_random_color_for_letter()
+	assigned_color = ColorPalette.get_random_color_for_letter()
 	_set_color(assigned_color)
 
 
