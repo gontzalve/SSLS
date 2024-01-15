@@ -88,19 +88,13 @@ func _execute_test_splash_sequence() -> void:
 	
 
 func _tween_node_scale(node: Node, new_scale: float, easing: int) -> void:
-	var tween: Tween = create_tween()
-	var tweener: PropertyTweener
-	tweener = tween.tween_property(node, "scale", Vector2.ONE * new_scale, 0.4)
-	tweener.set_trans(Tween.TRANS_BACK)
-	tweener.set_ease(easing)
+	var tween: SimpleTween = TweenHelper.create(node).to_scale_f(new_scale, 0.4)
+	tween.set_easing(Tween.TRANS_BACK, easing)
 	
 
 func _tween_logo_letters(new_position: Vector2, easing: int) -> void:
-	var tween: Tween = create_tween()
-	var tweener: PropertyTweener
-	tweener = tween.tween_property(godot_letter_container, "position", new_position, 0.4)
-	tweener.set_trans(Tween.TRANS_BACK)
-	tweener.set_ease(easing)
+	var tween: SimpleTween = TweenHelper.create(godot_letter_container).to_position(new_position, 0.4)
+	tween.set_easing(Tween.TRANS_BACK, easing)
 
 
 func _set_splash_color(color: Color) -> void:

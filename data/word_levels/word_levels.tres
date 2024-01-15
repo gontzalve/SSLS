@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_n0jam")
-words = Array[String](["WHATCHAMACALLIT", "HOUSE", "PIDGEON", "SCHOOL", "XANAX", "WYVERN", "DOOHICKEY", "SNOLLYGOSTER", "EXPERGEFACTOR", "WHATCHAMACALLIT"])
+words = Array[String](["CAT", "HOUSE", "PIDGEON", "SCHOOL", "XANAX", "WYVERN", "DOOHICKEY", "SNOLLYGOSTER", "EXPERGEFACTOR", "WHATCHAMACALLIT"])
 durations = Array[float]([10.0, 15.0, 15.0, 20.0, 20.0, 20.0, 30.0, 40.0, 45.0, 60.0])

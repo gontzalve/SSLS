@@ -50,11 +50,15 @@ func _on_level_created() -> void:
 	level_created.emit()
 
 
-func on_letter_dead(assigned_char: String) -> void:
+func on_letter_dead(letter_node: Node2D) -> void:
+	var assigned_char: String = letter_node.assigned_letter_char
 	var letter_index: int = remaining_letters.find(assigned_char)
-	if letter_index >= 0:
-		remaining_letters[letter_index] = "*"
-		remaining_letters_count -= 1
+	if letter_index < 0:
+		letter_node.disappear_as_incorrect_letter()
+		return
+	remaining_letters[letter_index] = "*"
+	letter_node.disappear_as_correct_letter()
 	letter_dead.emit(assigned_char, letter_index)
+	remaining_letters_count -= 1
 	if remaining_letters_count == 0:
 		level_completed.emit()

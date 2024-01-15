@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-signal dead(assigned_char: String)
+signal dead(letter_node: Node2D)
 
 @export var letter_textures_data: Resource
 @export var force_magnitude: float
@@ -31,12 +31,8 @@ func has_letter_assigned() -> bool:
 
 
 func _tween_up_scale() -> void:
-	var tween: Tween = create_tween()
-	var tweener: PropertyTweener
-	tweener = tween.tween_property(self, "scale", Vector2.ONE, 0.2)
-	tweener.set_trans(Tween.TRANS_BACK)
-	tweener.set_ease(Tween.EASE_OUT)
-	tween.tween_callback(_on_appeared)
+	var simple_tween: SimpleTween = TweenHelper.create(self).to_scale_f(1, 0.2)
+	simple_tween.set_easing(Tween.TRANS_BACK, Tween.EASE_OUT).set_callback(_on_appeared)
 
 
 func _on_appeared() -> void:
@@ -77,10 +73,8 @@ func _execute_movement(delta: float) -> void:
 
 
 func on_bullet_collision(push_velocity: Vector2) -> void:
-	current_health -= 1
 	_receive_push(push_velocity)
-	_execute_flash_sequence()
-	_check_for_death()
+	_receive_damage(1)
 
 
 func _receive_push(push_velocity: Vector2) -> void:
@@ -91,39 +85,43 @@ func _receive_push(push_velocity: Vector2) -> void:
 		velocity = next_velocity.normalized() * MAX_SPEED
 
 
+func _receive_damage(damage: int) -> void:
+	current_health -= damage
+	if current_health > 0:
+		_execute_flash_sequence()
+	else:
+		_on_death()
+
+
 func _execute_flash_sequence() -> void:
 	_set_color(Color.WHITE)
 	await get_tree().create_timer(0.2).timeout
 	_set_color(assigned_color)
 
 
-func _check_for_death() -> void:
-	if current_health > 0:
-		return
-	_on_death()
-	
-
 func _on_death() -> void:
 	is_dead = true
-	dead.emit(assigned_letter_char)
+	dead.emit(self)
 	set_process(false)
 	velocity = Vector2.ZERO
-	_disappear()
 	$CollisionShape2D.set_deferred("disabled", true)
 
 
-func _disappear() -> void:
+func disappear_as_correct_letter() -> void:
+	var outline_tween: SimpleTween = TweenHelper.create($Outline)
+	outline_tween.to_scale_f(0, 0.3).set_easing(Tween.TRANS_BACK, Tween.EASE_IN)
+	var letter_tween: SimpleTween = TweenHelper.create($LetterSprite)
+	letter_tween.to_alpha(0, 0.5).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN)
+	letter_tween.parallel().to_position(Vector2.UP * 20, 0.5).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN)
+	letter_tween.parallel().to_scale_f(1.5, 0.5).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN)
+	await letter_tween.finished
+	_on_disappeared()
+
+
+func disappear_as_incorrect_letter() -> void:
 	$LetterSprite.visible = false
-	_tween_down_scale()
-
-
-func _tween_down_scale() -> void:
-	var tween: Tween = create_tween()
-	var tweener: PropertyTweener
-	tweener = tween.tween_property(self, "scale", Vector2.ZERO, 0.3)
-	tweener.set_trans(Tween.TRANS_BACK)
-	tweener.set_ease(Tween.EASE_IN)
-	tween.tween_callback(_on_disappeared)
+	var tween: SimpleTween = TweenHelper.create(self).to_scale_f(0, 0.3)
+	tween.set_easing(Tween.TRANS_BACK, Tween.EASE_IN).set_callback(_on_disappeared)
 
 
 func _on_disappeared() -> void:

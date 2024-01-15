@@ -51,12 +51,8 @@ func disallow_input() -> void:
 
 
 func _tween_up_scale() -> void:
-	var tween: Tween = create_tween()
-	var tweener: PropertyTweener
-	tweener = tween.tween_property(self, "scale", Vector2.ONE, 0.2)
-	tweener.set_trans(Tween.TRANS_BACK)
-	tweener.set_ease(Tween.EASE_OUT)
-	tween.tween_callback(_on_appeared)
+	var tween: SimpleTween = TweenHelper.create(self).to_scale_f(1, 0.2)
+	tween.set_easing(Tween.TRANS_BACK, Tween.EASE_OUT).set_callback(_on_appeared)
 
 
 func _on_appeared() -> void:
@@ -118,9 +114,9 @@ func _get_shooting_direction_with_randomness(shooting_direction: Vector2) -> Vec
 
 
 func _tween_player_arrow() -> void:
-	var tween: Tween = create_tween()
-	tween.tween_property($PlayerArrowSprite, "position", Vector2.LEFT * 3, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property($PlayerArrowSprite, "position", Vector2.ZERO, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	var tween: SimpleTween = TweenHelper.create($PlayerArrowSprite)
+	tween.to_position(Vector2.LEFT * 3, 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+	tween.to_position(Vector2.ZERO, 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
 
 
 func _check_rotation() -> void:

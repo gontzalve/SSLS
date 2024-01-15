@@ -114,12 +114,10 @@ func _zoom_out_from_player() -> void:
 
 
 func _tween_camera_zoom(zoom_level: float, duration: float) -> void:
-	var tween: Tween = create_tween()
-	var tweener: PropertyTweener
-	tweener = tween.tween_property(camera2D, "zoom", Vector2.ONE * zoom_level, duration)
-	tweener.set_trans(Tween.TRANS_BACK)
-	tweener.set_ease(Tween.EASE_OUT)
-	tween.tween_callback(_on_tween_ended)
+	var tween: SimpleTween = TweenHelper.create(camera2D)
+	tween.to_property_value("zoom", Vector2.ONE * zoom_level, duration)
+	tween.set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+	tween.set_callback(_on_tween_ended)
 	
 
 func _on_tween_ended():

@@ -43,9 +43,9 @@ func start_countdown(duration_seconds: int) -> void:
 
 
 func _tween_countdown_text() -> void:
-	var tween: Tween = create_tween()
-	tween.tween_property(%CountdownLabel, "scale", Vector2.ONE * 1.3, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(%CountdownLabel, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	var tween: SimpleTween = TweenHelper.create(%CountdownLabel)
+	tween.to_scale_f(1.3, 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+	tween.to_scale_f(1, 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
 
 
 func set_level_info(word: String, duration: float) -> void:
@@ -75,8 +75,11 @@ func _create_letter_ui_nodes(word: String) -> void:
 
 
 func resolve_letter(letter_index: int) -> void:
-	letter_ui_node_array[letter_index].font_color = Color.RED
-	pass
+	var letter_ui_node = letter_ui_node_array[letter_index]
+	letter_ui_node.label_settings.font_color = ColorPalette.GREEN
+	var tween: SimpleTween = TweenHelper.create(letter_ui_node)
+	tween.to_scale_f(1.5, 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+	tween.to_scale_f(1, 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
 
 
 func update_timer(time_left: float) -> void:
