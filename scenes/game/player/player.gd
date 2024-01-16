@@ -9,6 +9,7 @@ signal shot_fired(spawn_pos: Vector2, direction: Vector2)
 
 var allowed_input: bool
 var is_shooting: bool
+var current_inaccuracy: float
 
 const MOVE_LEFT_ACTION: String = "move_left"
 const MOVE_RIGHT_ACTION: String = "move_right"
@@ -17,17 +18,21 @@ const MOVE_DOWN_ACTION: String = "move_down"
 
 const SHOOT_ACTION: String = "shoot"
 const SHOOT_COOLDOWN: float = 0.08
-const SHOOT_INACCURACY: float = 10 # in degree angles
+const MAX_SHOOT_INACCURACY: float = 10 # in degree angles
+const INACCURACY_INCREASE_PER_SHOT: float = 1 # in degree angles
+const INACCURACY_DECREASE_RATE_PER_SECOND: float = 5
 
 
 func _ready() -> void:
 	is_shooting = false
+	current_inaccuracy = 0
 
 
 func _process(delta: float) -> void:
 	if not allowed_input:
 		return
 	_check_movement_input(delta)
+	_decrease_inaccuracy(delta)
 	_check_shooting_input()
 	_check_rotation()
 	
@@ -86,15 +91,28 @@ func _check_shooting_input() -> void:
 	if is_shooting:
 		return
 	if Input.is_action_pressed(SHOOT_ACTION):
-		var shooting_dir: Vector2 = _get_shooting_direction()
-		var final_shooting_dir: Vector2 = _get_shooting_direction_with_randomness(shooting_dir)
-		_shoot(final_shooting_dir)
+		_increase_inaccuracy()
+		var aiming_dir: Vector2 = _get_aiming_direction()
+		var shooting_dir: Vector2 = _calculate_shooting_direction(aiming_dir, current_inaccuracy)
+		_shoot(shooting_dir)
 
 
-func _get_shooting_direction() -> Vector2:
+func _get_aiming_direction() -> Vector2:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
 	var center_pos: Vector2 = get_viewport().size / 2
 	return (mouse_pos - center_pos).normalized()
+
+
+func _increase_inaccuracy() -> void:
+	if (current_inaccuracy < MAX_SHOOT_INACCURACY):
+		current_inaccuracy += INACCURACY_INCREASE_PER_SHOT
+		current_inaccuracy = min(current_inaccuracy, MAX_SHOOT_INACCURACY)
+
+
+func _decrease_inaccuracy(delta: float) -> void:
+	if current_inaccuracy > 0:
+		current_inaccuracy -= delta * INACCURACY_DECREASE_RATE_PER_SECOND
+		current_inaccuracy = max(current_inaccuracy, 0)
 
 
 func _shoot(direction: Vector2) -> void:
@@ -102,21 +120,28 @@ func _shoot(direction: Vector2) -> void:
 	shot_fired.emit($ShootingPivot.global_position, direction)
 	AudioController.play_sfx(sfx_player_shot, randf_range(0.9, 1.1), -12)
 	_tween_player_arrow()
+	# _tween_container_scale()
 	await get_tree().create_timer(SHOOT_COOLDOWN).timeout
 	is_shooting = false
 
 
-func _get_shooting_direction_with_randomness(shooting_direction: Vector2) -> Vector2:
-	var offset_angle: float = deg_to_rad(randf_range(-10.0, 10.0))
-	var random_x: float = cos(offset_angle) * shooting_direction.x - sin(offset_angle) * shooting_direction.y
-	var random_y: float = sin(offset_angle) * shooting_direction.x + cos(offset_angle) * shooting_direction.y
+func _calculate_shooting_direction(shooting_direction: Vector2, inaccuracy: float) -> Vector2:
+	var inaccuracy_angle: float = deg_to_rad(randf_range(-inaccuracy, inaccuracy))
+	var random_x: float = cos(inaccuracy_angle) * shooting_direction.x - sin(inaccuracy_angle) * shooting_direction.y
+	var random_y: float = sin(inaccuracy_angle) * shooting_direction.x + cos(inaccuracy_angle) * shooting_direction.y
 	return Vector2(random_x, random_y).normalized()
 
 
 func _tween_player_arrow() -> void:
-	var tween: SimpleTween = TweenHelper.create($PlayerArrowSprite)
-	tween.to_position(Vector2.LEFT * 3, 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
-	tween.to_position(Vector2.ZERO, 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+	var tween: SimpleTween = TweenHelper.create(%ArrowSprite)
+	tween.to_position(Vector2.RIGHT * 17, 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+	tween.to_position(Vector2.RIGHT * 20, 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+
+
+# func _tween_container_scale() -> void:
+# 	var tween: SimpleTween = TweenHelper.create(%SpriteContainer)
+# 	tween.to_scale_v(Vector2(0.9, 1.1), 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+# 	tween.to_scale_v(Vector2.ONE, 0.15).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
 
 
 func _check_rotation() -> void:

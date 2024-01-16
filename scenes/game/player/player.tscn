@@ -1,31 +1,35 @@
-[gd_scene load_steps=7 format=3 uid="uid://cj0w5dwyhcvv8"]
+[gd_scene load_steps=6 format=3 uid="uid://cj0w5dwyhcvv8"]
 
 [ext_resource type="Script" path="res://scenes/game/player/player.gd" id="1_52xme"]
 [ext_resource type="Texture2D" uid="uid://c4db867j0ajg2" path="res://graphics/game/player/PlayerOutline.png" id="2_6a5kw"]
-[ext_resource type="AudioStream" uid="uid://bqp56jh80yxre" path="res://sfxs/sfx_splash.wav" id="2_dpybg"]
 [ext_resource type="Texture2D" uid="uid://boofwcm6g13eu" path="res://graphics/game/player/PlayerArrow.png" id="3_d7osy"]
 [ext_resource type="AudioStream" uid="uid://cq1x0giape42u" path="res://sfxs/sfx_gun.wav" id="3_lttf0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_t4nuc"]
 radius = 24.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("audio_player")]
+[node name="Player" type="CharacterBody2D"]
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_52xme")
 movement_speed = 480.0
 movement_acceleration = 2000.0
-audio_player = NodePath("AudioStreamPlayer")
-sfx_player_appeared = ExtResource("2_dpybg")
 sfx_player_shot = ExtResource("3_lttf0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_t4nuc")
 
-[node name="PlayerOutlineSprite" type="Sprite2D" parent="."]
+[node name="SpriteContainer" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-20, 0)
+
+[node name="OutlineSprite" type="Sprite2D" parent="SpriteContainer"]
+position = Vector2(20, 0)
 texture = ExtResource("2_6a5kw")
 
-[node name="PlayerArrowSprite" type="Sprite2D" parent="."]
+[node name="ArrowSprite" type="Sprite2D" parent="SpriteContainer"]
+unique_name_in_owner = true
+position = Vector2(20, 0)
 texture = ExtResource("3_d7osy")
 
 [node name="ShootingPivot" type="Node2D" parent="."]

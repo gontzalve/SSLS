@@ -15,7 +15,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 script = ExtResource("2_6tfly")
 camera_2d = NodePath("../Camera2D")
-max_strength = 7.5
+max_strength = 5.0
 
 [node name="CameraZoom" type="Node2D" parent="." node_paths=PackedStringArray("camera2D")]
 unique_name_in_owner = true

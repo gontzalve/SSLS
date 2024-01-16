@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://c3kty0s4mknva"]
+
+[ext_resource type="Script" path="res://scenes/game/particles/shoot_particles.gd" id="1_g1sh8"]
+[ext_resource type="Texture2D" uid="uid://bqcecoaowh387" path="res://graphics/game/outline/fill.png" id="2_tyu5c"]
+
+[sub_resource type="Curve" id="Curve_qfbve"]
+_data = [Vector2(0.00546448, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="ShootParticles" type="Node2D" node_paths=PackedStringArray("particle_system")]
+script = ExtResource("1_g1sh8")
+particle_system = NodePath("CPUParticles2D")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 6
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.9
+texture = ExtResource("2_tyu5c")
+gravity = Vector2(0, 0)
+initial_velocity_min = 180.0
+initial_velocity_max = 240.0
+scale_amount_min = 0.15
+scale_amount_max = 0.3
+scale_amount_curve = SubResource("Curve_qfbve")

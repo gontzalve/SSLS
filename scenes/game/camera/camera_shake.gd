@@ -2,7 +2,7 @@ extends Node2D
 
 @export var camera_2d: Camera2D
 @export var shake_fade: float = 5.0
-@export var max_strength: float = 30.0
+@export var max_strength: float = 10.0
 
 var current_shake_strength: float = 5.0
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()

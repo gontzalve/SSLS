@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dvf622xug1y10"]
+[gd_scene load_steps=5 format=3 uid="uid://dvf622xug1y10"]
 
 [ext_resource type="Script" path="res://scenes/game/bullet/bullet.gd" id="1_sfwpg"]
 [ext_resource type="Texture2D" uid="uid://b058rv7f6xpt0" path="res://graphics/game/bullet/bullet.png" id="2_5wbmc"]
+[ext_resource type="PackedScene" uid="uid://c3kty0s4mknva" path="res://scenes/game/particles/shoot_particles.tscn" id="2_7cf8x"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q4g51"]
 radius = 8.0
@@ -17,6 +18,7 @@ contact_monitor = true
 script = ExtResource("1_sfwpg")
 initial_impulse = 1500.0
 push_force_magnitude = 100.0
+shooting_particles_scene = ExtResource("2_7cf8x")
 
 [node name="BulletShape" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 0)
