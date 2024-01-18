@@ -67,5 +67,13 @@ func set_callback(callback: Callable) -> SimpleTween:
 	return self
 
 
+func is_running() -> bool:
+	return tween.is_running()
+
+
+func stop() -> void:
+	tween.stop()
+
+
 func _on_tween_finished() -> void:
 	finished.emit()

@@ -11,6 +11,8 @@ var assigned_color: Color
 var is_dead: bool
 var current_health: int
 
+var hit_tween: SimpleTween = null
+
 const LETTER_GROUP_NAME: String = "letters"
 const CLOSE_TO_ZERO_SPEED: float = 3
 const MAX_SPEED: float = 200
@@ -72,9 +74,15 @@ func _execute_movement(delta: float) -> void:
 			collision.get_collider().velocity = collision_speed * -collision.get_normal()
 
 
-func on_bullet_collision(push_velocity: Vector2) -> void:
+func on_bullet_collision(push_velocity: Vector2, bullet_angle: float) -> void:
+	if is_dead:
+		return
 	_receive_push(push_velocity)
 	_receive_damage(1)
+	if current_health > 0:
+		_play_hit_feedback(bullet_angle)
+	else:
+		_on_death()
 
 
 func _receive_push(push_velocity: Vector2) -> void:
@@ -87,16 +95,15 @@ func _receive_push(push_velocity: Vector2) -> void:
 
 func _receive_damage(damage: int) -> void:
 	current_health -= damage
-	if current_health > 0:
-		_execute_flash_sequence()
-	else:
-		_on_death()
 
 
-func _execute_flash_sequence() -> void:
-	_set_color(Color.WHITE)
-	await get_tree().create_timer(0.2).timeout
-	_set_color(assigned_color)
+func _play_hit_feedback(bullet_angle: float) -> void:
+	if hit_tween != null and hit_tween.is_running():
+		hit_tween.stop()
+	hit_tween = TweenHelper.create($Outline)
+	hit_tween.to_scale_v(Vector2(0.9, 1.1), 0.2).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	hit_tween.to_scale_f(1, 0.2).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	$Outline.rotation_degrees = bullet_angle
 
 
 func _on_death() -> void:
@@ -108,6 +115,8 @@ func _on_death() -> void:
 
 
 func disappear_as_correct_letter() -> void:
+	if hit_tween != null and hit_tween.is_running():
+		hit_tween.stop()
 	var outline_tween: SimpleTween = TweenHelper.create($Outline)
 	outline_tween.to_scale_f(0, 0.3).set_easing(Tween.TRANS_BACK, Tween.EASE_IN)
 	var letter_tween: SimpleTween = TweenHelper.create($LetterSprite)
@@ -119,9 +128,13 @@ func disappear_as_correct_letter() -> void:
 
 
 func disappear_as_incorrect_letter() -> void:
-	$LetterSprite.visible = false
-	var tween: SimpleTween = TweenHelper.create(self).to_scale_f(0, 0.3)
-	tween.set_easing(Tween.TRANS_BACK, Tween.EASE_IN).set_callback(_on_disappeared)
+	if hit_tween != null and hit_tween.is_running():
+		hit_tween.stop()
+	var letter_tween: SimpleTween = TweenHelper.create($LetterSprite)
+	letter_tween.to_alpha(0, 0.2).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN)
+	var outline_tween: SimpleTween = TweenHelper.create($Outline)
+	outline_tween.to_scale_f(0, 0.3).set_easing(Tween.TRANS_BACK, Tween.EASE_IN)
+	outline_tween.set_callback(_on_disappeared)
 
 
 func _on_disappeared() -> void:
