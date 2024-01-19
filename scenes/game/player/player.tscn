@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cj0w5dwyhcvv8"]
+[gd_scene load_steps=7 format=3 uid="uid://cj0w5dwyhcvv8"]
 
 [ext_resource type="Script" path="res://scenes/game/player/player.gd" id="1_52xme"]
 [ext_resource type="Texture2D" uid="uid://c4db867j0ajg2" path="res://graphics/game/player/PlayerOutline.png" id="2_6a5kw"]
 [ext_resource type="Texture2D" uid="uid://boofwcm6g13eu" path="res://graphics/game/player/PlayerArrow.png" id="3_d7osy"]
 [ext_resource type="AudioStream" uid="uid://cq1x0giape42u" path="res://sfxs/sfx_gun.wav" id="3_lttf0"]
+[ext_resource type="Texture2D" uid="uid://caw6gq8emlv0w" path="res://graphics/game/player/PlayerCross.png" id="5_sj3hd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_t4nuc"]
 radius = 24.0
@@ -31,6 +32,12 @@ texture = ExtResource("2_6a5kw")
 unique_name_in_owner = true
 position = Vector2(20, 0)
 texture = ExtResource("3_d7osy")
+
+[node name="CrossSprite" type="Sprite2D" parent="SpriteContainer"]
+unique_name_in_owner = true
+visible = false
+position = Vector2(20, 0)
+texture = ExtResource("5_sj3hd")
 
 [node name="ShootingPivot" type="Node2D" parent="."]
 position = Vector2(32, 0)

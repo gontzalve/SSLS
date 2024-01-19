@@ -4,6 +4,7 @@ signal level_ring_appeared
 signal level_created
 signal letter_dead(assigned_char: String, is_correct: bool)
 signal level_completed
+signal level_cleared
 
 @export var word_levels: Resource
 
@@ -14,11 +15,12 @@ var current_level_duration: float
 
 
 func _ready() -> void:
-	$LevelGenerator.level_ring_appeared.connect(_on_level_ring_appeared)
-	$LevelGenerator.level_created.connect(_on_level_created)
+	$LevelGenerator.level_ring_appeared.connect(func(): level_ring_appeared.emit())
+	$LevelGenerator.level_created.connect(func(): level_created.emit())
+	$LevelGenerator.level_cleared.connect(func(): level_cleared.emit())
 
 
-func create_word_level(index: int) -> void:
+func create_word_level(index: int, player_position: Vector2) -> void:
 	var level_word: String = word_levels.get_level_word(index)
 	if level_word == "-":
 		return
@@ -26,8 +28,7 @@ func create_word_level(index: int) -> void:
 	remaining_letters = level_word
 	remaining_letters_count = level_word.length()
 	current_level_duration = word_levels.get_level_duration(index)
-	$LevelGenerator.clear_level()
-	$LevelGenerator.create_level(level_word)
+	$LevelGenerator.create_level(level_word, player_position)
 
 
 func get_current_level_word() -> String:
@@ -40,14 +41,6 @@ func get_current_level_duration() -> float:
 
 func clear_level() -> void:
 	$LevelGenerator.clear_level()
-
-
-func _on_level_ring_appeared() -> void:
-	level_ring_appeared.emit()
-
-
-func _on_level_created() -> void:
-	level_created.emit()
 
 
 func on_letter_dead(letter_node: Node2D) -> void:

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="SSLS01"
-run/main_scene="res://scenes/game/main/main.tscn"
+run/main_scene="res://scenes/splash/splash.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 boot_splash/show_image=false
 config/icon="res://icon.svg"

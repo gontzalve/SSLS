@@ -8,6 +8,7 @@ signal shot_fired(spawn_pos: Vector2, direction: Vector2)
 @export var sfx_player_shot: AudioStream
 
 var allowed_input: bool
+var allowed_shooting_input: bool
 var is_shooting: bool
 var current_inaccuracy: float
 
@@ -55,6 +56,18 @@ func disallow_input() -> void:
 	allowed_input = false
 
 
+func allow_shooting_input() -> void:
+	allowed_shooting_input = true
+	%ArrowSprite.visible = true 
+	%CrossSprite.visible = false
+
+
+func disallow_shooting_input() -> void:
+	allowed_shooting_input = false
+	%CrossSprite.visible = true 
+	%ArrowSprite.visible = false
+
+
 func _tween_up_scale() -> void:
 	var tween: SimpleTween = TweenHelper.create(self).to_scale_f(1, 0.2)
 	tween.set_easing(Tween.TRANS_BACK, Tween.EASE_OUT).set_callback(_on_appeared)
@@ -91,10 +104,13 @@ func _check_shooting_input() -> void:
 	if is_shooting:
 		return
 	if Input.is_action_pressed(SHOOT_ACTION):
-		_increase_inaccuracy()
-		var aiming_dir: Vector2 = _get_aiming_direction()
-		var shooting_dir: Vector2 = _calculate_shooting_direction(aiming_dir, current_inaccuracy)
-		_shoot(shooting_dir)
+		if allowed_shooting_input:
+			_increase_inaccuracy()
+			var aiming_dir: Vector2 = _get_aiming_direction()
+			var shooting_dir: Vector2 = _calculate_shooting_direction(aiming_dir, current_inaccuracy)
+			_shoot(shooting_dir)
+		else:
+			_play_cross_feedback()
 
 
 func _get_aiming_direction() -> Vector2:
@@ -149,3 +165,9 @@ func _check_rotation() -> void:
 	var center_pos: Vector2 = get_viewport().size / 2
 	var angle = rad_to_deg(center_pos.angle_to_point(mouse_pos))
 	rotation_degrees = angle
+
+
+func _play_cross_feedback() -> void:
+	var tween: SimpleTween = TweenHelper.create(%CrossSprite)
+	tween.to_scale_f(0.7, 0.1).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	tween.to_scale_f(1, 0.1).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)

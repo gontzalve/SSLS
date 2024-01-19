@@ -2,6 +2,7 @@ extends Node2D
 
 signal level_created
 signal level_ring_appeared
+signal level_cleared
 
 @export var letter_scene: PackedScene
 @export var alphabet_data: Resource
@@ -26,19 +27,22 @@ const LETTER_RING_APPEAR_DELAY: float = 0.1
 
 
 func _ready() -> void:
-	origin_position = Vector2.ZERO
 	letter_node_slot_distance =  2 * (LETTER_NODE_RADIUS + LETTER_NODE_RADIUS_PADDING)
 
 
 func clear_level() -> void:
-	for letter_ring in letter_node_rings:
-		for i in range(letter_ring.size() - 1, -1, -1): 
-			letter_ring[i].queue_free()
+	for i in range(letter_node_rings.size()):
+		for j in range(letter_node_rings[i].size() - 1, -1, -1):
+			if is_instance_valid(letter_node_rings[i][j]):
+				letter_node_rings[i][j].queue_free()
+		AudioController.play_main_sfx(max(1.2 - i * 0.1, 0.8))
+		await get_tree().create_timer(0.08).timeout
 	letter_node_rings.clear()
+	level_cleared.emit()
 
 
-func create_level(level_word: String) -> void:
-	_spawn_letter_nodes()
+func create_level(level_word: String, player_position: Vector2) -> void:
+	_spawn_letter_nodes(player_position)
 	_initialize_letter_nodes(level_word)
 	_execute_letter_nodes_appear_sequence()
 
@@ -47,7 +51,8 @@ func create_tutorial_level(level_word: String) -> void:
 	pass
 
 
-func _spawn_letter_nodes() -> void:
+func _spawn_letter_nodes(player_position: Vector2) -> void:
+	origin_position = player_position
 	_spawn_letter_nodes_in_squares()
 	# _spawn_letter_nodes_in_circles()
 

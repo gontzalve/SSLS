@@ -17,6 +17,7 @@ func show_countdown_ui() -> void:
 	$BackUI.visible = true
 	%CountdownLabel.visible = true
 	%TimerLabel.visible = false
+	%TimerLabelFront.visible = false
 	%GameOverLabel.visible = false
 
 
@@ -24,6 +25,7 @@ func show_level_ui() -> void:
 	$BackUI.visible = true
 	$FrontUI.visible = true
 	%TimerLabel.visible = true
+	%TimerLabelFront.visible = true
 	%GameOverLabel.visible = false
 	%CountdownLabel.visible = false
 
@@ -56,7 +58,7 @@ func set_level_info(word: String, duration: float) -> void:
 
 func _clear_letter_ui_nodes() -> void:
 	var letter_count: int = letter_ui_node_array.size()
-	for i in range(letter_count, 0, -1):
+	for i in range(letter_count - 1, -1, -1):
 		letter_ui_node_array[i].queue_free()
 	letter_ui_node_array = []
 

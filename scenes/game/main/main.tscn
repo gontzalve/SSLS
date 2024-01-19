@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cnkavhuprclg4"]
+[gd_scene load_steps=9 format=3 uid="uid://cnkavhuprclg4"]
 
 [ext_resource type="Script" path="res://scenes/game/main/main_controller.gd" id="1_e8hqi"]
 [ext_resource type="PackedScene" uid="uid://cj0w5dwyhcvv8" path="res://scenes/game/player/player.tscn" id="2_cg2un"]
+[ext_resource type="AudioStream" uid="uid://b0l4xm32v2tvk" path="res://sfxs/sfx_correct_letter.wav" id="2_ukpjm"]
 [ext_resource type="PackedScene" uid="uid://jl30cbb50et2" path="res://scenes/game/camera/game_camera.tscn" id="2_vxcp5"]
 [ext_resource type="PackedScene" uid="uid://duqk6nnpkjlh1" path="res://scenes/game/levels/level_controller.tscn" id="4_1xhwx"]
 [ext_resource type="PackedScene" uid="uid://iv5glvthjnbv" path="res://scenes/game/cursor/game_cursor.tscn" id="5_k0t3l"]
@@ -10,6 +11,7 @@
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_e8hqi")
+sfx_correct_letter = ExtResource("2_ukpjm")
 
 [node name="GameCamera" parent="." node_paths=PackedStringArray("follow_target_node") instance=ExtResource("2_vxcp5")]
 unique_name_in_owner = true
