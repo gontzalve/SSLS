@@ -23,6 +23,22 @@ func to_position(target_position: Vector2, duration: float) -> SimpleTween:
 	return self
 
 
+func to_position_x(target_position_x: float, duration: float) -> SimpleTween:
+	current_property = "position"
+	var target_position: Vector2 = Vector2(target_position_x, node.position.y)
+	var tweener: PropertyTweener = tween.tween_property(node, current_property, target_position, duration)
+	tweener_dictionary[current_property] = tweener
+	return self
+
+
+func to_position_y(target_position_y: float, duration: float) -> SimpleTween:
+	current_property = "position"
+	var target_position: Vector2 = Vector2(node.position.x, target_position_y)
+	var tweener: PropertyTweener = tween.tween_property(node, current_property, target_position, duration)
+	tweener_dictionary[current_property] = tweener
+	return self
+
+
 func to_scale_f(target_scale: float, duration: float) -> SimpleTween:
 	return to_scale_v(Vector2.ONE * target_scale, duration)
 

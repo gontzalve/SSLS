@@ -54,17 +54,73 @@ label_settings = SubResource("LabelSettings_hxk3y")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="LevelLabelContainer" type="Control" parent="BackUI"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = 25.0
+offset_right = 75.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(75, 22.5)
+
+[node name="LevelLabel" type="Label" parent="BackUI/LevelLabelContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -22.5
+offset_right = 25.0
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(60, 0)
+text = "Level"
+label_settings = SubResource("LabelSettings_hxk3y")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="LevelNumberLabel" type="Label" parent="BackUI/LevelLabelContainer"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 35.0
+offset_top = -22.5
+offset_right = 80.0
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(22.5, 22.5)
+text = "20"
+label_settings = SubResource("LabelSettings_hxk3y")
+vertical_alignment = 1
+
 [node name="CountdownLabel" type="Label" parent="BackUI"]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -60.0
-offset_top = 25.0
+offset_top = -70.0
 offset_right = 60.0
-offset_bottom = 70.0
+offset_bottom = -25.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(60, 22.5)
@@ -74,6 +130,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="FrontUI" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="LettersPanel" type="PanelContainer" parent="FrontUI"]
 unique_name_in_owner = true

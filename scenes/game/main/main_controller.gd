@@ -43,13 +43,23 @@ func _start_game() -> void:
 
 
 func _on_player_appeared() -> void:
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(0.8).timeout
+	_show_level_label()
+
+
+func _show_level_label() -> void:
+	ui_controller.show_level_labels()
+	ui_controller.show_next_level_animation(current_level_index)
+
+
+func _on_level_shown() -> void:
+	await get_tree().create_timer(1).timeout
+	ui_controller.hide_level_labels()
 	level_controller.create_word_level(current_level_index, player.global_position)
 
 
 func _on_level_ring_appeared() -> void:
 	game_camera.start_zoom(game_camera.get_current_zoom() - 0.13, 0.3)
-	pass
 
 
 func _on_level_created() -> void:
@@ -74,6 +84,7 @@ func _start_current_level() -> void:
 	ui_controller.set_level_info(word, duration)
 	await get_tree().create_timer(0.2).timeout
 	game_timer.start(duration)
+	game_timer.paused = false
 	has_level_started = true
 	
 
@@ -97,8 +108,9 @@ func _on_level_completed() -> void:
 func _on_level_cleared() -> void:
 	current_level_index += 1
 	player.disallow_shooting_input()
+	ui_controller.hide_ui()
 	await get_tree().create_timer(0.4).timeout
-	level_controller.create_word_level(current_level_index, player.global_position)
+	_show_level_label()
 
 
 func _on_game_camera_zoomed_in() -> void:
@@ -136,5 +148,6 @@ func _connect_to_signals() -> void:
 	level_controller.letter_dead.connect(_on_letter_dead)
 	level_controller.level_completed.connect(_on_level_completed)
 	level_controller.level_cleared.connect(_on_level_cleared)
+	ui_controller.level_shown.connect(_on_level_shown)
 	ui_controller.countdown_ended.connect(_on_countdown_ended)
 	game_timer.timeout.connect(_on_level_timed_out)

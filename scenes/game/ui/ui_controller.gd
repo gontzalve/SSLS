@@ -1,5 +1,6 @@
 extends Node2D
 
+signal level_shown
 signal countdown_ended
 
 @export var letter_ui_scene: PackedScene
@@ -13,19 +14,50 @@ func hide_ui() -> void:
 	$FrontUI.visible = false
 
 
+func show_level_labels() -> void:
+	$BackUI.visible = true
+	_hide_timer_labels()
+	%LevelLabelContainer.visible = true
+
+
+func show_next_level_animation(next_level_index: int) -> void:
+	%LevelLabelContainer.scale = Vector2.ZERO
+	var container_tween: SimpleTween = TweenHelper.create(%LevelLabelContainer)
+	container_tween.to_scale_f(1, 0.2).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+	var level_number: int = next_level_index + 1
+	if next_level_index == 0:
+		%LevelNumberLabel.text = "%d" % (level_number)
+		AudioController.play_main_sfx(0.8)
+		await container_tween.finished
+		level_shown.emit()
+		return
+	%LevelNumberLabel.text = "%d" % (level_number - 1)
+	await get_tree().create_timer(0.6).timeout
+	AudioController.play_main_sfx(0.8)
+	var tween: SimpleTween = TweenHelper.create(%LevelNumberLabel)
+	%LevelNumberLabel.text = "%d" % (level_number)
+	tween.to_scale_f(1.2, 0.2).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+	tween.to_scale_f(1, 0.2).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+	await tween.finished
+	level_shown.emit()
+
+
+func hide_level_labels() -> void:
+	%LevelLabelContainer.visible = false
+
+
 func show_countdown_ui() -> void:
 	$BackUI.visible = true
 	%CountdownLabel.visible = true
-	%TimerLabel.visible = false
-	%TimerLabelFront.visible = false
+	_hide_timer_labels()
+	hide_level_labels()
 	%GameOverLabel.visible = false
 
 
 func show_level_ui() -> void:
 	$BackUI.visible = true
 	$FrontUI.visible = true
-	%TimerLabel.visible = true
-	%TimerLabelFront.visible = true
+	_show_timer_labels()
 	%GameOverLabel.visible = false
 	%CountdownLabel.visible = false
 
@@ -90,8 +122,7 @@ func update_timer(time_left: float) -> void:
 
 
 func show_game_over_ui() -> void:
-	%TimerLabel.visible = false
-	%TimerLabelFront.visible = false
+	_hide_timer_labels()
 	%GameOverLabel.visible = true
 
 
@@ -99,3 +130,13 @@ func _get_formatted_time(time_value: float) -> String:
 	var seconds: int = floori(time_value)
 	var tenths_seconds: int = floori(time_value * 10) % 10
 	return "%d.%d" % [seconds, tenths_seconds]
+
+
+func _show_timer_labels() -> void:
+	%TimerLabel.visible = true
+	%TimerLabelFront.visible = true
+
+
+func _hide_timer_labels() -> void:
+	%TimerLabel.visible = false
+	%TimerLabelFront.visible = false 
