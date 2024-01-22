@@ -54,10 +54,11 @@ func show_countdown_ui() -> void:
 	%GameOverLabel.visible = false
 
 
-func show_level_ui() -> void:
+func show_level_ui(is_tutorial: bool) -> void:
 	$BackUI.visible = true
 	$FrontUI.visible = true
-	_show_timer_labels()
+	if not is_tutorial:
+		_show_timer_labels()
 	%GameOverLabel.visible = false
 	%CountdownLabel.visible = false
 

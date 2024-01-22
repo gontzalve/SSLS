@@ -31,6 +31,16 @@ window/size/resizable=false
 mouse_cursor/custom_image="res://graphics/game/crosshairs/crosshair_big.png"
 mouse_cursor/custom_image_hotspot=Vector2(24, 24)
 
+[file_customization]
+
+folder_colors={
+"res://data/": "red",
+"res://fonts/": "gray",
+"res://graphics/": "orange",
+"res://scenes/": "yellow",
+"res://sfxs/": "green"
+}
+
 [input]
 
 move_left={

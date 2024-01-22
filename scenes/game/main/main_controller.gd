@@ -78,13 +78,15 @@ func _start_current_level() -> void:
 	game_cursor.show_cursor()
 	player.allow_input()
 	player.allow_shooting_input()
-	ui_controller.show_level_ui()
-	var word: String = level_controller.get_current_level_word()
-	var duration: float = level_controller.get_current_level_duration()
+	var level_data: LevelData = level_controller.get_current_level_data()
+	var is_tutorial: bool = level_data.is_tutorial
+	var word: String = level_data.level_word
+	var duration: float = level_data.duration
+	ui_controller.show_level_ui(is_tutorial)
 	ui_controller.set_level_info(word, duration)
 	await get_tree().create_timer(0.2).timeout
 	game_timer.start(duration)
-	game_timer.paused = false
+	game_timer.paused = is_tutorial
 	has_level_started = true
 	
 
