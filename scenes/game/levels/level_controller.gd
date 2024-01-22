@@ -6,9 +6,9 @@ signal letter_dead(assigned_char: String, is_correct: bool)
 signal level_completed
 signal level_cleared
 
-@export var word_levels: Resource
+@export var levels: LevelCollection
 
-var current_level_word: String
+var current_level_data: LevelData
 var remaining_letters: String
 var remaining_letters_count: int
 var current_level_duration: float
@@ -21,22 +21,18 @@ func _ready() -> void:
 
 
 func create_word_level(index: int, player_position: Vector2) -> void:
-	var level_word: String = word_levels.get_level_word(index)
-	if level_word == "-":
+	var level_data: LevelData = levels.get_level(index)
+	if level_data == null:
 		return
-	current_level_word = level_word
-	remaining_letters = level_word
-	remaining_letters_count = level_word.length()
-	current_level_duration = word_levels.get_level_duration(index)
-	$LevelGenerator.create_level(level_word, player_position)
+	current_level_data = level_data
+	remaining_letters = level_data.level_word
+	remaining_letters_count = level_data.level_word.length()
+	current_level_duration = level_data.duration
+	$LevelGenerator.create_level(level_data, player_position)
 
 
-func get_current_level_word() -> String:
-	return current_level_word
-
-
-func get_current_level_duration() -> float:
-	return current_level_duration
+func get_current_level_data() -> LevelData:
+	return current_level_data
 
 
 func clear_level() -> void:

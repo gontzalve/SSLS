@@ -2,13 +2,13 @@
 
 [ext_resource type="PackedScene" uid="uid://d2mt4713epsq8" path="res://scenes/game/letter/letter.tscn" id="1_bllgx"]
 [ext_resource type="Script" path="res://scenes/game/levels/level_controller.gd" id="1_eklft"]
+[ext_resource type="Resource" uid="uid://bswmxcw6utsa7" path="res://data/levels/level_collection.tres" id="2_psda7"]
 [ext_resource type="Resource" uid="uid://dhfdr3120uqgx" path="res://data/alphabet/alphabet.tres" id="3_xfgl2"]
-[ext_resource type="Resource" uid="uid://e73ytwisfwps" path="res://data/word_levels/word_levels.tres" id="4_kuxe6"]
 [ext_resource type="Script" path="res://scenes/game/levels/level_generator.gd" id="5_q0ux3"]
 
 [node name="LevelController" type="Node2D"]
 script = ExtResource("1_eklft")
-word_levels = ExtResource("4_kuxe6")
+levels = ExtResource("2_psda7")
 
 [node name="LetterContainer" type="Node2D" parent="."]
 

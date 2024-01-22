@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3 uid="uid://bhe6egrql76ve"]
+
+[ext_resource type="Script" path="res://data/levels/level_data.gd" id="1_x7ekc"]
+
+[resource]
+script = ExtResource("1_x7ekc")
+level_number = 2
+level_word = "HOUSE"
+is_tutorial = false
+duration = 20.0
+correct_letter_repetitions = 2
+level_rings = 2

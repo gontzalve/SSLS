@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3 uid="uid://du4chkpuxgulw"]
+
+[ext_resource type="Script" path="res://data/levels/level_data.gd" id="1_lev5a"]
+
+[resource]
+script = ExtResource("1_lev5a")
+level_number = 6
+level_word = "WYVERN"
+is_tutorial = false
+duration = 40.0
+correct_letter_repetitions = 4
+level_rings = 5

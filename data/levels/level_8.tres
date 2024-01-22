@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3 uid="uid://b4innye7moug1"]
+
+[ext_resource type="Script" path="res://data/levels/level_data.gd" id="1_4285y"]
+
+[resource]
+script = ExtResource("1_4285y")
+level_number = 8
+level_word = "SNOLLYGOSTER"
+is_tutorial = false
+duration = 60.0
+correct_letter_repetitions = 3
+level_rings = 5

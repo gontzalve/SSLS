@@ -12,14 +12,9 @@ var letter_node_rings = []
 var origin_position: Vector2
 var letter_node_slot_distance: float
 
-const LETTER_COUNT: int = 120
-const LETTER_REPETITIONS: int = 2
-
 const LETTER_NODE_RADIUS: float = 54.0
 const LETTER_NODE_RADIUS_PADDING: float = 8.0 
 
-const SPAWN_CIRCLE_INITIAL_RADIUS: float = 150.0
-const SPAWN_CIRCLE_RADIUS_INCREASE_STEP: float = 120.0
 const SPAWN_SQUARE_INITIAL_RING_SIZE: int = 3
 const SPAWN_SQUARE_RING_SIZE_INCREASE_STEP: int = 2
 
@@ -41,9 +36,9 @@ func clear_level() -> void:
 	level_cleared.emit()
 
 
-func create_level(level_word: String, player_position: Vector2) -> void:
-	_spawn_letter_nodes(player_position)
-	_initialize_letter_nodes(level_word)
+func create_level(level_data: LevelData, player_position: Vector2) -> void:
+	_spawn_letter_nodes(level_data, player_position)
+	_initialize_letter_nodes(level_data)
 	_execute_letter_nodes_appear_sequence()
 
 
@@ -51,16 +46,16 @@ func create_tutorial_level(level_word: String) -> void:
 	pass
 
 
-func _spawn_letter_nodes(player_position: Vector2) -> void:
+func _spawn_letter_nodes(level_data: LevelData, player_position: Vector2) -> void:
 	origin_position = player_position
-	_spawn_letter_nodes_in_squares()
-	# _spawn_letter_nodes_in_circles()
+	_spawn_letter_nodes_in_squares(level_data)
 
 
-func _spawn_letter_nodes_in_squares() -> void:
+func _spawn_letter_nodes_in_squares(level_data: LevelData) -> void:
 	var ring_side_size: int = SPAWN_SQUARE_INITIAL_RING_SIZE
+	var letter_count: int = _get_level_count_from_rings(level_data.level_rings)
 	var spawned_letters: int = 0
-	while spawned_letters < LETTER_COUNT:
+	while spawned_letters < letter_count:
 		var letter_count_in_ring = 4 * (ring_side_size - 1)
 		var letter_node_ring: Array[Node] = []
 		for i in range(letter_count_in_ring):
@@ -93,42 +88,6 @@ func _calculate_letter_spawn_position_in_square(slot_index: int, ring_side_size)
 	return Vector2(pos_x, pos_y)
 
 
-func _spawn_letter_nodes_in_circles() -> void:
-	var spawned_letters: int = 0
-	var current_spawn_circle_radius = SPAWN_CIRCLE_INITIAL_RADIUS
-	while spawned_letters < LETTER_COUNT:
-		# print("Spawned Letters: " , spawned_letters, " / Spawn Radius: ", current_spawn_circle_radius)
-		var letter_slot_angle: float = _calculate_letter_slot_angle_in_circle(current_spawn_circle_radius)
-		var letter_slot_count: int = floori(360.0 / letter_slot_angle)
-		letter_slot_angle = 360.0 / letter_slot_count
-		if letter_slot_count > LETTER_COUNT - spawned_letters:
-			return
-		# print("Slot Angle: " , letter_slot_angle)
-		# print("Letter slots: " , letter_slot_count)
-		var letter_node_ring: Array[Node] = []
-		for i in range(letter_slot_count):
-			var spawn_angle: float = (letter_slot_angle / 2) + i * letter_slot_angle
-			var spawn_pos: Vector2 = _calculate_letter_spawn_position_in_circle(spawn_angle, current_spawn_circle_radius)
-			var letter_node: Node = _spawn_letter(spawn_pos)
-			letter_node_ring.append(letter_node)
-			spawned_letters += 1
-		letter_node_rings.append(letter_node_ring)
-		current_spawn_circle_radius += SPAWN_CIRCLE_RADIUS_INCREASE_STEP
-		print("spawned: ", spawned_letters)
-		# print("-------------------------------")
-	
-
-func _calculate_letter_slot_angle_in_circle(spawn_radius: float) -> float:
-	var letter_node_slot_radius: float = letter_node_slot_distance / 2
-	var slot_angle: float = 4 * asin(letter_node_slot_radius / (2 * spawn_radius))
-	return rad_to_deg(slot_angle)
-
-
-func _calculate_letter_spawn_position_in_circle(angle: float, radius: float) -> Vector2:
-	var rad_angle: float = deg_to_rad(angle)
-	return Vector2(radius * cos(rad_angle), radius * sin(rad_angle))
-
-
 func _spawn_letter(spawn_pos: Vector2) -> Node:
 	var letter_node: Node = letter_scene.instantiate()
 	letter_node.set_initial_pos(spawn_pos)
@@ -138,27 +97,50 @@ func _spawn_letter(spawn_pos: Vector2) -> Node:
 	return letter_node
 
 
-func _initialize_letter_nodes(level_word: String) -> void:
-	_initialize_letter_characters(level_word)
+func _initialize_letter_nodes(level_data: LevelData) -> void:
+	_initialize_letter_characters(level_data)
 	_initialize_letter_colors()
 
 
-func _initialize_letter_characters(level_word: String) -> void:
+func _initialize_letter_characters(level_data: LevelData) -> void:
+	_assign_level_characters_to_letter_nodes(level_data)
+	_assign_non_level_characters_to_letter_nodes(level_data)
+
+
+func _assign_level_characters_to_letter_nodes(level_data: LevelData) -> void:
+	var level_word = level_data.level_word
 	var word_size = level_word.length()
-	var level_characters_count = word_size * LETTER_REPETITIONS
-	var available_rings: Array = range(1, letter_node_rings.size())
-	for i in range(level_characters_count):
+	var letter_repetitions: int = level_data.correct_letter_repetitions
+	var level_characters_count = word_size * letter_repetitions
+	var level_char_index: int = 0
+	var available_rings: Array = _get_available_rings_to_assign_level_characters(level_data.level_rings)
+	while level_char_index < level_characters_count:
 		var random_ring: int = available_rings.pick_random()
 		var random_slot: int = randi_range(0, letter_node_rings[random_ring].size() - 1)
-		letter_node_rings[random_ring][random_slot].set_letter_type(level_word[i % word_size])
+		var letter: Node2D = letter_node_rings[random_ring][random_slot]
+		if letter.has_letter_assigned():
+			continue
+		letter.set_letter_type(level_word[level_char_index % word_size])
 		available_rings.erase(random_ring)
 		if available_rings.is_empty():
-			available_rings = range(1, letter_node_rings.size())
+			available_rings = _get_available_rings_to_assign_level_characters(level_data.level_rings)
+		level_char_index += 1
+
+
+func _assign_non_level_characters_to_letter_nodes(level_data: LevelData) -> void:
+	var level_word = level_data.level_word
 	for letter_ring in letter_node_rings:
 		for letter in letter_ring:
-			if not letter.has_letter_assigned():
-				var random_char: String = alphabet_data.get_random_character(level_word)
-				letter.set_letter_type(random_char)
+			if letter.has_letter_assigned():
+				continue
+			var random_char: String
+			random_char = "x" if level_data.is_tutorial else alphabet_data.get_random_character(level_word)
+			letter.set_letter_type(random_char)
+
+
+func _get_available_rings_to_assign_level_characters(level_rings: int) -> Array:
+	var minimum_eligible_ring_index: int = 0 if level_rings == 1 else 1
+	return range(minimum_eligible_ring_index, level_rings)
 
 	
 func _initialize_letter_colors() -> void:
@@ -176,3 +158,7 @@ func _execute_letter_nodes_appear_sequence() -> void:
 		AudioController.play_main_sfx(1.2 - i * 0.1)
 		await get_tree().create_timer(0.08).timeout
 	level_created.emit()
+
+
+func _get_level_count_from_rings(level_rings: int) -> int:
+	return 4 * level_rings * (SPAWN_SQUARE_INITIAL_RING_SIZE + level_rings - 2)
