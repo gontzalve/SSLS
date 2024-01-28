@@ -14,8 +14,9 @@ var current_health: int
 var hit_tween: SimpleTween = null
 
 const LETTER_GROUP_NAME: String = "letters"
+const WALL_GROUP_NAME: String = "walls"
 const CLOSE_TO_ZERO_SPEED: float = 3
-const MAX_SPEED: float = 200
+const MAX_SPEED: float = 300
 const LETTER_MAX_HEALTH: int = 3
 
 
@@ -72,6 +73,8 @@ func _execute_movement(delta: float) -> void:
 		if collision.get_collider().is_in_group(LETTER_GROUP_NAME):
 			var collision_speed: float = velocity.length() * 0.75
 			collision.get_collider().velocity = collision_speed * -collision.get_normal()
+		elif collision.get_collider().is_in_group(WALL_GROUP_NAME):
+			velocity = velocity * -collision.get_normal() * 0.75
 
 
 func on_bullet_collision(push_velocity: Vector2, bullet_angle: float) -> void:

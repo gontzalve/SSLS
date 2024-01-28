@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_8ohq4")
 level_number = 3
-level_word = "PIDGEON"
+level_word = "APPLE"
 is_tutorial = false
-duration = 30.0
-correct_letter_repetitions = 3
+duration = 15.0
+correct_letter_repetitions = 2
 level_rings = 3

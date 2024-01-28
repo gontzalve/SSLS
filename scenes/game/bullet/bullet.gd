@@ -20,14 +20,28 @@ func start_movement(direction: Vector2):
 
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("letters"):
-		var push_velocity: Vector2 = (body.position - position) * push_force_magnitude
-		body.on_bullet_collision(push_velocity, rotation_degrees)
-		var particles: Node = shooting_particles_scene.instantiate()
-		get_tree().root.add_child(particles)
-		particles.position = _calculate_particles_initial_position(body)
-		particles.set_color(body.assigned_color)
-		particles.set_direction(-1 * current_direction)
+		_on_collision_with_letter(body)
+	elif body.is_in_group("walls"):
+		_on_collision_with_wall()
 	queue_free()
+
+
+func _on_collision_with_letter(body: Node) -> void:
+	var push_velocity: Vector2 = (body.position - position) * push_force_magnitude
+	body.on_bullet_collision(push_velocity, rotation_degrees)
+	var particles: Node = shooting_particles_scene.instantiate()
+	get_tree().root.add_child(particles)
+	particles.position = _calculate_particles_initial_position(body)
+	particles.set_color(body.assigned_color)
+	particles.set_direction(-1 * current_direction)
+
+
+func _on_collision_with_wall() -> void:
+	var particles: Node = shooting_particles_scene.instantiate()
+	get_tree().root.add_child(particles)
+	particles.global_position = $ParticlesPivot.global_position
+	particles.set_color(ColorPalette.WHITE)
+	particles.set_direction(-1 * current_direction)
 
 
 func _calculate_particles_initial_position(letter_node: Node) -> Vector2:

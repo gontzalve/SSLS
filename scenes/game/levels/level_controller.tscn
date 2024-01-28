@@ -1,10 +1,50 @@
-[gd_scene load_steps=6 format=3 uid="uid://duqk6nnpkjlh1"]
+[gd_scene load_steps=23 format=3 uid="uid://duqk6nnpkjlh1"]
 
 [ext_resource type="PackedScene" uid="uid://d2mt4713epsq8" path="res://scenes/game/letter/letter.tscn" id="1_bllgx"]
 [ext_resource type="Script" path="res://scenes/game/levels/level_controller.gd" id="1_eklft"]
 [ext_resource type="Resource" uid="uid://bswmxcw6utsa7" path="res://data/levels/level_collection.tres" id="2_psda7"]
 [ext_resource type="Resource" uid="uid://dhfdr3120uqgx" path="res://data/alphabet/alphabet.tres" id="3_xfgl2"]
 [ext_resource type="Script" path="res://scenes/game/levels/level_generator.gd" id="5_q0ux3"]
+[ext_resource type="Texture2D" uid="uid://bel7hrw3m4pf5" path="res://graphics/game/environment/walls_x1.png" id="6_fy5g2"]
+[ext_resource type="Texture2D" uid="uid://ojj0pcr8xesv" path="res://graphics/game/environment/walls_x5.png" id="6_ihaw0"]
+[ext_resource type="Script" path="res://scenes/game/levels/wall.gd" id="7_muugw"]
+[ext_resource type="Texture2D" uid="uid://bsllsdr15ryog" path="res://graphics/game/environment/walls_x2.png" id="7_yya7a"]
+[ext_resource type="Texture2D" uid="uid://c8kqfn0qs6uc4" path="res://graphics/game/environment/walls_x3.png" id="8_mn80w"]
+[ext_resource type="Texture2D" uid="uid://cgev6xfpa5p1n" path="res://graphics/game/environment/walls_x4.png" id="9_1453u"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hwi0d"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7q12v"]
+size = Vector2(480, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8jncq"]
+size = Vector2(60, 480)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_db5at"]
+size = Vector2(672, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kht6i"]
+size = Vector2(60, 672)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3qt67"]
+size = Vector2(960, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jxl7b"]
+size = Vector2(60, 960)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kl8w3"]
+size = Vector2(1248, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_33axq"]
+size = Vector2(60, 1248)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1vcip"]
+size = Vector2(1536, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pbcyv"]
+size = Vector2(60, 1536)
 
 [node name="LevelController" type="Node2D"]
 script = ExtResource("1_eklft")
@@ -12,10 +52,165 @@ levels = ExtResource("2_psda7")
 
 [node name="LetterContainer" type="Node2D" parent="."]
 
-[node name="LevelGenerator" type="Node2D" parent="." node_paths=PackedStringArray("letter_container")]
+[node name="LevelGenerator" type="Node2D" parent="." node_paths=PackedStringArray("letter_container", "walls")]
 script = ExtResource("5_q0ux3")
 letter_scene = ExtResource("1_bllgx")
 alphabet_data = ExtResource("3_xfgl2")
 letter_container = NodePath("../LetterContainer")
+walls = [NodePath("../WallContainer/Wall1"), NodePath("../WallContainer/Wall2"), NodePath("../WallContainer/Wall3"), NodePath("../WallContainer/Wall4"), NodePath("../WallContainer/Wall5")]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="LevelGenerator"]
+
+[node name="WallContainer" type="Node2D" parent="."]
+modulate = Color(1, 1, 1, 0.25098)
+
+[node name="Wall1" type="Sprite2D" parent="WallContainer" node_paths=PackedStringArray("wall_collision_shapes")]
+visible = false
+texture = ExtResource("6_fy5g2")
+script = ExtResource("7_muugw")
+wall_collision_shapes = [NodePath("StaticBody2D/CollisionShape1"), NodePath("StaticBody2D/CollisionShape2"), NodePath("StaticBody2D/CollisionShape3"), NodePath("StaticBody2D/CollisionShape4")]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="WallContainer/Wall1" groups=["walls"]]
+collision_layer = 8
+collision_mask = 7
+physics_material_override = SubResource("PhysicsMaterial_hwi0d")
+
+[node name="CollisionShape1" type="CollisionShape2D" parent="WallContainer/Wall1/StaticBody2D"]
+position = Vector2(0, -260)
+shape = SubResource("RectangleShape2D_7q12v")
+disabled = true
+
+[node name="CollisionShape2" type="CollisionShape2D" parent="WallContainer/Wall1/StaticBody2D"]
+position = Vector2(0, 260)
+shape = SubResource("RectangleShape2D_7q12v")
+disabled = true
+
+[node name="CollisionShape3" type="CollisionShape2D" parent="WallContainer/Wall1/StaticBody2D"]
+position = Vector2(-260, 0)
+shape = SubResource("RectangleShape2D_8jncq")
+disabled = true
+
+[node name="CollisionShape4" type="CollisionShape2D" parent="WallContainer/Wall1/StaticBody2D"]
+position = Vector2(260, 0)
+shape = SubResource("RectangleShape2D_8jncq")
+disabled = true
+
+[node name="Wall2" type="Sprite2D" parent="WallContainer" node_paths=PackedStringArray("wall_collision_shapes")]
+visible = false
+texture = ExtResource("7_yya7a")
+script = ExtResource("7_muugw")
+wall_collision_shapes = [NodePath("StaticBody2D/CollisionShape1"), NodePath("StaticBody2D/CollisionShape2"), NodePath("StaticBody2D/CollisionShape3"), NodePath("StaticBody2D/CollisionShape4")]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="WallContainer/Wall2" groups=["walls"]]
+collision_layer = 8
+collision_mask = 7
+
+[node name="CollisionShape1" type="CollisionShape2D" parent="WallContainer/Wall2/StaticBody2D"]
+position = Vector2(0, 356)
+shape = SubResource("RectangleShape2D_db5at")
+disabled = true
+
+[node name="CollisionShape2" type="CollisionShape2D" parent="WallContainer/Wall2/StaticBody2D"]
+position = Vector2(0, -356)
+shape = SubResource("RectangleShape2D_db5at")
+disabled = true
+
+[node name="CollisionShape3" type="CollisionShape2D" parent="WallContainer/Wall2/StaticBody2D"]
+position = Vector2(356, 0)
+shape = SubResource("RectangleShape2D_kht6i")
+disabled = true
+
+[node name="CollisionShape4" type="CollisionShape2D" parent="WallContainer/Wall2/StaticBody2D"]
+position = Vector2(-356, 0)
+shape = SubResource("RectangleShape2D_kht6i")
+disabled = true
+
+[node name="Wall3" type="Sprite2D" parent="WallContainer" node_paths=PackedStringArray("wall_collision_shapes")]
+visible = false
+texture = ExtResource("8_mn80w")
+script = ExtResource("7_muugw")
+wall_collision_shapes = [NodePath("StaticBody2D/CollisionShape1"), NodePath("StaticBody2D/CollisionShape2"), NodePath("StaticBody2D/CollisionShape3"), NodePath("StaticBody2D/CollisionShape4")]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="WallContainer/Wall3" groups=["walls"]]
+collision_layer = 8
+collision_mask = 7
+
+[node name="CollisionShape1" type="CollisionShape2D" parent="WallContainer/Wall3/StaticBody2D"]
+position = Vector2(0, 500)
+shape = SubResource("RectangleShape2D_3qt67")
+disabled = true
+
+[node name="CollisionShape2" type="CollisionShape2D" parent="WallContainer/Wall3/StaticBody2D"]
+position = Vector2(0, -500)
+shape = SubResource("RectangleShape2D_3qt67")
+disabled = true
+
+[node name="CollisionShape3" type="CollisionShape2D" parent="WallContainer/Wall3/StaticBody2D"]
+position = Vector2(-500, 0)
+shape = SubResource("RectangleShape2D_jxl7b")
+disabled = true
+
+[node name="CollisionShape4" type="CollisionShape2D" parent="WallContainer/Wall3/StaticBody2D"]
+position = Vector2(500, 0)
+shape = SubResource("RectangleShape2D_jxl7b")
+disabled = true
+
+[node name="Wall4" type="Sprite2D" parent="WallContainer" node_paths=PackedStringArray("wall_collision_shapes")]
+visible = false
+texture = ExtResource("9_1453u")
+script = ExtResource("7_muugw")
+wall_collision_shapes = [NodePath("StaticBody2D/CollisionShape1"), NodePath("StaticBody2D/CollisionShape2"), NodePath("StaticBody2D/CollisionShape3"), NodePath("StaticBody2D/CollisionShape4")]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="WallContainer/Wall4" groups=["walls"]]
+collision_layer = 8
+collision_mask = 7
+
+[node name="CollisionShape1" type="CollisionShape2D" parent="WallContainer/Wall4/StaticBody2D"]
+position = Vector2(0, 644)
+shape = SubResource("RectangleShape2D_kl8w3")
+disabled = true
+
+[node name="CollisionShape2" type="CollisionShape2D" parent="WallContainer/Wall4/StaticBody2D"]
+position = Vector2(0, -644)
+shape = SubResource("RectangleShape2D_kl8w3")
+disabled = true
+
+[node name="CollisionShape3" type="CollisionShape2D" parent="WallContainer/Wall4/StaticBody2D"]
+position = Vector2(-644, 0)
+shape = SubResource("RectangleShape2D_33axq")
+disabled = true
+
+[node name="CollisionShape4" type="CollisionShape2D" parent="WallContainer/Wall4/StaticBody2D"]
+position = Vector2(644, 0)
+shape = SubResource("RectangleShape2D_33axq")
+disabled = true
+
+[node name="Wall5" type="Sprite2D" parent="WallContainer" node_paths=PackedStringArray("wall_collision_shapes")]
+visible = false
+texture = ExtResource("6_ihaw0")
+script = ExtResource("7_muugw")
+wall_collision_shapes = [NodePath("StaticBody2D/CollisionShape1"), NodePath("StaticBody2D/CollisionShape2"), NodePath("StaticBody2D/CollisionShape3"), NodePath("StaticBody2D/CollisionShape4")]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="WallContainer/Wall5" groups=["walls"]]
+collision_layer = 8
+collision_mask = 7
+
+[node name="CollisionShape1" type="CollisionShape2D" parent="WallContainer/Wall5/StaticBody2D"]
+position = Vector2(0, 788)
+shape = SubResource("RectangleShape2D_1vcip")
+disabled = true
+
+[node name="CollisionShape2" type="CollisionShape2D" parent="WallContainer/Wall5/StaticBody2D"]
+position = Vector2(0, -788)
+shape = SubResource("RectangleShape2D_1vcip")
+disabled = true
+
+[node name="CollisionShape3" type="CollisionShape2D" parent="WallContainer/Wall5/StaticBody2D"]
+position = Vector2(-788, 0)
+shape = SubResource("RectangleShape2D_pbcyv")
+disabled = true
+
+[node name="CollisionShape4" type="CollisionShape2D" parent="WallContainer/Wall5/StaticBody2D"]
+position = Vector2(788, 0)
+shape = SubResource("RectangleShape2D_pbcyv")
+disabled = true

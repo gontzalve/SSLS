@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_scege")
 level_number = 9
-level_word = "EXPERGEFACTOR"
+level_word = "PIDGEON"
 is_tutorial = false
-duration = 60.0
-correct_letter_repetitions = 3
+duration = 45.0
+correct_letter_repetitions = 2
 level_rings = 5

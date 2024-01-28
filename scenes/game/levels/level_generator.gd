@@ -7,10 +7,12 @@ signal level_cleared
 @export var letter_scene: PackedScene
 @export var alphabet_data: Resource
 @export var letter_container: Node2D
+@export var walls: Array[Wall]
 
 var letter_node_rings = []
 var origin_position: Vector2
 var letter_node_slot_distance: float
+var current_wall: Wall
 
 const LETTER_NODE_RADIUS: float = 54.0
 const LETTER_NODE_RADIUS_PADDING: float = 8.0 
@@ -22,10 +24,16 @@ const LETTER_RING_APPEAR_DELAY: float = 0.1
 
 
 func _ready() -> void:
+	current_wall = null
 	letter_node_slot_distance =  2 * (LETTER_NODE_RADIUS + LETTER_NODE_RADIUS_PADDING)
 
 
 func clear_level() -> void:
+	if current_wall != null:
+		current_wall.deactivate_wall()
+		current_wall = null
+		AudioController.play_main_sfx(1.3)
+		await get_tree().create_timer(0.08).timeout
 	for i in range(letter_node_rings.size()):
 		for j in range(letter_node_rings[i].size() - 1, -1, -1):
 			if is_instance_valid(letter_node_rings[i][j]):
@@ -39,7 +47,7 @@ func clear_level() -> void:
 func create_level(level_data: LevelData, player_position: Vector2) -> void:
 	_spawn_letter_nodes(level_data, player_position)
 	_initialize_letter_nodes(level_data)
-	_execute_letter_nodes_appear_sequence()
+	_execute_letter_nodes_appear_sequence(player_position)
 
 
 func create_tutorial_level(level_word: String) -> void:
@@ -149,7 +157,11 @@ func _initialize_letter_colors() -> void:
 			letter.set_initial_color()
 
 
-func _execute_letter_nodes_appear_sequence() -> void:
+func _execute_letter_nodes_appear_sequence(player_position: Vector2) -> void:
+	current_wall = _get_wall_for_level(letter_node_rings.size())
+	current_wall.activate_wall_at(player_position)
+	AudioController.play_main_sfx(1.3)
+	await get_tree().create_timer(0.08).timeout
 	for i in range(letter_node_rings.size()):
 		for letter in letter_node_rings[i]:
 			letter.appear()
@@ -162,3 +174,7 @@ func _execute_letter_nodes_appear_sequence() -> void:
 
 func _get_level_count_from_rings(level_rings: int) -> int:
 	return 4 * level_rings * (SPAWN_SQUARE_INITIAL_RING_SIZE + level_rings - 2)
+
+
+func _get_wall_for_level(level_ring_count: int) -> Wall:
+	return walls[level_ring_count - 1]

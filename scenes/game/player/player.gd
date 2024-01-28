@@ -86,12 +86,18 @@ func _check_movement_input(delta: float) -> void:
 	if collision:
 		if collision.get_collider().is_in_group("letters"):
 			_handle_collision_with_letter(collision)
+		elif collision.get_collider().is_in_group("walls"):
+			_handle_collision_with_wall(collision)
 
 
 func _handle_collision_with_letter(collision: KinematicCollision2D) -> void:
 	var collision_speed: float = velocity.length() * 0.75
 	collision.get_collider().velocity = collision_speed * -collision.get_normal()
-	# velocity = velocity.bounce(collision.get_normal()) * 0.2
+	# velocity = velocity.bounce(collision.get_normal()) * 0.1
+
+
+func _handle_collision_with_wall(collision: KinematicCollision2D) -> void:
+	velocity = velocity.bounce(collision.get_normal()) * 0.9
 	
 
 func _get_movement_direction() -> Vector2:

@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_10ya0")
 level_number = 7
-level_word = "DOOHICKEY"
+level_word = "MUSIC"
 is_tutorial = false
-duration = 45.0
-correct_letter_repetitions = 3
+duration = 40.0
+correct_letter_repetitions = 2
 level_rings = 5
