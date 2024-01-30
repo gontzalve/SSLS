@@ -4,6 +4,7 @@ extends RigidBody2D
 @export var initial_impulse: float
 @export var push_force_magnitude: float
 @export var shooting_particles_scene: PackedScene
+@export var range_duration: float
 
 var current_direction: Vector2
 
@@ -12,10 +13,11 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 
 
-func start_movement(direction: Vector2):
+func start_movement(direction: Vector2, range_duration_factor: float):
 	current_direction = direction
 	apply_impulse(direction * initial_impulse)
 	_set_initial_rotation()
+	_set_timer_for_range(range_duration_factor)
 
 
 func _on_body_entered(body: Node) -> void:
@@ -53,3 +55,18 @@ func _set_initial_rotation() -> void:
 	var center_pos: Vector2 = get_viewport().size / 2
 	var angle = rad_to_deg(center_pos.angle_to_point(mouse_pos))
 	rotation_degrees = angle
+
+
+func _set_timer_for_range(range_duration_factor: float) -> void:
+	var duration = range_duration * range_duration_factor
+	await get_tree().create_timer(duration).timeout
+	_disable_bullet()
+
+
+func _disable_bullet() -> void:
+	$BulletShape.disabled = true
+	sleeping = true
+	var tween: SimpleTween = TweenHelper.create(self)
+	tween.to_alpha(0, 0.2).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+	await tween.finished
+	queue_free()

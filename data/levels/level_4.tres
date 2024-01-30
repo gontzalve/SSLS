@@ -7,6 +7,6 @@ script = ExtResource("1_voftp")
 level_number = 4
 level_word = "SCHOOL"
 is_tutorial = false
-duration = 20.0
+duration = 25.0
 correct_letter_repetitions = 2
 level_rings = 4

@@ -7,6 +7,6 @@ script = ExtResource("1_scege")
 level_number = 9
 level_word = "PIDGEON"
 is_tutorial = false
-duration = 45.0
+duration = 40.0
 correct_letter_repetitions = 2
 level_rings = 5

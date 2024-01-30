@@ -19,6 +19,7 @@ script = ExtResource("1_sfwpg")
 initial_impulse = 1500.0
 push_force_magnitude = 200.0
 shooting_particles_scene = ExtResource("2_7cf8x")
+range_duration = 0.15
 
 [node name="BulletShape" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 0)

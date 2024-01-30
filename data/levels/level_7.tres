@@ -7,6 +7,6 @@ script = ExtResource("1_10ya0")
 level_number = 7
 level_word = "MUSIC"
 is_tutorial = false
-duration = 40.0
+duration = 30.0
 correct_letter_repetitions = 2
 level_rings = 5

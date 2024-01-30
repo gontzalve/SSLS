@@ -26,7 +26,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if not has_level_started:
+	if game_timer.paused or not has_level_started:
 		return
 	ui_controller.update_timer(game_timer.time_left)
 
@@ -92,10 +92,11 @@ func _start_current_level() -> void:
 
 func _on_player_shot_fired(spawn_pos: Vector2, direction: Vector2) -> void:
 	game_camera.start_shake()
-	bullet_factory.create_bullet(spawn_pos, direction)
+	var bullet_node: Node2D = bullet_factory.create_bullet(spawn_pos)
+	bullet_node.start_movement(direction, 1)
 
 
-func _on_letter_dead(assigned_char: String, letter_index: int) -> void:
+func _on_letter_dead(_assigned_char: String, letter_index: int) -> void:
 	if letter_index >= 0:
 		AudioController.play_sfx(sfx_correct_letter, 1.2)
 		ui_controller.resolve_letter(letter_index)

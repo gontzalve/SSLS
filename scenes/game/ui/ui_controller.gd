@@ -5,8 +5,10 @@ signal countdown_ended
 
 @export var letter_ui_scene: PackedScene
 
-const LETTERS_PANEL_HORIZONTAL_PADDING: int = 20
 var letter_ui_node_array: Array[Node] = []
+
+const LETTERS_PANEL_HORIZONTAL_PADDING: int = 20
+const WINDOW_SIZE: Vector2 = Vector2(960, 720)
 
 
 func hide_ui() -> void:
@@ -98,6 +100,7 @@ func _clear_letter_ui_nodes() -> void:
 
 func _create_letter_ui_nodes(word: String) -> void:
 	%LettersPanel.visible = false
+	%LettersContainer.size.x = 0
 	for character in word:
 		var letter_ui_node: Node = letter_ui_scene.instantiate()
 		letter_ui_node.text = character
@@ -106,6 +109,7 @@ func _create_letter_ui_nodes(word: String) -> void:
 	await get_tree().create_timer(0.1).timeout
 	var panel_width: float = %LettersContainer.size.x + 2 * LETTERS_PANEL_HORIZONTAL_PADDING
 	%LettersPanel.size.x = panel_width
+	%LettersPanel.position.x = WINDOW_SIZE.x / 2 - panel_width / 2
 	%LettersPanel.visible = true
 
 
