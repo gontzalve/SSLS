@@ -76,22 +76,22 @@ collision_mask = 7
 physics_material_override = SubResource("PhysicsMaterial_hwi0d")
 
 [node name="CollisionShape1" type="CollisionShape2D" parent="WallContainer/Wall1/StaticBody2D"]
-position = Vector2(0, -260)
+position = Vector2(0, -255)
 shape = SubResource("RectangleShape2D_7q12v")
 disabled = true
 
 [node name="CollisionShape2" type="CollisionShape2D" parent="WallContainer/Wall1/StaticBody2D"]
-position = Vector2(0, 260)
+position = Vector2(0, 255)
 shape = SubResource("RectangleShape2D_7q12v")
 disabled = true
 
 [node name="CollisionShape3" type="CollisionShape2D" parent="WallContainer/Wall1/StaticBody2D"]
-position = Vector2(-260, 0)
+position = Vector2(-255, 0)
 shape = SubResource("RectangleShape2D_8jncq")
 disabled = true
 
 [node name="CollisionShape4" type="CollisionShape2D" parent="WallContainer/Wall1/StaticBody2D"]
-position = Vector2(260, 0)
+position = Vector2(253, 0)
 shape = SubResource("RectangleShape2D_8jncq")
 disabled = true
 
@@ -106,22 +106,22 @@ collision_layer = 8
 collision_mask = 7
 
 [node name="CollisionShape1" type="CollisionShape2D" parent="WallContainer/Wall2/StaticBody2D"]
-position = Vector2(0, 356)
+position = Vector2(0, 350)
 shape = SubResource("RectangleShape2D_db5at")
 disabled = true
 
 [node name="CollisionShape2" type="CollisionShape2D" parent="WallContainer/Wall2/StaticBody2D"]
-position = Vector2(0, -356)
+position = Vector2(0, -350)
 shape = SubResource("RectangleShape2D_db5at")
 disabled = true
 
 [node name="CollisionShape3" type="CollisionShape2D" parent="WallContainer/Wall2/StaticBody2D"]
-position = Vector2(356, 0)
+position = Vector2(350, 0)
 shape = SubResource("RectangleShape2D_kht6i")
 disabled = true
 
 [node name="CollisionShape4" type="CollisionShape2D" parent="WallContainer/Wall2/StaticBody2D"]
-position = Vector2(-356, 0)
+position = Vector2(-350, 0)
 shape = SubResource("RectangleShape2D_kht6i")
 disabled = true
 
@@ -136,22 +136,22 @@ collision_layer = 8
 collision_mask = 7
 
 [node name="CollisionShape1" type="CollisionShape2D" parent="WallContainer/Wall3/StaticBody2D"]
-position = Vector2(0, 500)
+position = Vector2(0, 490)
 shape = SubResource("RectangleShape2D_3qt67")
 disabled = true
 
 [node name="CollisionShape2" type="CollisionShape2D" parent="WallContainer/Wall3/StaticBody2D"]
-position = Vector2(0, -500)
+position = Vector2(0, -493)
 shape = SubResource("RectangleShape2D_3qt67")
 disabled = true
 
 [node name="CollisionShape3" type="CollisionShape2D" parent="WallContainer/Wall3/StaticBody2D"]
-position = Vector2(-500, 0)
+position = Vector2(-493, 0)
 shape = SubResource("RectangleShape2D_jxl7b")
 disabled = true
 
 [node name="CollisionShape4" type="CollisionShape2D" parent="WallContainer/Wall3/StaticBody2D"]
-position = Vector2(500, 0)
+position = Vector2(490, 0)
 shape = SubResource("RectangleShape2D_jxl7b")
 disabled = true
 
@@ -166,22 +166,22 @@ collision_layer = 8
 collision_mask = 7
 
 [node name="CollisionShape1" type="CollisionShape2D" parent="WallContainer/Wall4/StaticBody2D"]
-position = Vector2(0, 644)
+position = Vector2(0, 633)
 shape = SubResource("RectangleShape2D_kl8w3")
 disabled = true
 
 [node name="CollisionShape2" type="CollisionShape2D" parent="WallContainer/Wall4/StaticBody2D"]
-position = Vector2(0, -644)
+position = Vector2(0, -636)
 shape = SubResource("RectangleShape2D_kl8w3")
 disabled = true
 
 [node name="CollisionShape3" type="CollisionShape2D" parent="WallContainer/Wall4/StaticBody2D"]
-position = Vector2(-644, 0)
+position = Vector2(-635, 0)
 shape = SubResource("RectangleShape2D_33axq")
 disabled = true
 
 [node name="CollisionShape4" type="CollisionShape2D" parent="WallContainer/Wall4/StaticBody2D"]
-position = Vector2(644, 0)
+position = Vector2(635, 0)
 shape = SubResource("RectangleShape2D_33axq")
 disabled = true
 
@@ -196,21 +196,21 @@ collision_layer = 8
 collision_mask = 7
 
 [node name="CollisionShape1" type="CollisionShape2D" parent="WallContainer/Wall5/StaticBody2D"]
-position = Vector2(0, 788)
+position = Vector2(0, 778)
 shape = SubResource("RectangleShape2D_1vcip")
 disabled = true
 
 [node name="CollisionShape2" type="CollisionShape2D" parent="WallContainer/Wall5/StaticBody2D"]
-position = Vector2(0, -788)
+position = Vector2(0, -778)
 shape = SubResource("RectangleShape2D_1vcip")
 disabled = true
 
 [node name="CollisionShape3" type="CollisionShape2D" parent="WallContainer/Wall5/StaticBody2D"]
-position = Vector2(-788, 0)
+position = Vector2(-778, 0)
 shape = SubResource("RectangleShape2D_pbcyv")
 disabled = true
 
 [node name="CollisionShape4" type="CollisionShape2D" parent="WallContainer/Wall5/StaticBody2D"]
-position = Vector2(788, 0)
+position = Vector2(779, 0)
 shape = SubResource("RectangleShape2D_pbcyv")
 disabled = true
