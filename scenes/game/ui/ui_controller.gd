@@ -2,10 +2,12 @@ extends Node2D
 
 signal level_shown
 signal countdown_ended
+signal restart_completed
 
 @export var letter_ui_scene: PackedScene
 
 var letter_ui_node_array: Array[Node] = []
+var current_level_number: int
 
 const LETTERS_PANEL_HORIZONTAL_PADDING: int = 20
 const WINDOW_SIZE: Vector2 = Vector2(960, 720)
@@ -26,18 +28,18 @@ func show_next_level_animation(next_level_index: int) -> void:
 	%LevelLabelContainer.scale = Vector2.ZERO
 	var container_tween: SimpleTween = TweenHelper.create(%LevelLabelContainer)
 	container_tween.to_scale_f(1, 0.2).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
-	var level_number: int = next_level_index + 1
+	current_level_number = next_level_index + 1
 	if next_level_index == 0:
-		%LevelNumberLabel.text = "%d" % (level_number)
+		%LevelNumberLabel.text = "%d" % (current_level_number)
 		AudioController.play_main_sfx(0.8)
 		await container_tween.finished
 		level_shown.emit()
 		return
-	%LevelNumberLabel.text = "%d" % (level_number - 1)
+	%LevelNumberLabel.text = "%d" % (current_level_number - 1)
 	await get_tree().create_timer(0.6).timeout
 	AudioController.play_main_sfx(0.8)
 	var tween: SimpleTween = TweenHelper.create(%LevelNumberLabel)
-	%LevelNumberLabel.text = "%d" % (level_number)
+	%LevelNumberLabel.text = "%d" % (current_level_number)
 	tween.to_scale_f(1.2, 0.2).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
 	tween.to_scale_f(1, 0.2).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
 	await tween.finished
@@ -145,3 +147,12 @@ func _show_timer_labels() -> void:
 func _hide_timer_labels() -> void:
 	%TimerLabel.visible = false
 	%TimerLabelFront.visible = false 
+
+
+func start_restart_sequence() -> void:
+	%GameOverLabel.visible = false
+	%LevelLabelContainer.visible = true
+	for i in range(current_level_number - 1, 0, -1):
+		await get_tree().create_timer(0.1).timeout
+		AudioController.play_main_sfx(1.2)
+		%LevelNumberLabel.text = "%d" % (i)

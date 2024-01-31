@@ -12,6 +12,7 @@ var game_timer: Timer
 
 var current_level_index: int
 var has_level_started: bool
+var has_lost: bool
 
 const COUNTDOWN_DURATION: int = 3
 
@@ -88,6 +89,7 @@ func _start_current_level() -> void:
 	game_timer.start(duration)
 	game_timer.paused = is_tutorial
 	has_level_started = true
+	has_lost = false
 	
 
 func _on_player_shot_fired(spawn_pos: Vector2, direction: Vector2) -> void:
@@ -103,6 +105,8 @@ func _on_letter_dead(_assigned_char: String, letter_index: int) -> void:
 
 
 func _on_level_completed() -> void:
+	if has_lost:
+		return
 	game_timer.paused = true
 	await get_tree().create_timer(1).timeout
 	level_controller.clear_level()
@@ -126,9 +130,13 @@ func _on_game_camera_zoomed_out() -> void:
 
 func _on_level_timed_out() -> void:
 	# game_cursor.hide_cursor()
+	has_lost = true
 	player.disallow_input()
 	game_timer.stop()
+	AudioController.play_main_sfx(0.8)
 	ui_controller.show_game_over_ui()
+	await get_tree().create_timer(2).timeout
+	ui_controller.start_restart_sequence()
 
 
 func _get_references() -> void:

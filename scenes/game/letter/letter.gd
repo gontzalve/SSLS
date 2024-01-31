@@ -114,6 +114,7 @@ func _on_death() -> void:
 	dead.emit(self)
 	set_process(false)
 	velocity = Vector2.ZERO
+	$Fill.visible = false
 	$CollisionShape2D.set_deferred("disabled", true)
 
 
