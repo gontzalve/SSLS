@@ -130,7 +130,18 @@ func update_timer(time_left: float) -> void:
 
 func show_game_over_ui() -> void:
 	_hide_timer_labels()
+	for letter_ui in letter_ui_node_array:
+		if letter_ui.label_settings.font_color != ColorPalette.GREEN:
+			letter_ui.label_settings.font_color = ColorPalette.RED
 	%GameOverLabel.visible = true
+
+
+func hide_timeout_label() -> void:
+	%GameOverLabel.visible = false
+
+
+func hide_letters_ui_panel() -> void:
+	%LettersPanel.visible = false
 
 
 func _get_formatted_time(time_value: float) -> String:
@@ -156,3 +167,4 @@ func start_restart_sequence() -> void:
 		await get_tree().create_timer(0.1).timeout
 		AudioController.play_main_sfx(1.2)
 		%LevelNumberLabel.text = "%d" % (i)
+	restart_completed.emit()

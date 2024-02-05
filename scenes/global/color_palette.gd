@@ -7,6 +7,7 @@ extends Node
 @export var GREEN: Color
 @export var YELLOW: Color
 @export var PURPLE: Color
+@export var GRAY: Color
 
 var letter_colors: PackedColorArray = []
 

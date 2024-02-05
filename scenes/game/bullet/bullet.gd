@@ -4,9 +4,11 @@ extends RigidBody2D
 @export var initial_impulse: float
 @export var push_force_magnitude: float
 @export var shooting_particles_scene: PackedScene
+@export var vanish_particles_scene: PackedScene
 @export var range_duration: float
 
 var current_direction: Vector2
+var vanishing: bool = false
 
 
 func _ready() -> void:
@@ -17,10 +19,12 @@ func start_movement(direction: Vector2, range_duration_factor: float):
 	current_direction = direction
 	apply_impulse(direction * initial_impulse)
 	_set_initial_rotation()
-	_set_timer_for_range(range_duration_factor)
+	# _set_timer_for_range(range_duration_factor)
 
 
 func _on_body_entered(body: Node) -> void:
+	if vanishing:
+		return
 	if body.is_in_group("letters"):
 		_on_collision_with_letter(body)
 	elif body.is_in_group("walls"):
@@ -65,8 +69,9 @@ func _set_timer_for_range(range_duration_factor: float) -> void:
 
 func _disable_bullet() -> void:
 	$BulletShape.disabled = true
+	vanishing = true
 	sleeping = true
-	var tween: SimpleTween = TweenHelper.create(self)
-	tween.to_alpha(0, 0.2).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
-	await tween.finished
+	var particles: Node = vanish_particles_scene.instantiate()
+	get_tree().root.add_child(particles)
+	particles.global_position = $VanishPivot.global_position
 	queue_free()

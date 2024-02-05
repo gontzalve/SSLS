@@ -77,6 +77,7 @@ func _on_countdown_ended() -> void:
 
 func _start_current_level() -> void:
 	game_cursor.show_cursor()
+	game_camera.resume_following()
 	player.allow_input()
 	player.allow_shooting_input()
 	var level_data: LevelData = level_controller.get_current_level_data()
@@ -110,9 +111,11 @@ func _on_level_completed() -> void:
 	game_timer.paused = true
 	await get_tree().create_timer(1).timeout
 	level_controller.clear_level()
+	await level_controller.level_cleared
+	_introduce_next_level()
 
 
-func _on_level_cleared() -> void:
+func _introduce_next_level() -> void:
 	current_level_index += 1
 	player.disallow_shooting_input()
 	ui_controller.hide_ui()
@@ -133,10 +136,31 @@ func _on_level_timed_out() -> void:
 	has_lost = true
 	player.disallow_input()
 	game_timer.stop()
-	AudioController.play_main_sfx(0.8)
+	AudioController.play_main_sfx(0.5)
 	ui_controller.show_game_over_ui()
 	await get_tree().create_timer(2).timeout
+	ui_controller.hide_timeout_label()
+	game_camera.pause_following()
+	var level_origin_position: Vector2 = level_controller.level_origin_position
+	game_camera.move_to_position(level_origin_position, 0.5)
+	await get_tree().create_timer(0.6).timeout
+	game_camera.start_zoom(0.5, 0.4)
+	level_controller.highlight_end_of_level_letters()
+	await get_tree().create_timer(2).timeout
+	game_camera.move_to_position(player.global_position, 0.5)
+	await get_tree().create_timer(0.6).timeout
+	game_camera.start_zoom(1, 0.4)
+	await get_tree().create_timer(0.5).timeout
+	ui_controller.hide_letters_ui_panel()
+	level_controller.clear_level()
+	await level_controller.level_cleared
+	await get_tree().create_timer(0.5).timeout
 	ui_controller.start_restart_sequence()
+	await ui_controller.restart_completed
+	current_level_index = 0
+	player.allow_input()
+	player.disallow_shooting_input()
+	_on_level_shown()
 
 
 func _get_references() -> void:
@@ -158,7 +182,6 @@ func _connect_to_signals() -> void:
 	level_controller.level_created.connect(_on_level_created)
 	level_controller.letter_dead.connect(_on_letter_dead)
 	level_controller.level_completed.connect(_on_level_completed)
-	level_controller.level_cleared.connect(_on_level_cleared)
 	ui_controller.level_shown.connect(_on_level_shown)
 	ui_controller.countdown_ended.connect(_on_countdown_ended)
 	game_timer.timeout.connect(_on_level_timed_out)

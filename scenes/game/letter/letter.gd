@@ -17,7 +17,7 @@ const LETTER_GROUP_NAME: String = "letters"
 const WALL_GROUP_NAME: String = "walls"
 const CLOSE_TO_ZERO_SPEED: float = 3
 const MAX_SPEED: float = 300
-const LETTER_MAX_HEALTH: int = 3
+const LETTER_MAX_HEALTH: int = 4
 
 
 func appear() -> void:
@@ -59,7 +59,7 @@ func set_letter_type(letter_char: String) -> void:
 
 func set_initial_color() -> void:
 	assigned_color = ColorPalette.get_random_color_for_letter()
-	_set_color(assigned_color)
+	set_color(assigned_color)
 
 
 func set_texture(letter_char: String) -> void:
@@ -151,6 +151,6 @@ func _apply_friction(delta: float) -> void:
 	velocity -= sign(velocity) * friction * delta
 
 
-func _set_color(color: Color) -> void:
+func set_color(color: Color) -> void:
 	$LetterSprite.modulate = color
 	$Outline.modulate = color

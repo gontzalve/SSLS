@@ -18,7 +18,7 @@ const MOVE_UP_ACTION: String = "move_up"
 const MOVE_DOWN_ACTION: String = "move_down"
 
 const SHOOT_ACTION: String = "shoot"
-const SHOOT_COOLDOWN: float = 0.08
+const SHOOT_COOLDOWN: float = 0.075
 const MAX_SHOOT_INACCURACY: float = 10 # in degree angles
 const INACCURACY_INCREASE_PER_SHOT: float = 1 # in degree angles
 const INACCURACY_DECREASE_RATE_PER_SECOND: float = 5

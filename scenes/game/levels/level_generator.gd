@@ -50,8 +50,15 @@ func create_level(level_data: LevelData, player_position: Vector2) -> void:
 	_execute_letter_nodes_appear_sequence(player_position)
 
 
-func create_tutorial_level(level_word: String) -> void:
-	pass
+func highlight_end_of_level_letters(word_level: String) -> void:
+	for i in range(letter_node_rings.size()):
+		for j in range(letter_node_rings[i].size() - 1, -1, -1):
+			if is_instance_valid(letter_node_rings[i][j]):
+				var letter_node: Node = letter_node_rings[i][j]
+				if letter_node.assigned_letter_char in word_level:
+					letter_node.set_color(ColorPalette.RED)
+				else:
+					letter_node.set_color(ColorPalette.GRAY)
 
 
 func _spawn_letter_nodes(level_data: LevelData, player_position: Vector2) -> void:
@@ -162,6 +169,26 @@ func _execute_letter_nodes_appear_sequence(player_position: Vector2) -> void:
 	current_wall.activate_wall_at(player_position)
 	AudioController.play_main_sfx(1.3)
 	await get_tree().create_timer(0.08).timeout
+	if letter_node_rings.size() <= 2:
+		_execute_appear_sequence_for_few_rings()
+	else:
+		_execute_appear_sequence_for_lots_of_rings()
+
+
+func _execute_appear_sequence_for_few_rings() -> void:
+	var num_rings: int = letter_node_rings.size()
+	for i in range(num_rings):
+		for j in range(letter_node_rings[i].size()):
+			letter_node_rings[i][j].appear()
+			if j % (num_rings * 2) == 0:
+				AudioController.play_main_sfx(1.2 - i * 0.1)
+				await get_tree().create_timer(0.08).timeout
+		if i < letter_node_rings.size() - 1:
+			level_ring_appeared.emit()
+	level_created.emit()
+
+
+func _execute_appear_sequence_for_lots_of_rings() -> void:
 	for i in range(letter_node_rings.size()):
 		for letter in letter_node_rings[i]:
 			letter.appear()

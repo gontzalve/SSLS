@@ -12,6 +12,7 @@ var current_level_data: LevelData
 var remaining_letters: String
 var remaining_letters_count: int
 var current_level_duration: float
+var level_origin_position: Vector2
 
 
 func _ready() -> void:
@@ -24,6 +25,7 @@ func create_word_level(index: int, player_position: Vector2) -> void:
 	var level_data: LevelData = levels.get_level(index)
 	if level_data == null:
 		return
+	level_origin_position = player_position
 	current_level_data = level_data
 	remaining_letters = level_data.level_word
 	remaining_letters_count = level_data.level_word.length()
@@ -37,6 +39,10 @@ func get_current_level_data() -> LevelData:
 
 func clear_level() -> void:
 	$LevelGenerator.clear_level()
+
+
+func highlight_end_of_level_letters() -> void:
+	$LevelGenerator.highlight_end_of_level_letters(remaining_letters)
 
 
 func on_letter_dead(letter_node: Node2D) -> void:

@@ -24,6 +24,18 @@ func get_current_zoom() -> float:
 	return %CameraZoom.get_current_zoom()
 
 
+func pause_following() -> void:
+	%CameraFollow.pause_following()
+
+
+func move_to_position(pos: Vector2, duration: float) -> void:
+	%CameraFollow.move_to_position(pos, duration)
+
+
+func resume_following() -> void:
+	%CameraFollow.resume_following()
+
+
 func _inject_dependencies() -> void:
 	%CameraFollow.set_target_reference(follow_target_node)
 

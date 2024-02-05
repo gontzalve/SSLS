@@ -1,11 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://dvf622xug1y10"]
+[gd_scene load_steps=6 format=3 uid="uid://dvf622xug1y10"]
 
 [ext_resource type="Script" path="res://scenes/game/bullet/bullet.gd" id="1_sfwpg"]
 [ext_resource type="Texture2D" uid="uid://b058rv7f6xpt0" path="res://graphics/game/bullet/bullet.png" id="2_5wbmc"]
 [ext_resource type="PackedScene" uid="uid://c3kty0s4mknva" path="res://scenes/game/particles/shoot_particles.tscn" id="2_7cf8x"]
+[ext_resource type="PackedScene" uid="uid://bjjp1pcca4a16" path="res://scenes/game/particles/bullet_vanish_particles.tscn" id="3_tbgk8"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_q4g51"]
-radius = 8.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uvtog"]
+size = Vector2(24, 15)
 
 [node name="Bullet" type="RigidBody2D"]
 collision_layer = 4
@@ -19,14 +20,18 @@ script = ExtResource("1_sfwpg")
 initial_impulse = 1500.0
 push_force_magnitude = 200.0
 shooting_particles_scene = ExtResource("2_7cf8x")
+vanish_particles_scene = ExtResource("3_tbgk8")
 range_duration = 0.15
 
 [node name="BulletShape" type="CollisionShape2D" parent="."]
-position = Vector2(-1, 0)
-shape = SubResource("CircleShape2D_q4g51")
+position = Vector2(4, 0)
+shape = SubResource("RectangleShape2D_uvtog")
 
 [node name="BulletSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_5wbmc")
 
 [node name="ParticlesPivot" type="Node2D" parent="."]
 position = Vector2(12, 0)
+
+[node name="VanishPivot" type="Node2D" parent="."]
+position = Vector2(-12, 1)

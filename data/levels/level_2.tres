@@ -7,6 +7,6 @@ script = ExtResource("1_x7ekc")
 level_number = 2
 level_word = "HOUSE"
 is_tutorial = false
-duration = 10.0
+duration = 15.0
 correct_letter_repetitions = 2
 level_rings = 2
