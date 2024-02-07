@@ -3,8 +3,10 @@ extends Node2D
 signal level_shown
 signal countdown_ended
 signal restart_completed
+signal credits_shown
 
 @export var letter_ui_scene: PackedScene
+@export var credit_lines: Array[String]
 
 var letter_ui_node_array: Array[Node] = []
 var current_level_number: int
@@ -167,4 +169,27 @@ func start_restart_sequence() -> void:
 		await get_tree().create_timer(0.1).timeout
 		AudioController.play_main_sfx(1.2)
 		%LevelNumberLabel.text = "%d" % (i)
+	await get_tree().create_timer(0.5).timeout
 	restart_completed.emit()
+
+
+func play_credits_sequence() -> void:
+	show_credits_ui()
+	for credit_line in credit_lines:
+		%CreditsLabel.text = credit_line
+		AudioController.play_main_sfx(1.2)
+		await get_tree().create_timer(2).timeout
+	credits_shown.emit()
+
+
+func show_credits_ui() -> void:
+	$BackUI.visible = false
+	$FrontUI.visible = true
+	_hide_timer_labels()
+	hide_letters_ui_panel()
+	%LevelLabelContainer.visible = false
+	%CreditsLabel.visible = true
+
+
+func hide_credits_ui() -> void:
+	%CreditsLabel.visible = false

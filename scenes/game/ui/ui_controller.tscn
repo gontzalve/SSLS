@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://kfk18ah52c2n"]
+[gd_scene load_steps=11 format=3 uid="uid://kfk18ah52c2n"]
 
 [ext_resource type="Script" path="res://scenes/game/ui/ui_controller.gd" id="1_lhojd"]
 [ext_resource type="FontFile" uid="uid://cgti1yvcveiqx" path="res://fonts/NunitoSans_7pt-Bold.ttf" id="2_k2pdu"]
@@ -28,9 +28,14 @@ font_color = Color(0.772549, 0.105882, 0.329412, 1)
 outline_size = 4
 outline_color = Color(0.180392, 0.156863, 0.164706, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_5jriu"]
+font = ExtResource("2_k2pdu")
+font_size = 32
+
 [node name="UIController" type="Node2D"]
 script = ExtResource("1_lhojd")
 letter_ui_scene = ExtResource("2_wqq27")
+credit_lines = Array[String](["Super Stupid Letter Soup", "a game by Germán Cruz", "made with Godot", "thank you for playing <3"])
 
 [node name="BackUI" type="CanvasLayer" parent="."]
 layer = -1
@@ -186,5 +191,24 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Time's up!"
 label_settings = SubResource("LabelSettings_emwgs")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CreditsLabel" type="Label" parent="FrontUI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -45.0
+offset_right = 225.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "thank you for playing <3"
+label_settings = SubResource("LabelSettings_5jriu")
 horizontal_alignment = 1
 vertical_alignment = 1

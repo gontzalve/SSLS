@@ -50,6 +50,7 @@ func on_letter_dead(letter_node: Node2D) -> void:
 	var letter_index: int = remaining_letters.find(assigned_char)
 	if letter_index < 0:
 		letter_node.disappear_as_incorrect_letter()
+		letter_dead.emit(assigned_char, letter_index)
 		return
 	remaining_letters[letter_index] = "*"
 	letter_node.disappear_as_correct_letter()

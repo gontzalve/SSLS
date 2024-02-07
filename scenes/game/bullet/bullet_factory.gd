@@ -10,3 +10,8 @@ func create_bullet(spawn_pos: Vector2) -> Node2D:
 	return bullet_node
 
 
+func destroy_all_bullets() -> void:
+	var bullets: Array[Node] = $BulletContainer.get_children()
+	for i in range(bullets.size() -1, -1, -1):
+		if is_instance_valid(bullets[i]):
+			bullets[i].queue_free()

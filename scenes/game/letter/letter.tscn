@@ -1,13 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://d2mt4713epsq8"]
+[gd_scene load_steps=9 format=3 uid="uid://d2mt4713epsq8"]
 
 [ext_resource type="Script" path="res://scenes/game/letter/letter.gd" id="1_ykfcf"]
 [ext_resource type="Resource" uid="uid://b416tkf4phlrv" path="res://data/letters/letter_textures.tres" id="3_pbucg"]
 [ext_resource type="Texture2D" uid="uid://eq00cndsu4vj" path="res://graphics/game/letters/letter_a.png" id="4_5eqql"]
 [ext_resource type="Texture2D" uid="uid://b35s65xixkvam" path="res://graphics/game/outline/outline.png" id="5_qugxa"]
 [ext_resource type="Texture2D" uid="uid://bqcecoaowh387" path="res://graphics/game/outline/fill.png" id="5_rlcbu"]
+[ext_resource type="FontFile" uid="uid://cgti1yvcveiqx" path="res://fonts/NunitoSans_7pt-Bold.ttf" id="6_f4fh0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pp8vm"]
 radius = 32.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_16kk7"]
+font = ExtResource("6_f4fh0")
+font_size = 32
 
 [node name="Letter" type="CharacterBody2D" groups=["letters"]]
 collision_layer = 2
@@ -34,3 +39,21 @@ texture = ExtResource("4_5eqql")
 shape = SubResource("CircleShape2D_pp8vm")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Label" type="Label" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "A"
+label_settings = SubResource("LabelSettings_16kk7")
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -15,6 +15,7 @@ var has_level_started: bool
 var has_lost: bool
 
 const COUNTDOWN_DURATION: int = 3
+const NUM_LEVELS: int = 10
 
 
 func _ready() -> void:
@@ -40,6 +41,7 @@ func _setup_scene() -> void:
 	
 func _start_game() -> void:
 	current_level_index = 0
+	game_camera.global_position = Vector2.ZERO
 	player.appear_at(Vector2.ZERO)
 
 
@@ -103,6 +105,9 @@ func _on_letter_dead(_assigned_char: String, letter_index: int) -> void:
 	if letter_index >= 0:
 		AudioController.play_sfx(sfx_correct_letter, 1.2)
 		ui_controller.resolve_letter(letter_index)
+	else:
+		# AudioController.play_sfx(sfx_correct_letter, 0.2)
+		pass
 
 
 func _on_level_completed() -> void:
@@ -112,15 +117,38 @@ func _on_level_completed() -> void:
 	await get_tree().create_timer(1).timeout
 	level_controller.clear_level()
 	await level_controller.level_cleared
-	_introduce_next_level()
+	current_level_index += 1
+	if current_level_index < NUM_LEVELS:
+		_introduce_next_level()
+	else:
+		_play_credits_sequence()
 
 
 func _introduce_next_level() -> void:
-	current_level_index += 1
 	player.disallow_shooting_input()
 	ui_controller.hide_ui()
 	await get_tree().create_timer(0.4).timeout
 	_show_level_label()
+
+
+func _play_credits_sequence() -> void:
+	ui_controller.hide_ui()
+	player.disallow_input()
+	player.stop_movement()
+	game_camera.pause_following()
+	await get_tree().create_timer(0.5).timeout
+	bullet_factory.destroy_all_bullets()
+	player.disappear()
+	await player.disappeared
+	player.global_position = Vector2.ZERO
+	game_camera.global_position = Vector2.ZERO
+	await get_tree().create_timer(0.5).timeout
+	ui_controller.play_credits_sequence()
+
+
+func _on_credits_shown() -> void:
+	ui_controller.hide_credits_ui()
+	_start_game()
 
 
 func _on_game_camera_zoomed_in() -> void:
@@ -135,6 +163,8 @@ func _on_level_timed_out() -> void:
 	# game_cursor.hide_cursor()
 	has_lost = true
 	player.disallow_input()
+	player.disallow_shooting_input()
+	player.stop_movement()
 	game_timer.stop()
 	AudioController.play_main_sfx(0.5)
 	ui_controller.show_game_over_ui()
@@ -145,7 +175,9 @@ func _on_level_timed_out() -> void:
 	game_camera.move_to_position(level_origin_position, 0.5)
 	await get_tree().create_timer(0.6).timeout
 	game_camera.start_zoom(0.5, 0.4)
+	await get_tree().create_timer(1).timeout
 	level_controller.highlight_end_of_level_letters()
+	AudioController.play_main_sfx(1.2)
 	await get_tree().create_timer(2).timeout
 	game_camera.move_to_position(player.global_position, 0.5)
 	await get_tree().create_timer(0.6).timeout
@@ -158,7 +190,7 @@ func _on_level_timed_out() -> void:
 	ui_controller.start_restart_sequence()
 	await ui_controller.restart_completed
 	current_level_index = 0
-	player.allow_input()
+	player.disallow_input()
 	player.disallow_shooting_input()
 	_on_level_shown()
 
@@ -184,4 +216,5 @@ func _connect_to_signals() -> void:
 	level_controller.level_completed.connect(_on_level_completed)
 	ui_controller.level_shown.connect(_on_level_shown)
 	ui_controller.countdown_ended.connect(_on_countdown_ended)
+	ui_controller.credits_shown.connect(_on_credits_shown)
 	game_timer.timeout.connect(_on_level_timed_out)

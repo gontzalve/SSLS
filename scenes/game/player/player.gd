@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal appeared
+signal disappeared
 signal shot_fired(spawn_pos: Vector2, direction: Vector2)
 
 @export var movement_speed: float
@@ -45,7 +46,13 @@ func initialize() -> void:
 
 func appear_at(pos: Vector2) -> void:
 	position = pos
+	visible = true 
 	_tween_up_scale()
+
+
+func disappear() -> void:
+	var tween: SimpleTween = TweenHelper.create(self).to_scale_f(0, 0.4)
+	tween.set_easing(Tween.TRANS_BACK, Tween.EASE_IN).set_callback(_on_disappeared)
 
 
 func allow_input() -> void:
@@ -76,6 +83,11 @@ func _tween_up_scale() -> void:
 func _on_appeared() -> void:
 	AudioController.play_main_sfx(0.8)
 	appeared.emit()
+
+func _on_disappeared() -> void:
+	AudioController.play_main_sfx(0.8)
+	disappeared.emit()
+	visible = false
 
 
 func _check_movement_input(delta: float) -> void:
@@ -175,5 +187,9 @@ func _check_rotation() -> void:
 
 func _play_cross_feedback() -> void:
 	var tween: SimpleTween = TweenHelper.create(%CrossSprite)
-	tween.to_scale_f(0.7, 0.1).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	tween.to_scale_f(1, 0.1).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	tween.to_scale_f(0.7, 0.05).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	tween.to_scale_f(1, 0.05).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+
+
+func stop_movement() -> void:
+	velocity = Vector2.ZERO
