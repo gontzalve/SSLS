@@ -32,7 +32,11 @@ func _execute_splash_sequence() -> void:
 	await get_tree().create_timer(1).timeout
 	# Letters appearing ####################################
 	for i in range(godot_letters.size()):
+		godot_letters[i].scale = Vector2.ZERO
 		godot_letters[i].visible = true
+	for i in range(godot_letters.size()):
+		var tween: SimpleTween = TweenHelper.create(godot_letters[i])
+		tween.to_scale_f(1, 0.1).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
 		AudioController.play_main_sfx(0.8 + i * 0.1)
 		await get_tree().create_timer(0.08).timeout
 	await get_tree().create_timer(0.1).timeout
@@ -57,7 +61,8 @@ func _execute_splash_sequence() -> void:
 	await get_tree().create_timer(0.4).timeout
 	# Letters disappearing ####################################
 	for i in range(godot_letters.size()):
-		godot_letters[i].visible = false
+		var tween: SimpleTween = TweenHelper.create(godot_letters[i])
+		tween.to_scale_f(0, 0.1).set_easing(Tween.TRANS_BACK, Tween.EASE_IN)
 		AudioController.play_main_sfx(1.2 - i * 0.1)
 		await get_tree().create_timer(0.08).timeout
 	# Sequence end ####################################

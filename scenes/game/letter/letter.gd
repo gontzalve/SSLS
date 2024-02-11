@@ -2,7 +2,6 @@ extends CharacterBody2D
 
 signal dead(letter_node: Node2D)
 
-@export var letter_textures_data: Resource
 @export var force_magnitude: float
 @export var friction: Vector2
 
@@ -22,7 +21,7 @@ const LETTER_MAX_HEALTH: int = 4
 
 func appear() -> void:
 	show()
-	$LetterSprite.hide()
+	$LetterLabel.hide()
 	scale = Vector2.ZERO
 	is_dead = false
 	current_health = LETTER_MAX_HEALTH
@@ -39,7 +38,7 @@ func _tween_up_scale() -> void:
 
 
 func _on_appeared() -> void:
-	$LetterSprite.show()
+	$LetterLabel.show()
 
 
 func _physics_process(delta: float) -> void:
@@ -54,18 +53,13 @@ func set_initial_pos(pos: Vector2) -> void:
 
 func set_letter_type(letter_char: String) -> void:
 	assigned_letter_char = letter_char
-	set_texture(letter_char)
+	$LetterLabel.text = letter_char.to_upper()
 	
 
 func set_initial_color() -> void:
 	assigned_color = ColorPalette.get_random_color_for_letter()
 	set_color(assigned_color)
 
-
-func set_texture(letter_char: String) -> void:
-	var letter_texture = letter_textures_data.get_texture_from_char(letter_char)
-	$LetterSprite.texture = letter_texture
-	
 
 func _execute_movement(delta: float) -> void:
 	var collision: KinematicCollision2D = move_and_collide(velocity * delta)
@@ -123,9 +117,11 @@ func disappear_as_correct_letter() -> void:
 		hit_tween.stop()
 	var outline_tween: SimpleTween = TweenHelper.create($Outline)
 	outline_tween.to_scale_f(0, 0.3).set_easing(Tween.TRANS_BACK, Tween.EASE_IN)
-	var letter_tween: SimpleTween = TweenHelper.create($LetterSprite)
+	var letter_tween: SimpleTween = TweenHelper.create($LetterLabel)
 	letter_tween.to_alpha(0, 0.5).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN)
-	letter_tween.parallel().to_position(Vector2.UP * 20, 0.5).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN)
+	var letter_label_position: Vector2 = $LetterLabel.position
+	var letter_label_tween_position: Vector2 = letter_label_position + Vector2.UP * 30
+	letter_tween.parallel().to_position(letter_label_tween_position, 0.5).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN)
 	letter_tween.parallel().to_scale_f(1.5, 0.5).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN)
 	await letter_tween.finished
 	_on_disappeared()
@@ -134,7 +130,7 @@ func disappear_as_correct_letter() -> void:
 func disappear_as_incorrect_letter() -> void:
 	if hit_tween != null and hit_tween.is_running():
 		hit_tween.stop()
-	var letter_tween: SimpleTween = TweenHelper.create($LetterSprite)
+	var letter_tween: SimpleTween = TweenHelper.create($LetterLabel)
 	letter_tween.to_alpha(0, 0.2).set_easing(Tween.TRANS_CUBIC, Tween.EASE_IN)
 	var outline_tween: SimpleTween = TweenHelper.create($Outline)
 	outline_tween.to_scale_f(0, 0.3).set_easing(Tween.TRANS_BACK, Tween.EASE_IN)
@@ -152,5 +148,5 @@ func _apply_friction(delta: float) -> void:
 
 
 func set_color(color: Color) -> void:
-	$LetterSprite.modulate = color
+	$LetterLabel.label_settings.font_color = color
 	$Outline.modulate = color

@@ -1,9 +1,9 @@
 [gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://daoa6o144ot4u"]
 
-[ext_resource type="FontFile" uid="uid://cgti1yvcveiqx" path="res://fonts/NunitoSans_7pt-Bold.ttf" id="1_5jvt1"]
+[ext_resource type="FontFile" uid="uid://d78dudl48ol6" path="res://fonts/Itim-Regular.ttf" id="1_qryav"]
 
 [resource]
 resource_local_to_scene = true
-font = ExtResource("1_5jvt1")
+font = ExtResource("1_qryav")
 font_size = 32
 font_color = Color(1, 1, 1, 0.25098)

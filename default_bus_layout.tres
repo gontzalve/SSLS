@@ -1,0 +1,9 @@
+[gd_resource type="AudioBusLayout" load_steps=2 format=3 uid="uid://ckgnvqsu0s0xd"]
+
+[sub_resource type="AudioEffectPanner" id="AudioEffectPanner_xd7ed"]
+resource_name = "Panner"
+
+[resource]
+bus/0/volume_db = -0.128275
+bus/0/effect/0/effect = SubResource("AudioEffectPanner_xd7ed")
+bus/0/effect/0/enabled = false

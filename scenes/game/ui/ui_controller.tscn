@@ -1,41 +1,66 @@
-[gd_scene load_steps=11 format=3 uid="uid://kfk18ah52c2n"]
+[gd_scene load_steps=13 format=3 uid="uid://kfk18ah52c2n"]
 
 [ext_resource type="Script" path="res://scenes/game/ui/ui_controller.gd" id="1_lhojd"]
-[ext_resource type="FontFile" uid="uid://cgti1yvcveiqx" path="res://fonts/NunitoSans_7pt-Bold.ttf" id="2_k2pdu"]
 [ext_resource type="PackedScene" uid="uid://xddfjim7v1tx" path="res://scenes/game/ui/letter_ui.tscn" id="2_wqq27"]
+[ext_resource type="FontFile" uid="uid://d78dudl48ol6" path="res://fonts/Itim-Regular.ttf" id="3_h8loi"]
+[ext_resource type="FontFile" uid="uid://b2fmxxaxnuvyw" path="res://fonts/SingleDay-Regular.ttf" id="3_qko0y"]
 [ext_resource type="Theme" uid="uid://7fmata4vfx8n" path="res://themes/theme_ui.tres" id="3_y1n5b"]
 [ext_resource type="StyleBox" uid="uid://de68smf7ix6rq" path="res://themes/theme_rectangle.tres" id="4_t4tny"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_jas4c"]
+font = ExtResource("3_qko0y")
+font_size = 48
+
 [sub_resource type="LabelSettings" id="LabelSettings_hxk3y"]
-font = ExtResource("2_k2pdu")
+font = ExtResource("3_h8loi")
 font_size = 32
 font_color = Color(1, 1, 1, 0.25098)
 
 [sub_resource type="LabelSettings" id="LabelSettings_17ee3"]
-font = ExtResource("2_k2pdu")
+font = ExtResource("3_h8loi")
 font_size = 32
 font_color = Color(1, 1, 1, 0.25098)
 
 [sub_resource type="LabelSettings" id="LabelSettings_hccww"]
-font = ExtResource("2_k2pdu")
+font = ExtResource("3_h8loi")
 font_size = 32
 font_color = Color(1, 1, 1, 0.0470588)
 
 [sub_resource type="LabelSettings" id="LabelSettings_emwgs"]
-font = ExtResource("2_k2pdu")
+font = ExtResource("3_h8loi")
 font_size = 32
 font_color = Color(0.772549, 0.105882, 0.329412, 1)
 outline_size = 4
 outline_color = Color(0.180392, 0.156863, 0.164706, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_5jriu"]
-font = ExtResource("2_k2pdu")
+font = ExtResource("3_h8loi")
 font_size = 32
 
 [node name="UIController" type="Node2D"]
 script = ExtResource("1_lhojd")
 letter_ui_scene = ExtResource("2_wqq27")
+game_name_words = Array[String](["SUPER", "STUPID", "LETTER", "SOUP", " "])
 credit_lines = Array[String](["Super Stupid Letter Soup", "a game by Germán Cruz", "made with Godot", "thank you for playing <3"])
+
+[node name="IntroUI" type="CanvasLayer" parent="."]
+
+[node name="GameNameLabel" type="Label" parent="IntroUI"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -231.0
+offset_top = -60.0
+offset_right = 449.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "SUPER STUPID LETTER SOUP"
+label_settings = SubResource("LabelSettings_jas4c")
+vertical_alignment = 1
 
 [node name="BackUI" type="CanvasLayer" parent="."]
 layer = -1
@@ -194,9 +219,11 @@ label_settings = SubResource("LabelSettings_emwgs")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CreditsLabel" type="Label" parent="FrontUI"]
-unique_name_in_owner = true
+[node name="CreditsUI" type="CanvasLayer" parent="."]
 visible = false
+
+[node name="CreditsLabel" type="Label" parent="CreditsUI"]
+unique_name_in_owner = true
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -208,7 +235,29 @@ offset_right = 225.0
 offset_bottom = 45.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(225, 45)
 text = "thank you for playing <3"
 label_settings = SubResource("LabelSettings_5jriu")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CreditsLabel2" type="Label" parent="CreditsUI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -45.0
+offset_right = 206.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(225, 45)
+text = "thank you for playing <3"
+label_settings = SubResource("LabelSettings_5jriu")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true

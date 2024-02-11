@@ -1,11 +1,13 @@
 extends Node2D
 
+signal title_shown
 signal level_shown
 signal countdown_ended
 signal restart_completed
 signal credits_shown
 
 @export var letter_ui_scene: PackedScene
+@export var game_name_words: Array[String]
 @export var credit_lines: Array[String]
 
 var letter_ui_node_array: Array[Node] = []
@@ -18,6 +20,8 @@ const WINDOW_SIZE: Vector2 = Vector2(960, 720)
 func hide_ui() -> void:
 	$BackUI.visible = false
 	$FrontUI.visible = false
+	$IntroUI.visible = false
+	$CreditsUI.visible = false
 
 
 func show_level_labels() -> void:
@@ -177,19 +181,63 @@ func play_credits_sequence() -> void:
 	show_credits_ui()
 	for credit_line in credit_lines:
 		%CreditsLabel.text = credit_line
+		var tween: SimpleTween = TweenHelper.create(%CreditsLabel)
+		tween.to_scale_f(1.1, 0.1).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
+		tween.to_scale_f(1, 0.1).set_easing(Tween.TRANS_BACK, Tween.EASE_OUT)
 		AudioController.play_main_sfx(1.2)
-		await get_tree().create_timer(2).timeout
+		await get_tree().create_timer(1.5).timeout
+	var splash_colors: PackedColorArray = ColorPalette.get_color_array_for_splash_sequence()
+	for i in range(splash_colors.size()):
+		%CreditsLabel.label_settings.font_color = splash_colors[i]
+		var pitch: float = 1.2 if i == 0 or i == 4 else 0.9
+		AudioController.play_main_sfx(pitch)
+		await get_tree().create_timer(0.11).timeout
+	await get_tree().create_timer(0.4).timeout
+	%CreditsLabel.visible = false
+	%CreditsLabel2.visible = true
+	%CreditsLabel.label_settings.font_color = ColorPalette.BLUE
+	var last_credit_line: String = credit_lines[credit_lines.size() - 1]
+	%CreditsLabel2.text = last_credit_line
+	var last_credit_words: PackedStringArray = last_credit_line.split(" ", false)
+	for i in range(last_credit_words.size()):
+		%CreditsLabel2.text = %CreditsLabel2.text.replace(last_credit_words[i], "")
+		AudioController.play_main_sfx(1.2 - i * 0.1)
+		await get_tree().create_timer(0.08).timeout
+	await get_tree().create_timer(1).timeout
 	credits_shown.emit()
 
 
 func show_credits_ui() -> void:
-	$BackUI.visible = false
-	$FrontUI.visible = true
-	_hide_timer_labels()
-	hide_letters_ui_panel()
-	%LevelLabelContainer.visible = false
-	%CreditsLabel.visible = true
+	hide_ui()
+	$CreditsUI.visible = true
+	%CreditsLabel.visible = true 
+	%CreditsLabel2.visible = false
 
 
 func hide_credits_ui() -> void:
-	%CreditsLabel.visible = false
+	$CreditsUI.visible = false
+
+
+func show_intro_ui() -> void:
+	hide_ui()
+	$IntroUI.visible = true
+
+
+func start_intro_sequence() -> void:
+	%GameNameLabel.text = ""
+	%GameNameLabel.label_settings.font_color = ColorPalette.WHITE
+	var colors: PackedColorArray = ColorPalette.get_color_array_for_splash_sequence()
+	for i in range(game_name_words.size()):
+		%GameNameLabel.text = %GameNameLabel.text + game_name_words[i] + " "
+		# %GameNameLabel.label_settings.font_color = colors[i]
+		var pitch: float = 1.2 if i == 0 or i == 4 else 0.9
+		AudioController.play_main_sfx(pitch)
+		await get_tree().create_timer(0.11).timeout
+	await get_tree().create_timer(1).timeout
+	AudioController.play_main_sfx(1.2)
+	%GameNameLabel.visible = false
+	title_shown.emit()
+
+
+func hide_intro_ui() -> void:
+	$IntroUI.visible = false

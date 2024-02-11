@@ -24,7 +24,7 @@ func _ready() -> void:
 	_connect_to_signals()
 	_setup_scene()
 	await get_tree().create_timer(0.5).timeout
-	_start_game()
+	_start_title_intro()
 
 
 func _process(_delta: float) -> void:
@@ -37,6 +37,14 @@ func _setup_scene() -> void:
 	player.initialize()
 	game_cursor.hide_cursor()
 	ui_controller.hide_ui()
+
+
+func _start_title_intro() -> void:
+	ui_controller.show_intro_ui()
+	ui_controller.start_intro_sequence()
+	await ui_controller.title_shown
+	ui_controller.hide_intro_ui()
+	_start_game()
 
 	
 func _start_game() -> void:
@@ -141,6 +149,7 @@ func _play_credits_sequence() -> void:
 	player.disappear()
 	await player.disappeared
 	player.global_position = Vector2.ZERO
+	player.rotation_degrees = 0
 	game_camera.global_position = Vector2.ZERO
 	await get_tree().create_timer(0.5).timeout
 	ui_controller.play_credits_sequence()
