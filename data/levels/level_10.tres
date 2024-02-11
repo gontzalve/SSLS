@@ -7,6 +7,6 @@ script = ExtResource("1_ea63n")
 level_number = 10
 level_word = "RABBIT"
 is_tutorial = false
-duration = 20.0
+duration = 25.0
 correct_letter_repetitions = 2
 level_rings = 5

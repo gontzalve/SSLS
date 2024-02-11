@@ -13,8 +13,7 @@ func show_cursor() -> void:
 	
 
 func hide_cursor() -> void:
-	# Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
-	pass
+	Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
 
 
 func set_big_cursor() -> void:

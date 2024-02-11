@@ -229,7 +229,6 @@ func start_intro_sequence() -> void:
 	var colors: PackedColorArray = ColorPalette.get_color_array_for_splash_sequence()
 	for i in range(game_name_words.size()):
 		%GameNameLabel.text = %GameNameLabel.text + game_name_words[i] + " "
-		# %GameNameLabel.label_settings.font_color = colors[i]
 		var pitch: float = 1.2 if i == 0 or i == 4 else 0.9
 		AudioController.play_main_sfx(pitch)
 		await get_tree().create_timer(0.11).timeout

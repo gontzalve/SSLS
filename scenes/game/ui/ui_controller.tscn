@@ -260,4 +260,3 @@ text = "thank you for playing <3"
 label_settings = SubResource("LabelSettings_5jriu")
 horizontal_alignment = 2
 vertical_alignment = 1
-uppercase = true
