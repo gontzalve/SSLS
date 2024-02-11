@@ -1,15 +1,14 @@
-[gd_scene load_steps=13 format=3 uid="uid://kfk18ah52c2n"]
+[gd_scene load_steps=12 format=3 uid="uid://kfk18ah52c2n"]
 
 [ext_resource type="Script" path="res://scenes/game/ui/ui_controller.gd" id="1_lhojd"]
 [ext_resource type="PackedScene" uid="uid://xddfjim7v1tx" path="res://scenes/game/ui/letter_ui.tscn" id="2_wqq27"]
 [ext_resource type="FontFile" uid="uid://d78dudl48ol6" path="res://fonts/Itim-Regular.ttf" id="3_h8loi"]
-[ext_resource type="FontFile" uid="uid://b2fmxxaxnuvyw" path="res://fonts/SingleDay-Regular.ttf" id="3_qko0y"]
 [ext_resource type="Theme" uid="uid://7fmata4vfx8n" path="res://themes/theme_ui.tres" id="3_y1n5b"]
 [ext_resource type="StyleBox" uid="uid://de68smf7ix6rq" path="res://themes/theme_rectangle.tres" id="4_t4tny"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jas4c"]
-font = ExtResource("3_qko0y")
-font_size = 48
+font = ExtResource("3_h8loi")
+font_size = 36
 
 [sub_resource type="LabelSettings" id="LabelSettings_hxk3y"]
 font = ExtResource("3_h8loi")
@@ -40,10 +39,11 @@ font_size = 32
 [node name="UIController" type="Node2D"]
 script = ExtResource("1_lhojd")
 letter_ui_scene = ExtResource("2_wqq27")
-game_name_words = Array[String](["SUPER", "STUPID", "LETTER", "SOUP", " "])
+game_name_words = Array[String](["Super", "Stupid", "Letter", "Soup", " "])
 credit_lines = Array[String](["Super Stupid Letter Soup", "a game by Germán Cruz", "made with Godot", "thank you for playing <3"])
 
 [node name="IntroUI" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="GameNameLabel" type="Label" parent="IntroUI"]
 unique_name_in_owner = true
@@ -52,13 +52,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -231.0
+offset_left = -192.0
 offset_top = -60.0
-offset_right = 449.0
+offset_right = 488.0
 offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "SUPER STUPID LETTER SOUP"
+text = "Super Stupid Letter Soup"
 label_settings = SubResource("LabelSettings_jas4c")
 vertical_alignment = 1
 
@@ -249,9 +249,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -225.0
+offset_left = -266.0
 offset_top = -45.0
-offset_right = 206.0
+offset_right = 165.0
 offset_bottom = 45.0
 grow_horizontal = 2
 grow_vertical = 2
